@@ -20,10 +20,20 @@
         <java.version>1.8</java.version>
         <postgresql.jdbc.version>42.2.5</postgresql.jdbc.version>
         <server.port>8022</server.port>
-        <db.url>jdbc:postgresql://localhost:5432/fistful_reporter</db.url>
+        <!---->
+        <db.name>fistful_reporter</db.name>
+        <db.schema>fr</db.schema>
         <db.user>postgres</db.user>
         <db.password>postgres</db.password>
-        <db.schema>fstrpt</db.schema>
+        <db.port>5432</db.port>
+        <db.url>jdbc:postgresql://localhost:${db.port}/${db.name}</db.url>
+        <!---->
+        <db.embedded.name>${db.name}</db.embedded.name>
+        <db.embedded.schema>${db.schema}</db.embedded.schema>
+        <db.embedded.user>${db.user}</db.embedded.user>
+        <db.embedded.password>${db.password}</db.embedded.password>
+        <db.embedded.port>15432</db.embedded.port>
+        <db.embedded.url>jdbc:postgresql://localhost:${db.embedded.port}/${db.embedded.name}</db.embedded.url>
     </properties>
 
     <dependencies>
@@ -80,11 +90,11 @@
                 <artifactId>flyway-maven-plugin</artifactId>
                 <version>${flyway.version}</version>
                 <configuration>
-                    <url>${db.url}</url>
-                    <user>${db.user}</user>
-                    <password>${db.password}</password>
+                    <url>${db.embedded.url}</url>
+                    <user>${db.embedded.user}</user>
+                    <password>${db.embedded.password}</password>
                     <schemas>
-                        <schema>${db.schema}</schema>
+                        <schema>${db.embedded.schema}</schema>
                     </schemas>
                 </configuration>
                 <dependencies>
@@ -94,6 +104,16 @@
                         <version>${postgresql.jdbc.version}</version>
                     </dependency>
                 </dependencies>
+                <executions>
+                    <execution>
+                        <id>migrate</id>
+                        <phase>initialize</phase>
+                        <goals>
+                            <goal>clean</goal>
+                            <goal>migrate</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
             <plugin>
                 <groupId>org.jooq</groupId>
@@ -102,9 +122,9 @@
                 <configuration>
                     <jdbc>
                         <driver>org.postgresql.Driver</driver>
-                        <url>${db.url}</url>
-                        <user>${db.user}</user>
-                        <password>${db.password}</password>
+                        <url>${db.embedded.url}</url>
+                        <user>${db.embedded.user}</user>
+                        <password>${db.embedded.password}</password>
                     </jdbc>
                     <generator>
                         <generate>
@@ -119,7 +139,7 @@
                             <excludes>
                                 schema_version|.*func|get_adjustment.*|get_cashflow.*|get_payment.*|get_payout.*|get_refund.*
                             </excludes>
-                            <inputSchema>${db.schema}</inputSchema>
+                            <inputSchema>${db.embedded.schema}</inputSchema>
                         </database>
                         <target>
                             <packageName>com.rbkmoney.fistfulreporter.domain</packageName>
@@ -127,6 +147,45 @@
                         </target>
                     </generator>
                 </configuration>
+                <executions>
+                    <execution>
+                        <id>gen-src</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>com.rbkmoney.maven.plugins</groupId>
+                <artifactId>pg-embedded-plugin</artifactId>
+                <version>1.4</version>
+                <configuration>
+                    <dbName>${db.embedded.name}</dbName>
+                    <schemas>
+                        <schema>${db.embedded.schema}</schema>
+                    </schemas>
+                    <userName>${db.embedded.name}</userName>
+                    <password>${db.embedded.password}</password>
+                    <port>${db.embedded.port}</port>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>PG_server_start</id>
+                        <phase>validate</phase>
+                        <goals>
+                            <goal>start</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>PG_server_stop</id>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>stop</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>
