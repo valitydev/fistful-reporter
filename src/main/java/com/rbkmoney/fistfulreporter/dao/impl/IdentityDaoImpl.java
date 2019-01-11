@@ -31,9 +31,10 @@ public class IdentityDaoImpl extends AbstractGenericDao implements IdentityDao {
 
     @Override
     public Optional<Long> getLastEventId() throws DaoException {
-        Query query = getDslContext().select(DSL.max(DSL.field("event_id"))).from(
-                getDslContext().select(IDENTITY.EVENT_ID.max().as("event_id")).from(IDENTITY)
-                        .unionAll(getDslContext().select(CHALLENGE.EVENT_ID.max().as("event_id")).from(CHALLENGE))
+        String eventId = "event_id";
+        Query query = getDslContext().select(DSL.max(DSL.field(eventId))).from(
+                getDslContext().select(IDENTITY.EVENT_ID.max().as(eventId)).from(IDENTITY)
+                        .unionAll(getDslContext().select(CHALLENGE.EVENT_ID.max().as(eventId)).from(CHALLENGE))
         );
         return Optional.ofNullable(fetchOne(query, Long.class));
     }

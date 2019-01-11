@@ -37,7 +37,7 @@ public class DestinationEventService implements EventService<SinkEvent> {
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
-    public void processSinkEvent(SinkEvent event) throws StorageException {
+    public void processSinkEvent(SinkEvent event) {
         for (Change change : event.getPayload().getChanges()) {
             for (DestinationEventHandler identityEventHandler : eventHandlers) {
                 if (identityEventHandler.accept(change)) {

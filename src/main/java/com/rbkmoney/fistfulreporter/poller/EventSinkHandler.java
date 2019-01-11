@@ -6,7 +6,7 @@ import com.rbkmoney.fistfulreporter.service.EventService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class EventSinkHandler<EType> implements EventHandler<EType> {
+public class EventSinkHandler<T> implements EventHandler<T> {
 
     private final Logger log = LoggerFactory.getLogger(this.getClass());
 
@@ -17,7 +17,7 @@ public class EventSinkHandler<EType> implements EventHandler<EType> {
     }
 
     @Override
-    public EventAction handle(EType event, String subsKey) throws Exception {
+    public EventAction handle(T event, String subsKey) throws Exception {
         try {
             eventStockService.processSinkEvent(event);
             return EventAction.CONTINUE;
