@@ -26,5 +26,4 @@ public class EventSinkHandler<T> implements EventHandler<T> {
             return EventAction.DELAYED_RETRY;
         }
     }
-
 }
