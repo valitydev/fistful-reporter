@@ -18,8 +18,13 @@
 
     <properties>
         <java.version>1.8</java.version>
-        <postgresql.jdbc.version>42.2.5</postgresql.jdbc.version>
         <server.port>8022</server.port>
+        <exposed.ports>${server.port}</exposed.ports>
+        <postgresql.version>42.2.5</postgresql.version>
+        <lombok.version>1.18.4</lombok.version>
+        <!---->
+        <eventstock.version>1.2.6</eventstock.version>
+        <fistful-proto.version>1.8-37ccefb</fistful-proto.version>
         <!---->
         <db.name>fistful_reporter</db.name>
         <db.schema>fr</db.schema>
@@ -37,6 +42,24 @@
     </properties>
 
     <dependencies>
+        <!---->
+        <dependency>
+            <groupId>com.rbkmoney</groupId>
+            <artifactId>eventstock-client-damsel</artifactId>
+            <version>${eventstock.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.rbkmoney</groupId>
+            <artifactId>eventstock-client-fistful</artifactId>
+            <version>${eventstock.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.rbkmoney</groupId>
+            <artifactId>fistful-proto</artifactId>
+            <version>${fistful-proto.version}</version>
+        </dependency>
+
+        <!---->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
@@ -54,7 +77,7 @@
         <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
-            <version>${postgresql.jdbc.version}</version>
+            <version>${postgresql.version}</version>
         </dependency>
         <dependency>
             <groupId>com.zaxxer</groupId>
@@ -71,10 +94,29 @@
             <artifactId>jooq</artifactId>
             <version>${jooq.version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>${lombok.version}</version>
+            <scope>provided</scope>
+        </dependency>
 
+        <!---->
+        <dependency>
+            <groupId>org.testcontainers</groupId>
+            <artifactId>postgresql</artifactId>
+            <version>1.8.3</version>
+            <scope>test</scope>
+        </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.github.benas</groupId>
+            <artifactId>random-beans</artifactId>
+            <version>3.6.0</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
@@ -101,7 +143,7 @@
                     <dependency>
                         <groupId>org.postgresql</groupId>
                         <artifactId>postgresql</artifactId>
-                        <version>${postgresql.jdbc.version}</version>
+                        <version>${postgresql.version}</version>
                     </dependency>
                 </dependencies>
                 <executions>
@@ -143,7 +185,7 @@
                         </database>
                         <target>
                             <packageName>com.rbkmoney.fistfulreporter.domain</packageName>
-                            <directory>target/generated-sources/db/</directory>
+                            <directory>target/generated-sources/jooq/</directory>
                         </target>
                     </generator>
                 </configuration>
