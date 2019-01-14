@@ -251,7 +251,7 @@
                             <inputSchema>${db.embedded.schema}</inputSchema>
                         </database>
                         <target>
-                            <packageName>com.rbkmoney.fistfulreporter.domain</packageName>
+                            <packageName>com.rbkmoney.fistful.reporter.domain</packageName>
                             <directory>target/generated-sources/jooq/</directory>
                         </target>
                     </generator>
