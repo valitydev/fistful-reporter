@@ -3,7 +3,7 @@ package com.rbkmoney.fistful.reporter.service.impl;
 import com.rbkmoney.fistful.reporter.dao.WalletDao;
 import com.rbkmoney.fistful.reporter.exception.DaoException;
 import com.rbkmoney.fistful.reporter.exception.StorageException;
-import com.rbkmoney.fistful.reporter.poller.handler.WalletEventHandler;
+import com.rbkmoney.fistful.reporter.poller.WalletEventHandler;
 import com.rbkmoney.fistful.reporter.service.EventService;
 import com.rbkmoney.fistful.wallet.Change;
 import com.rbkmoney.fistful.wallet.SinkEvent;

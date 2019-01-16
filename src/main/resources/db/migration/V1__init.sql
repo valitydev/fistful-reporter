@@ -316,4 +316,29 @@ CREATE INDEX deposit_id_idx
 CREATE INDEX deposit_event_occured_at_idx
   on fr.deposit (event_occured_at);
 CREATE INDEX deposit_wallet_id_idx
-  on fr.withdrawal (wallet_id);
+  on fr.deposit (wallet_id);
+
+-- report
+
+CREATE TYPE fr.REPORT_STATUS AS ENUM ('pending', 'created', 'cancelled');
+
+CREATE TABLE fr.report (
+  id          BIGSERIAL                   NOT NULL,
+  party_id    CHARACTER VARYING           NOT NULL,
+  contract_id CHARACTER VARYING           NOT NULL,
+  from_time   TIMESTAMP WITHOUT TIME ZONE NOT NULL,
+  to_time     TIMESTAMP WITHOUT TIME ZONE NOT NULL,
+  created_at  TIMESTAMP WITHOUT TIME ZONE NOT NULL,
+  type        CHARACTER VARYING           NOT NULL,
+  status      fr.REPORT_STATUS            NOT NULL DEFAULT 'pending' :: fr.REPORT_STATUS,
+  timezone    CHARACTER VARYING           NOT NULL,
+  CONSTRAINT report_pkey PRIMARY KEY (id)
+);
+
+CREATE TABLE fr.file_info (
+  id           BIGSERIAL         NOT NULL,
+  report_id    BIGINT            NOT NULL,
+  file_data_id CHARACTER VARYING NOT NULL,
+  CONSTRAINT file_info_pkey PRIMARY KEY (id),
+  CONSTRAINT file_info_fkey FOREIGN KEY (report_id) REFERENCES fr.report (id) ON DELETE RESTRICT ON UPDATE NO ACTION
+)

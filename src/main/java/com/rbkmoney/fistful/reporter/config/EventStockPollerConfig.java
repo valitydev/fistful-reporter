@@ -2,7 +2,7 @@ package com.rbkmoney.fistful.reporter.config;
 
 import com.rbkmoney.eventstock.client.EventPublisher;
 import com.rbkmoney.eventstock.client.poll.FistfulPollingEventPublisherBuilder;
-import com.rbkmoney.fistful.reporter.poller.EventSinkHandler;
+import com.rbkmoney.fistful.reporter.handler.EventSinkHandler;
 import com.rbkmoney.fistful.reporter.service.impl.*;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;

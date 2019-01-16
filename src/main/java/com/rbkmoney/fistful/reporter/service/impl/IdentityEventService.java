@@ -5,7 +5,7 @@ import com.rbkmoney.fistful.identity.SinkEvent;
 import com.rbkmoney.fistful.reporter.dao.IdentityDao;
 import com.rbkmoney.fistful.reporter.exception.DaoException;
 import com.rbkmoney.fistful.reporter.exception.StorageException;
-import com.rbkmoney.fistful.reporter.poller.handler.IdentityEventHandler;
+import com.rbkmoney.fistful.reporter.poller.IdentityEventHandler;
 import com.rbkmoney.fistful.reporter.service.EventService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

@@ -29,6 +29,12 @@ spring:
     schemas: @db.schema@
 eventStock:
   pollingEnable: true
+partyManagement:
+  url: http://hellgate:8022/v1/processing/partymgmt
+  timeout: 5000
+reporting:
+  reportsLimit: 0
+  defaultTimeZone: Europe/Moscow
 deposit:
   polling:
     url: http://localhost:8022/v1/eventsink/deposit

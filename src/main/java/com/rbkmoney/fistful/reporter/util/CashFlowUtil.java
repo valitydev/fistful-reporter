@@ -4,6 +4,7 @@ import com.rbkmoney.fistful.cashflow.FinalCashFlowPosting;
 import com.rbkmoney.fistful.reporter.domain.enums.DepositEventType;
 import com.rbkmoney.fistful.reporter.domain.enums.FistfulCashFlowAccount;
 import com.rbkmoney.fistful.reporter.domain.tables.pojos.FistfulCashFlow;
+import com.rbkmoney.fistful.reporter.dto.FistfulCashFlowSinkEvent;
 import com.rbkmoney.geck.common.util.TBaseUtil;
 import com.rbkmoney.geck.common.util.TypeUtil;
 
