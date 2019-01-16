@@ -29,7 +29,7 @@
         <!---->
         <eventstock.version>1.2.6</eventstock.version>
         <fistful-proto.version>1.8-37ccefb</fistful-proto.version>
-        <fistful-reporter-proto.version>1.2-e558883</fistful-reporter-proto.version>
+        <fistful-reporter-proto.version>1.3-fc9d4d1</fistful-reporter-proto.version>
         <!---->
         <db.name>fistful_reporter</db.name>
         <db.schema>fr</db.schema>
