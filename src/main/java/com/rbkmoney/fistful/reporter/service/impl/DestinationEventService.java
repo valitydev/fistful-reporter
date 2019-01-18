@@ -25,6 +25,7 @@ public class DestinationEventService implements EventService<SinkEvent> {
     private final DestinationDao destinationDao;
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRED)
     public Optional<Long> getLastEventId() {
         try {
             Optional<Long> lastEventId = destinationDao.getLastEventId();

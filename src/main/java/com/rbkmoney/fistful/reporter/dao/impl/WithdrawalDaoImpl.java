@@ -5,6 +5,7 @@ import com.rbkmoney.fistful.reporter.dao.mapper.RecordRowMapper;
 import com.rbkmoney.fistful.reporter.domain.tables.pojos.Withdrawal;
 import com.rbkmoney.fistful.reporter.domain.tables.records.WithdrawalRecord;
 import com.rbkmoney.fistful.reporter.exception.DaoException;
+import org.jooq.Condition;
 import org.jooq.Query;
 import org.jooq.impl.DSL;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +32,7 @@ public class WithdrawalDaoImpl extends AbstractGenericDao implements WithdrawalD
     @Override
     public Optional<Long> getLastEventId() throws DaoException {
         Query query = getDslContext().select(DSL.max(WITHDRAWAL.EVENT_ID)).from(WITHDRAWAL);
+
         return Optional.ofNullable(fetchOne(query, Long.class));
     }
 
@@ -46,22 +48,19 @@ public class WithdrawalDaoImpl extends AbstractGenericDao implements WithdrawalD
 
     @Override
     public Withdrawal get(String withdrawalId) throws DaoException {
-        Query query = getDslContext().selectFrom(WITHDRAWAL)
-                .where(
-                        WITHDRAWAL.WITHDRAWAL_ID.eq(withdrawalId)
-                                .and(WITHDRAWAL.CURRENT)
-                );
+        Condition condition = WITHDRAWAL.WITHDRAWAL_ID.eq(withdrawalId)
+                .and(WITHDRAWAL.CURRENT);
+        Query query = getDslContext().selectFrom(WITHDRAWAL).where(condition);
 
         return fetchOne(query, withdrawalRowMapper);
     }
 
     @Override
     public void updateNotCurrent(String withdrawalId) throws DaoException {
-        Query query = getDslContext().update(WITHDRAWAL).set(WITHDRAWAL.CURRENT, false)
-                .where(
-                        WITHDRAWAL.WITHDRAWAL_ID.eq(withdrawalId)
-                                .and(WITHDRAWAL.CURRENT)
-                );
+        Condition condition = WITHDRAWAL.WITHDRAWAL_ID.eq(withdrawalId)
+                .and(WITHDRAWAL.CURRENT);
+        Query query = getDslContext().update(WITHDRAWAL).set(WITHDRAWAL.CURRENT, false).where(condition);
+
         executeOne(query);
     }
 }

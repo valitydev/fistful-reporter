@@ -25,6 +25,7 @@ public class DepositEventService implements EventService<SinkEvent> {
     private final DepositDao depositDao;
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRED)
     public Optional<Long> getLastEventId() {
         try {
             Optional<Long> lastEventId = depositDao.getLastEventId();

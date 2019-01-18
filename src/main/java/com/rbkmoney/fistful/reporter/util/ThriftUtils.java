@@ -1,6 +1,6 @@
 package com.rbkmoney.fistful.reporter.util;
 
-import com.rbkmoney.damsel.base.InvalidRequest;
+import com.rbkmoney.fistful.reporter.InvalidRequest;
 import com.rbkmoney.fistful.reporter.Report;
 import com.rbkmoney.fistful.reporter.ReportStatus;
 import com.rbkmoney.fistful.reporter.ReportTimeRange;

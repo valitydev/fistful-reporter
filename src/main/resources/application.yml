@@ -32,9 +32,16 @@ eventStock:
 partyManagement:
   url: http://hellgate:8022/v1/processing/partymgmt
   timeout: 5000
+fileStorage:
+  url: http://localhost:8022/file-storage
+  clientTimeout: 5000
+  urlLifeTimeDuration: 360
+  timeZone: Europe/Moscow
 reporting:
   reportsLimit: 0
   defaultTimeZone: Europe/Moscow
+  pollingEnable: true
+  pollingDelay: 3000
 deposit:
   polling:
     url: http://localhost:8022/v1/eventsink/deposit

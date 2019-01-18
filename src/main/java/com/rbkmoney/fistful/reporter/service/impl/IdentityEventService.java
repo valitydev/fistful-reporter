@@ -25,6 +25,7 @@ public class IdentityEventService implements EventService<SinkEvent> {
     private final IdentityDao identityDao;
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRED)
     public Optional<Long> getLastEventId() {
         try {
             Optional<Long> lastEventId = identityDao.getLastEventId();

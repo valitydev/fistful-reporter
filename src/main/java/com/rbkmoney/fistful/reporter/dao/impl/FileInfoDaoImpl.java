@@ -5,6 +5,7 @@ import com.rbkmoney.fistful.reporter.dao.mapper.RecordRowMapper;
 import com.rbkmoney.fistful.reporter.domain.tables.pojos.FileInfo;
 import com.rbkmoney.fistful.reporter.domain.tables.records.FileInfoRecord;
 import com.rbkmoney.fistful.reporter.exception.DaoException;
+import org.jooq.Condition;
 import org.jooq.Query;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.stereotype.Component;
@@ -36,8 +37,9 @@ public class FileInfoDaoImpl extends AbstractGenericDao implements FileInfoDao {
 
     @Override
     public List<FileInfo> getByReportId(Long reportId) throws DaoException {
-        Query query = getDslContext().selectFrom(FILE_INFO)
-                .where(FILE_INFO.REPORT_ID.eq(reportId));
+        Condition condition = FILE_INFO.REPORT_ID.eq(reportId);
+        Query query = getDslContext().selectFrom(FILE_INFO).where(condition);
+
         return fetch(query, fileInfoRecordRowMapper);
     }
 }

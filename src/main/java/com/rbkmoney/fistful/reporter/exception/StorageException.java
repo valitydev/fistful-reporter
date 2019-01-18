@@ -20,5 +20,4 @@ public class StorageException extends RuntimeException {
     public StorageException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
         super(message, cause, enableSuppression, writableStackTrace);
     }
-
 }

@@ -25,6 +25,7 @@ public class SourceEventService implements EventService<SinkEvent> {
     private final SourceDao sourceDao;
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRED)
     public Optional<Long> getLastEventId() {
         try {
             Optional<Long> lastEventId = sourceDao.getLastEventId();

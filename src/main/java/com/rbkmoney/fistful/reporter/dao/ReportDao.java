@@ -9,11 +9,13 @@ import java.util.List;
 
 public interface ReportDao extends GenericDao {
 
+    long save(Report report) throws DaoException;
+
     List<Report> getReportsByRange(String partyId, String contractId, LocalDateTime fromTime, LocalDateTime toTime, List<String> reportTypes) throws DaoException;
 
-    Report getReport(String partyId, String contractId, long reportId) throws DaoException;
-
-    long createReport(String partyId, String contractId, LocalDateTime fromTime, LocalDateTime toTime, String reportType, String timezone, LocalDateTime createdAt) throws DaoException;
+    Report getReport(long reportId, String partyId, String contractId) throws DaoException;
 
     void changeReportStatus(Long reportId, ReportStatus reportStatus) throws DaoException;
+
+    List<Report> getPendingReports() throws DaoException;
 }

@@ -25,6 +25,7 @@ public class WithdrawalEventService implements EventService<SinkEvent> {
     private final WithdrawalDao withdrawalDao;
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRED)
     public Optional<Long> getLastEventId() {
         try {
             Optional<Long> lastEventId = withdrawalDao.getLastEventId();

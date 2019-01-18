@@ -1,5 +1,6 @@
 package com.rbkmoney.fistful.reporter.service;
 
+import com.rbkmoney.fistful.reporter.domain.enums.ReportStatus;
 import com.rbkmoney.fistful.reporter.domain.tables.pojos.Report;
 import com.rbkmoney.fistful.reporter.exception.ReportNotFoundException;
 import com.rbkmoney.fistful.reporter.exception.StorageException;
@@ -18,4 +19,8 @@ public interface ReportService {
     Report getReport(String partyId, String contractId, long reportId) throws ReportNotFoundException, StorageException;
 
     void cancelReport(String partyId, String shopId, long reportId) throws ReportNotFoundException, StorageException;
+
+    void changeReportStatus(Report report, ReportStatus reportStatus) throws StorageException;
+
+    List<Report> getPendingReports() throws StorageException;
 }

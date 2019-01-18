@@ -1,6 +1,5 @@
 package com.rbkmoney.fistful.reporter.handler;
 
-import com.rbkmoney.damsel.base.InvalidRequest;
 import com.rbkmoney.fistful.reporter.*;
 import com.rbkmoney.fistful.reporter.dto.ReportType;
 import com.rbkmoney.fistful.reporter.exception.ContractNotFoundException;

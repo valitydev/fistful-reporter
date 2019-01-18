@@ -4,6 +4,7 @@ import com.rbkmoney.fistful.reporter.dao.ReportDao;
 import com.rbkmoney.fistful.reporter.dao.mapper.RecordRowMapper;
 import com.rbkmoney.fistful.reporter.domain.enums.ReportStatus;
 import com.rbkmoney.fistful.reporter.domain.tables.pojos.Report;
+import com.rbkmoney.fistful.reporter.domain.tables.records.ReportRecord;
 import com.rbkmoney.fistful.reporter.exception.DaoException;
 import org.jooq.Condition;
 import org.jooq.Query;
@@ -27,6 +28,16 @@ public class ReportDaoImpl extends AbstractGenericDao implements ReportDao {
     }
 
     @Override
+    public long save(Report report) throws DaoException {
+        ReportRecord record = getDslContext().newRecord(REPORT, report);
+        Query query = getDslContext().insertInto(REPORT).set(record).returning(REPORT.ID);
+
+        GeneratedKeyHolder keyHolder = new GeneratedKeyHolder();
+        executeOne(query, keyHolder);
+        return keyHolder.getKey().longValue();
+    }
+
+    @Override
     public List<Report> getReportsByRange(String partyId, String contractId, LocalDateTime fromTime, LocalDateTime toTime, List<String> reportTypes) throws DaoException {
         Condition condition = REPORT.PARTY_ID.eq(partyId)
                 .and(REPORT.CONTRACT_ID.eq(contractId))
@@ -43,39 +54,28 @@ public class ReportDaoImpl extends AbstractGenericDao implements ReportDao {
     }
 
     @Override
-    public Report getReport(String partyId, String contractId, long reportId) throws DaoException {
-        Query query = getDslContext().selectFrom(REPORT).where(
-                REPORT.ID.eq(reportId)
-                        .and(REPORT.PARTY_ID.eq(partyId))
-                        .and(REPORT.CONTRACT_ID.eq(contractId))
-        );
+    public Report getReport(long reportId, String partyId, String contractId) throws DaoException {
+        Condition condition = REPORT.ID.eq(reportId)
+                .and(REPORT.PARTY_ID.eq(partyId))
+                .and(REPORT.CONTRACT_ID.eq(contractId));
+        Query query = getDslContext().selectFrom(REPORT).where(condition);
+
         return fetchOne(query, reportRowMapper);
     }
 
     @Override
-    public long createReport(String partyId, String contractId, LocalDateTime fromTime, LocalDateTime toTime, String reportType, String timezone, LocalDateTime createdAt) throws DaoException {
-        GeneratedKeyHolder keyHolder = new GeneratedKeyHolder();
+    public void changeReportStatus(Long reportId, ReportStatus reportStatus) throws DaoException {
+        Condition condition = REPORT.ID.eq(reportId);
+        Query query = getDslContext().update(REPORT).set(REPORT.STATUS, reportStatus).where(condition);
 
-        Query query = getDslContext().insertInto(REPORT)
-                .set(REPORT.PARTY_ID, partyId)
-                .set(REPORT.CONTRACT_ID, contractId)
-                .set(REPORT.FROM_TIME, fromTime)
-                .set(REPORT.TO_TIME, toTime)
-                .set(REPORT.CREATED_AT, createdAt)
-                .set(REPORT.TYPE, reportType)
-                .set(REPORT.TIMEZONE, timezone)
-                .returning(REPORT.ID);
-
-        executeOne(query, keyHolder);
-        return keyHolder.getKey().longValue();
+        executeOne(query);
     }
 
     @Override
-    public void changeReportStatus(Long reportId, ReportStatus reportStatus) throws DaoException {
-        Query query = getDslContext().update(REPORT)
-                .set(REPORT.STATUS, reportStatus)
-                .where(REPORT.ID.eq(reportId));
+    public List<Report> getPendingReports() throws DaoException {
+        Condition condition = REPORT.STATUS.eq(ReportStatus.pending);
+        Query query = getDslContext().selectFrom(REPORT).where(condition).forUpdate();
 
-        executeOne(query);
+        return fetch(query, reportRowMapper);
     }
 }

@@ -5,6 +5,7 @@ import com.rbkmoney.fistful.reporter.dao.mapper.RecordRowMapper;
 import com.rbkmoney.fistful.reporter.domain.tables.pojos.Challenge;
 import com.rbkmoney.fistful.reporter.domain.tables.records.ChallengeRecord;
 import com.rbkmoney.fistful.reporter.exception.DaoException;
+import org.jooq.Condition;
 import org.jooq.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.RowMapper;
@@ -12,6 +13,8 @@ import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.stereotype.Component;
 
 import javax.sql.DataSource;
+
+import static com.rbkmoney.fistful.reporter.domain.tables.Challenge.CHALLENGE;
 
 @Component
 public class ChallengeDaoImpl extends AbstractGenericDao implements ChallengeDao {
@@ -21,13 +24,13 @@ public class ChallengeDaoImpl extends AbstractGenericDao implements ChallengeDao
     @Autowired
     public ChallengeDaoImpl(DataSource dataSource) {
         super(dataSource);
-        challengeRowMapper = new RecordRowMapper<>(com.rbkmoney.fistful.reporter.domain.tables.Challenge.CHALLENGE, Challenge.class);
+        challengeRowMapper = new RecordRowMapper<>(CHALLENGE, Challenge.class);
     }
 
     @Override
     public Long save(Challenge challenge) throws DaoException {
-        ChallengeRecord record = getDslContext().newRecord(com.rbkmoney.fistful.reporter.domain.tables.Challenge.CHALLENGE, challenge);
-        Query query = getDslContext().insertInto(com.rbkmoney.fistful.reporter.domain.tables.Challenge.CHALLENGE).set(record).returning(com.rbkmoney.fistful.reporter.domain.tables.Challenge.CHALLENGE.ID);
+        ChallengeRecord record = getDslContext().newRecord(CHALLENGE, challenge);
+        Query query = getDslContext().insertInto(CHALLENGE).set(record).returning(CHALLENGE.ID);
 
         GeneratedKeyHolder keyHolder = new GeneratedKeyHolder();
         executeOne(query, keyHolder);
@@ -36,24 +39,21 @@ public class ChallengeDaoImpl extends AbstractGenericDao implements ChallengeDao
 
     @Override
     public Challenge get(String identityId, String challengeId) throws DaoException {
-        Query query = getDslContext().selectFrom(com.rbkmoney.fistful.reporter.domain.tables.Challenge.CHALLENGE)
-                .where(
-                        com.rbkmoney.fistful.reporter.domain.tables.Challenge.CHALLENGE.IDENTITY_ID.eq(identityId)
-                                .and(com.rbkmoney.fistful.reporter.domain.tables.Challenge.CHALLENGE.CHALLENGE_ID.eq(challengeId))
-                                .and(com.rbkmoney.fistful.reporter.domain.tables.Challenge.CHALLENGE.CURRENT)
-                );
+        Condition condition = CHALLENGE.IDENTITY_ID.eq(identityId)
+                .and(CHALLENGE.CHALLENGE_ID.eq(challengeId))
+                .and(CHALLENGE.CURRENT);
+        Query query = getDslContext().selectFrom(CHALLENGE).where(condition);
 
         return fetchOne(query, challengeRowMapper);
     }
 
     @Override
     public void updateNotCurrent(String identityId, String challengeId) throws DaoException {
-        Query query = getDslContext().update(com.rbkmoney.fistful.reporter.domain.tables.Challenge.CHALLENGE).set(com.rbkmoney.fistful.reporter.domain.tables.Challenge.CHALLENGE.CURRENT, false)
-                .where(
-                        com.rbkmoney.fistful.reporter.domain.tables.Challenge.CHALLENGE.IDENTITY_ID.eq(identityId)
-                                .and(com.rbkmoney.fistful.reporter.domain.tables.Challenge.CHALLENGE.CHALLENGE_ID.eq(challengeId))
-                                .and(com.rbkmoney.fistful.reporter.domain.tables.Challenge.CHALLENGE.CURRENT)
-                );
+        Condition condition = CHALLENGE.IDENTITY_ID.eq(identityId)
+                .and(CHALLENGE.CHALLENGE_ID.eq(challengeId))
+                .and(CHALLENGE.CURRENT);
+        Query query = getDslContext().update(CHALLENGE).set(CHALLENGE.CURRENT, false).where(condition);
+
         executeOne(query);
     }
 }

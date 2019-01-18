@@ -25,6 +25,7 @@ public class WalletEventService implements EventService<SinkEvent> {
     private final WalletDao walletDao;
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRED)
     public Optional<Long> getLastEventId() {
         try {
             Optional<Long> lastEventId = walletDao.getLastEventId();
