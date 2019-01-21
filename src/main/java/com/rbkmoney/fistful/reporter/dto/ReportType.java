@@ -1,8 +1,11 @@
 package com.rbkmoney.fistful.reporter.dto;
 
+/**
+ * данный enum должны содержит типы отчетов, использующиеся в протоколе
+ */
 public enum ReportType {
 
-    withdrawal_registry("withdrawal_registry");
+    WITHDRAWAL_REGISTRY("withdrawalRegistry");
 
     private final String type;
 

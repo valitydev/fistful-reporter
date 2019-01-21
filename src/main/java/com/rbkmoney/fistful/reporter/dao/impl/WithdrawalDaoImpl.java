@@ -2,6 +2,9 @@ package com.rbkmoney.fistful.reporter.dao.impl;
 
 import com.rbkmoney.fistful.reporter.dao.WithdrawalDao;
 import com.rbkmoney.fistful.reporter.dao.mapper.RecordRowMapper;
+import com.rbkmoney.fistful.reporter.domain.enums.WithdrawalEventType;
+import com.rbkmoney.fistful.reporter.domain.enums.WithdrawalStatus;
+import com.rbkmoney.fistful.reporter.domain.tables.pojos.Report;
 import com.rbkmoney.fistful.reporter.domain.tables.pojos.Withdrawal;
 import com.rbkmoney.fistful.reporter.domain.tables.records.WithdrawalRecord;
 import com.rbkmoney.fistful.reporter.exception.DaoException;
@@ -14,8 +17,12 @@ import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.stereotype.Component;
 
 import javax.sql.DataSource;
+import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
+import static com.rbkmoney.fistful.reporter.domain.tables.Identity.IDENTITY;
+import static com.rbkmoney.fistful.reporter.domain.tables.Wallet.WALLET;
 import static com.rbkmoney.fistful.reporter.domain.tables.Withdrawal.WITHDRAWAL;
 
 @Component
@@ -62,5 +69,41 @@ public class WithdrawalDaoImpl extends AbstractGenericDao implements WithdrawalD
         Query query = getDslContext().update(WITHDRAWAL).set(WITHDRAWAL.CURRENT, false).where(condition);
 
         executeOne(query);
+    }
+
+    @Override
+    public List<Withdrawal> getSucceededWithdrawalsByReport(Report report, Long fromId, int limit) throws DaoException {
+        String partyId = report.getPartyId();
+        String contractId = report.getContractId();
+        LocalDateTime fromTime = report.getFromTime();
+        LocalDateTime toTime = report.getToTime();
+
+        String walletIds = "wallet_ids";
+
+        Query query = getDslContext().select().from(WITHDRAWAL)
+                .join(
+                        DSL.lateral(
+                                getDslContext().select(WALLET.WALLET_ID).from(WALLET)
+                                        .join(IDENTITY)
+                                        .on(
+                                                IDENTITY.PARTY_ID.eq(partyId)
+                                                        .and(IDENTITY.PARTY_CONTRACT_ID.eq(contractId))
+                                                        .and(IDENTITY.IDENTITY_ID.eq(WALLET.IDENTITY_ID))
+                                        )
+                        )
+                                .as(walletIds)
+                )
+                .on(WITHDRAWAL.WALLET_ID.eq(walletIds))
+                .where(
+                        WITHDRAWAL.WITHDRAWAL_STATUS.eq(WithdrawalStatus.succeeded)
+                                .and(WITHDRAWAL.EVENT_TYPE.eq(WithdrawalEventType.WITHDRAWAL_STATUS_CHANGED))
+                                .and(WITHDRAWAL.EVENT_CREATED_AT.ge(fromTime))
+                                .and(WITHDRAWAL.EVENT_CREATED_AT.lt(toTime))
+                                .and(WITHDRAWAL.ID.le(fromId))
+                )
+                .orderBy(WITHDRAWAL.EVENT_CREATED_AT.desc())
+                .limit(limit);
+
+        return fetch(query, withdrawalRowMapper);
     }
 }

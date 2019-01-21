@@ -41,7 +41,7 @@ public class ReportServiceImpl implements ReportService {
     @Transactional(propagation = Propagation.REQUIRED)
     public List<Report> getReportsByRange(String partyId, String contractId, Instant fromTime, Instant toTime, List<String> reportTypes) throws StorageException {
         try {
-            log.info("Trying to get reports by range, partyId={}, contractId={},", partyId, contractId);
+            log.info("Trying to get reports by range, partyId={}, contractId={}", partyId, contractId);
             List<Report> reportsByRange = reportDao.getReportsByRange(
                     partyId,
                     contractId,
@@ -49,7 +49,7 @@ public class ReportServiceImpl implements ReportService {
                     LocalDateTime.ofInstant(toTime, ZoneOffset.UTC),
                     reportTypes
             );
-            log.info("Reports by range have been found, partyId={}, contractId={},", partyId, contractId);
+            log.info("Reports by range have been found, partyId={}, contractId={}", partyId, contractId);
             return reportsByRange;
         } catch (DaoException ex) {
             throw new StorageException(
@@ -74,12 +74,12 @@ public class ReportServiceImpl implements ReportService {
     @Transactional(propagation = Propagation.REQUIRED)
     public Report getReport(String partyId, String contractId, long reportId) throws ReportNotFoundException, StorageException {
         try {
-            log.info("Trying to get report, reportId={}, partyId={}, contractId={},", reportId, partyId, contractId);
+            log.info("Trying to get report, reportId={}, partyId={}, contractId={}", reportId, partyId, contractId);
             Report report = reportDao.getReport(reportId, partyId, contractId);
             if (report == null) {
                 throw new ReportNotFoundException(String.format("Report not found, partyId='%s', contractId='%s', reportId='%d'", partyId, contractId, reportId));
             }
-            log.info("Report have been found, reportId={}, partyId={}, contractId={},", reportId, partyId, contractId);
+            log.info("Report have been found, reportId={}, partyId={}, contractId={}", reportId, partyId, contractId);
             return report;
         } catch (DaoException ex) {
             throw new StorageException(
@@ -119,7 +119,7 @@ public class ReportServiceImpl implements ReportService {
         try {
             log.info("Trying to get pending reports");
             List<Report> pendingReports = reportDao.getPendingReports();
-            log.info("{} pending reports have been found, partyId={}, contractId={},", pendingReports.size());
+            log.info("{} pending reports have been found", pendingReports.size());
             return pendingReports;
         } catch (DaoException ex) {
             throw new StorageException("Failed to get pending reports", ex);

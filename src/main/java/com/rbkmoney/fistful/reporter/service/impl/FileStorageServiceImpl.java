@@ -80,10 +80,10 @@ public class FileStorageServiceImpl implements FileStorageService {
     }
 
     private Instant getTime() {
-        Instant instant = Instant.now();
         // меняем на UTC , сдвигаем на тайм зону file-storage сервиса
-        return LocalDateTime.ofInstant(instant, ZoneOffset.UTC)
-                .plusMinutes(urlLifeTime)
-                .toInstant(timeZone.getRules().getOffset(instant));
+        return LocalDateTime.now().plusMinutes(urlLifeTime)
+                .toInstant(ZoneOffset.UTC)
+                .atZone(timeZone)
+                .toInstant();
     }
 }

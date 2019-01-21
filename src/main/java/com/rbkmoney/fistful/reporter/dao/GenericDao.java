@@ -23,6 +23,8 @@ public interface GenericDao {
 
     <T> T fetchOne(String namedSql, SqlParameterSource parameterSource, RowMapper<T> rowMapper, NamedParameterJdbcTemplate namedParameterJdbcTemplate) throws DaoException;
 
+    <T> List<T> fetch(Query query, Class<T> type) throws DaoException;
+
     <T> List<T> fetch(Query query, RowMapper<T> rowMapper) throws DaoException;
 
     <T> List<T> fetch(String namedSql, SqlParameterSource parameterSource, RowMapper<T> rowMapper) throws DaoException;

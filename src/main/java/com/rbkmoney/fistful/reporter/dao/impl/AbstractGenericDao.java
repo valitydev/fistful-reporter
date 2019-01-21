@@ -76,6 +76,11 @@ public abstract class AbstractGenericDao extends NamedParameterJdbcDaoSupport im
     }
 
     @Override
+    public <T> List<T> fetch(Query query, Class<T> type) throws DaoException {
+        return fetch(query, new SingleColumnRowMapper<>(type));
+    }
+
+    @Override
     public <T> List<T> fetch(Query query, RowMapper<T> rowMapper) throws DaoException {
         return fetch(query, rowMapper, getNamedParameterJdbcTemplate());
     }
