@@ -10,7 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import static io.github.benas.randombeans.api.EnhancedRandom.random;
 import static org.junit.Assert.assertNull;
 
-public class IdentityDaoImplTest extends AbstractIntegrationTest {
+public class IdentityDaoTest extends AbstractIntegrationTest {
 
     @Autowired
     private IdentityDao identityDao;

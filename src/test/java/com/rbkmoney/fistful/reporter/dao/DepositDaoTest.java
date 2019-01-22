@@ -10,13 +10,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import static io.github.benas.randombeans.api.EnhancedRandom.random;
 import static org.junit.Assert.assertNull;
 
-public class DepositImplTest extends AbstractIntegrationTest {
+public class DepositDaoTest extends AbstractIntegrationTest {
 
     @Autowired
     private DepositDao depositDao;
 
     @Test
-    public void saveAndGetTest() throws DaoException {
+    public void test() throws DaoException {
         Deposit deposit = random(Deposit.class);
         deposit.setCurrent(true);
         Long id = depositDao.save(deposit);

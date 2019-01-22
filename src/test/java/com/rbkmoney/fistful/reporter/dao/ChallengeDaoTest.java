@@ -10,7 +10,7 @@ import static io.github.benas.randombeans.api.EnhancedRandom.random;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
-public class ChallengeDaoImplTest extends AbstractIntegrationTest {
+public class ChallengeDaoTest extends AbstractIntegrationTest {
 
     @Autowired
     private ChallengeDao challengeDao;

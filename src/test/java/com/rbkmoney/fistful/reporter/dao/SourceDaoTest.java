@@ -10,13 +10,13 @@ import static io.github.benas.randombeans.api.EnhancedRandom.random;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
-public class SourceDaoImplTest extends AbstractIntegrationTest {
+public class SourceDaoTest extends AbstractIntegrationTest {
 
     @Autowired
     private SourceDao sourceDao;
 
     @Test
-    public void saveAndGetTest() throws DaoException {
+    public void test() throws DaoException {
         Source source = random(Source.class);
         source.setCurrent(true);
         Long id = sourceDao.save(source);
