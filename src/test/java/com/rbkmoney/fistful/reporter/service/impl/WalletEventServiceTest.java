@@ -11,16 +11,17 @@ import com.rbkmoney.fistful.wallet.Event;
 import com.rbkmoney.fistful.wallet.SinkEvent;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 
-import java.util.Arrays;
 import java.util.List;
 
 import static io.github.benas.randombeans.api.EnhancedRandom.random;
+import static java.util.Arrays.asList;
 import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.anyString;
+import static org.mockito.Mockito.when;
 
 public class WalletEventServiceTest extends AbstractIntegrationTest {
 
@@ -32,12 +33,12 @@ public class WalletEventServiceTest extends AbstractIntegrationTest {
 
     @Before
     public void setUp() throws Exception {
-        Mockito.when(identityDao.get(Mockito.anyString())).thenReturn(random(Identity.class));
+        when(identityDao.get(anyString())).thenReturn(random(Identity.class));
     }
 
     @Test
     public void test() {
-        List<Change> changes = Arrays.asList(
+        List<Change> changes = asList(
                 createCreatedChange(),
                 createAccountCreatedChange()
         );

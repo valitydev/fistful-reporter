@@ -8,16 +8,17 @@ import com.rbkmoney.fistful.reporter.dao.IdentityDao;
 import com.rbkmoney.fistful.reporter.domain.tables.pojos.Identity;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 
-import java.util.Arrays;
 import java.util.List;
 
 import static io.github.benas.randombeans.api.EnhancedRandom.random;
+import static java.util.Arrays.asList;
 import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.anyString;
+import static org.mockito.Mockito.when;
 
 public class DestinationEventServiceTest extends AbstractIntegrationTest {
 
@@ -29,14 +30,14 @@ public class DestinationEventServiceTest extends AbstractIntegrationTest {
 
     @Before
     public void setUp() throws Exception {
-        Mockito.when(identityDao.get(Mockito.anyString())).thenReturn(random(Identity.class));
+        when(identityDao.get(anyString())).thenReturn(random(Identity.class));
     }
 
     @Test
     public void test() {
         String destinationId = generateString();
 
-        List<Change> changes = Arrays.asList(
+        List<Change> changes = asList(
                 createCreatedChange(),
                 createStatusChangedChange(),
                 createAccountCreatedChange()

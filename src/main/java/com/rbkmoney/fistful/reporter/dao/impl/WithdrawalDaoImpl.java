@@ -9,8 +9,9 @@ import com.rbkmoney.fistful.reporter.domain.tables.pojos.Withdrawal;
 import com.rbkmoney.fistful.reporter.domain.tables.records.WithdrawalRecord;
 import com.rbkmoney.fistful.reporter.exception.DaoException;
 import org.jooq.Condition;
+import org.jooq.Field;
 import org.jooq.Query;
-import org.jooq.impl.DSL;
+import org.jooq.Table;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -24,6 +25,7 @@ import java.util.Optional;
 import static com.rbkmoney.fistful.reporter.domain.tables.Identity.IDENTITY;
 import static com.rbkmoney.fistful.reporter.domain.tables.Wallet.WALLET;
 import static com.rbkmoney.fistful.reporter.domain.tables.Withdrawal.WITHDRAWAL;
+import static org.jooq.impl.DSL.max;
 
 @Component
 public class WithdrawalDaoImpl extends AbstractGenericDao implements WithdrawalDao {
@@ -38,7 +40,7 @@ public class WithdrawalDaoImpl extends AbstractGenericDao implements WithdrawalD
 
     @Override
     public Optional<Long> getLastEventId() throws DaoException {
-        Query query = getDslContext().select(DSL.max(WITHDRAWAL.EVENT_ID)).from(WITHDRAWAL);
+        Query query = getDslContext().select(max(WITHDRAWAL.EVENT_ID)).from(WITHDRAWAL);
 
         return Optional.ofNullable(fetchOne(query, Long.class));
     }
@@ -78,30 +80,34 @@ public class WithdrawalDaoImpl extends AbstractGenericDao implements WithdrawalD
         LocalDateTime fromTime = report.getFromTime();
         LocalDateTime toTime = report.getToTime();
 
-        String walletIds = "wallet_ids";
+
+        String identityIdsTableAlias = "i";
+        String identityId = "identity_id";
+        Table identityIdsTable = getDslContext().selectDistinct(IDENTITY.IDENTITY_ID).from(IDENTITY)
+                .where(
+                        IDENTITY.PARTY_ID.eq(partyId)
+                                .and(IDENTITY.PARTY_CONTRACT_ID.eq(contractId))
+                )
+                .asTable(identityIdsTableAlias);
+
+        String walletIdsTableAlias = "w";
+        String walletId = "wallet_id";
+        Table walletIdsTable = getDslContext().selectDistinct(WALLET.WALLET_ID).from(WALLET)
+                .join(identityIdsTable)
+                .on(WALLET.IDENTITY_ID.eq((Field<String>) identityIdsTable.field(identityId)))
+                .asTable(walletIdsTableAlias);
 
         Query query = getDslContext().select().from(WITHDRAWAL)
-                .join(
-                        DSL.lateral(
-                                getDslContext().select(WALLET.WALLET_ID).from(WALLET)
-                                        .join(IDENTITY)
-                                        .on(
-                                                IDENTITY.PARTY_ID.eq(partyId)
-                                                        .and(IDENTITY.PARTY_CONTRACT_ID.eq(contractId))
-                                                        .and(IDENTITY.IDENTITY_ID.eq(WALLET.IDENTITY_ID))
-                                        )
-                        )
-                                .as(walletIds)
-                )
-                .on(WITHDRAWAL.WALLET_ID.eq(walletIds))
-                .where(
-                        WITHDRAWAL.WITHDRAWAL_STATUS.eq(WithdrawalStatus.succeeded)
+                .join(walletIdsTable)
+                .on(
+                        WITHDRAWAL.WALLET_ID.eq((Field<String>) walletIdsTable.field(walletId))
                                 .and(WITHDRAWAL.EVENT_TYPE.eq(WithdrawalEventType.WITHDRAWAL_STATUS_CHANGED))
+                                .and(WITHDRAWAL.WITHDRAWAL_STATUS.eq(WithdrawalStatus.succeeded))
                                 .and(WITHDRAWAL.EVENT_CREATED_AT.ge(fromTime))
-                                .and(WITHDRAWAL.EVENT_CREATED_AT.lt(toTime))
-                                .and(WITHDRAWAL.ID.le(fromId))
+                                .and(WITHDRAWAL.EVENT_CREATED_AT.le(toTime))
+                                .and(WITHDRAWAL.ID.gt(fromId))
                 )
-                .orderBy(WITHDRAWAL.EVENT_CREATED_AT.desc())
+                .orderBy(WITHDRAWAL.ID)
                 .limit(limit);
 
         return fetch(query, withdrawalRowMapper);

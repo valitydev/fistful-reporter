@@ -4,7 +4,6 @@ import com.rbkmoney.fistful.reporter.AbstractIntegrationTest;
 import com.rbkmoney.fistful.reporter.domain.tables.pojos.FileInfo;
 import com.rbkmoney.fistful.reporter.domain.tables.pojos.Report;
 import com.rbkmoney.fistful.reporter.exception.DaoException;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +12,7 @@ import java.util.List;
 
 import static io.github.benas.randombeans.api.EnhancedRandom.random;
 import static io.github.benas.randombeans.api.EnhancedRandom.randomListOf;
+import static org.junit.Assert.assertEquals;
 
 public class FileInfoDaoImplTest extends AbstractIntegrationTest {
 
@@ -40,6 +40,6 @@ public class FileInfoDaoImplTest extends AbstractIntegrationTest {
             fileInfoDao.save(fileInfo);
 
         }
-        Assert.assertEquals(size, fileInfoDao.getByReportId(reportId).size());
+        assertEquals(size, fileInfoDao.getByReportId(reportId).size());
     }
 }

@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.time.Instant;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -79,7 +80,10 @@ public class FistfulReportsHandler implements ReportingSrv.Iface {
                 throw new IllegalArgumentException("fromTime must be less that toTime");
             }
 
-            ReportType.valueOf(reportType);
+            if (Arrays.stream(ReportType.values())
+                    .noneMatch(r -> r.getType().equals(reportType))) {
+                throw new IllegalArgumentException("reportType does not exist");
+            }
 
             // проверка на существование в хелгейте
             partyManagementService.getContract(reportRequest.getPartyId(), reportRequest.getContractId());

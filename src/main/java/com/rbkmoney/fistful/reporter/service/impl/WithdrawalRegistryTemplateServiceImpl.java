@@ -62,6 +62,7 @@ public class WithdrawalRegistryTemplateServiceImpl implements TemplateService {
                     row.createCell(2).setCellValue(withdrawal.getAmount());
                     row.createCell(3).setCellValue(withdrawal.getCurrencyCode());
                     row.createCell(4).setCellValue(withdrawal.getFee());
+                    inc.increment();
                 }
         );
 

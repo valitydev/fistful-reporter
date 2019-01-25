@@ -24,10 +24,21 @@ import static org.springframework.boot.test.context.SpringBootTest.WebEnvironmen
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = RANDOM_PORT)
-@TestPropertySource(properties = {"eventStock.pollingEnable=false"})
+@TestPropertySource(
+        properties = {
+                "eventStock.pollingEnable=false",
+                "reporting.pollingEnable=false",
+                "fileStorage.url=http://localhost:42826/file_storage",
+                "fileStorage.healthCheckUrl=http://localhost:42826/actuator/health"
+        }
+)
 @ContextConfiguration(classes = FistfulReporterApplication.class, initializers = AbstractIntegrationTest.Initializer.class)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
 public abstract class AbstractIntegrationTest {
+
+    protected LocalDateTime fromTime = LocalDateTime.now().minusHours(3);
+    protected LocalDateTime toTime = LocalDateTime.now().minusHours(1);
+    protected LocalDateTime inFromToPeriodTime = LocalDateTime.now().minusHours(2);
 
     @Value("${local.server.port}")
     protected int port;
@@ -55,19 +66,19 @@ public abstract class AbstractIntegrationTest {
         }
     }
 
-    protected String generateDate() {
+    protected static String generateDate() {
         return TypeUtil.temporalToString(LocalDateTime.now());
     }
 
-    protected Long generateLong() {
+    protected static Long generateLong() {
         return random(Long.class);
     }
 
-    protected Integer generateInt() {
+    protected static Integer generateInt() {
         return random(Integer.class);
     }
 
-    protected String generateString() {
+    protected static String generateString() {
         return random(String.class);
     }
 }

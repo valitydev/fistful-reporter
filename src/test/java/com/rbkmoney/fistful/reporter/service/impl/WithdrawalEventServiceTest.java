@@ -8,10 +8,10 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 
-import java.util.Arrays;
 import java.util.List;
 
 import static io.github.benas.randombeans.api.EnhancedRandom.random;
+import static java.util.Arrays.asList;
 import static org.junit.Assert.assertEquals;
 
 public class WithdrawalEventServiceTest extends AbstractIntegrationTest {
@@ -21,7 +21,7 @@ public class WithdrawalEventServiceTest extends AbstractIntegrationTest {
 
     @Test
     public void test() {
-        List<Change> changes = Arrays.asList(
+        List<Change> changes = asList(
                 createCreatedChange(),
                 createStatusChangedChange(),
                 createTransferCreatedChange(),
@@ -70,7 +70,7 @@ public class WithdrawalEventServiceTest extends AbstractIntegrationTest {
                 TransferChange.created(
                         new Transfer(
                                 new FinalCashFlow(
-                                        Arrays.asList(
+                                        asList(
                                                 new FinalCashFlowPosting(
                                                         new FinalCashFlowAccount(
                                                                 CashFlowAccount.merchant(MerchantCashFlowAccount.payout),

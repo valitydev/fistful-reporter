@@ -1,0 +1,41 @@
+version: '3'
+services:
+  ceph-test:
+    image: 'dr.rbkmoney.com/ceph-demo:latest'
+    container_name: ceph-test
+    hostname: ceph-test
+    ports:
+    - "42827:80"
+    networks:
+    - fr_backend
+    environment:
+      SERVICE_NAME: "ceph-test"
+      RGW_NAME: "localhost"
+      NETWORK_AUTO_DETECT: "4"
+      CEPH_DEMO_UID: "ceph-test"
+      CEPH_DEMO_ACCESS_KEY: "test"
+      CEPH_DEMO_SECRET_KEY: "test"
+      CEPH_DEMO_BUCKET: "test"
+  file-storage-test:
+    image: 'dr.rbkmoney.com/rbkmoney/file-storage:0d66e41b5c6200bb2101929f6c03b7430fa98958'
+    depends_on:
+    - ceph-test
+    container_name: file-storage-test
+    hostname: file-storage-test
+    ports:
+    - "42826:8022"
+    networks:
+    - fr_backend
+    environment:
+      SERVICE_NAME: "file-storage-test"
+      server.port: "8022"
+      storage.endpoint: "ceph-test:80"
+      storage.signingRegion: "RU"
+      storage.accessKey: "test"
+      storage.secretKey: "test"
+      storage.clientProtocol: "HTTP"
+      storage.clientMaxErrorRetry: "10"
+      storage.bucketName: "test"
+
+networks:
+  fr_backend:

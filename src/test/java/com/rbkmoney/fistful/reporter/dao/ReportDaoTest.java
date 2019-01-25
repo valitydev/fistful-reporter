@@ -8,11 +8,11 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.LocalDateTime;
-import java.util.Collections;
 import java.util.List;
 
 import static io.github.benas.randombeans.api.EnhancedRandom.random;
 import static io.github.benas.randombeans.api.EnhancedRandom.randomListOf;
+import static java.util.Collections.emptyList;
 import static org.junit.Assert.assertEquals;
 
 public class ReportDaoTest extends AbstractIntegrationTest {
@@ -20,13 +20,11 @@ public class ReportDaoTest extends AbstractIntegrationTest {
     @Autowired
     private ReportDao reportDao;
 
-    private static final String PARTY_ID = "0";
-    private static final String CONTRACT_ID = "0";
+    private static final String PARTY_ID = generateString();
+    private static final String CONTRACT_ID = generateString();
 
     @Test
     public void test() throws DaoException {
-        LocalDateTime toTime = LocalDateTime.now();
-        LocalDateTime fromTime = LocalDateTime.now().minusHours(1);
         Report report = random(Report.class);
         configReport(report, fromTime, toTime);
         long id = reportDao.save(report);
@@ -43,9 +41,9 @@ public class ReportDaoTest extends AbstractIntegrationTest {
         reportDao.changeReportStatus(id, ReportStatus.created);
         assertEquals(reportDao.getPendingReports().size(), 4);
 
-        assertEquals(reportDao.getReportsByRange(PARTY_ID, CONTRACT_ID, fromTime, toTime, Collections.emptyList()).size(), 5);
+        assertEquals(reportDao.getReportsByRange(PARTY_ID, CONTRACT_ID, fromTime, toTime, emptyList()).size(), 5);
 
-        assertEquals(reportDao.getReportsByRange(PARTY_ID, CONTRACT_ID, fromTime.plusMinutes(1), toTime, Collections.emptyList()).size(), 0);
+        assertEquals(reportDao.getReportsByRange(PARTY_ID, CONTRACT_ID, fromTime.plusMinutes(1), toTime, emptyList()).size(), 0);
 
     }
 
