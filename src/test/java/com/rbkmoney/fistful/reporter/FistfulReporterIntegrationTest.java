@@ -21,7 +21,6 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.thrift.TException;
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -100,8 +99,6 @@ public class FistfulReporterIntegrationTest extends AbstractWithdrawalTest {
         reportClient.generateReport(request, "kek");
     }
 
-    // comment ignore at local dev
-    @Ignore
     @Test
     public void test() throws TException, IOException, InterruptedException {
         upConteiners();
