@@ -37,6 +37,8 @@ CREATE INDEX identity_event_occured_at_idx
   on fr.identity (event_occured_at);
 CREATE INDEX identity_party_id_idx
   on fr.identity (party_id);
+CREATE INDEX identity_party_contract_id_idx
+  on fr.identity (party_contract_id);
 
 -- challenge
 

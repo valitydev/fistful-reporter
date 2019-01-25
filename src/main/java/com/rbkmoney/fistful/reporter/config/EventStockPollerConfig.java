@@ -24,7 +24,7 @@ public class EventStockPollerConfig {
             @Value("${deposit.polling.retryDelay}") int retryDelay
     ) throws IOException {
         return new FistfulPollingEventPublisherBuilder()
-                .withIdentityServiceAdapter()
+                .withDepositServiceAdapter()
                 .withURI(pollingUrl.getURI())
                 .withMaxQuerySize(pollingQuerySize)
                 .withMaxPoolSize(pollingMaxPoolSize)
@@ -44,7 +44,7 @@ public class EventStockPollerConfig {
             @Value("${destination.polling.retryDelay}") int retryDelay
     ) throws IOException {
         return new FistfulPollingEventPublisherBuilder()
-                .withIdentityServiceAdapter()
+                .withDestinationServiceAdapter()
                 .withURI(pollingUrl.getURI())
                 .withMaxQuerySize(pollingQuerySize)
                 .withMaxPoolSize(pollingMaxPoolSize)
@@ -84,7 +84,7 @@ public class EventStockPollerConfig {
             @Value("${source.polling.retryDelay}") int retryDelay
     ) throws IOException {
         return new FistfulPollingEventPublisherBuilder()
-                .withIdentityServiceAdapter()
+                .withSourceServiceAdapter()
                 .withURI(pollingUrl.getURI())
                 .withMaxQuerySize(pollingQuerySize)
                 .withMaxPoolSize(pollingMaxPoolSize)
