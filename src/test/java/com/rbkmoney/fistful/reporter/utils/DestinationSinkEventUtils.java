@@ -1,0 +1,52 @@
+package com.rbkmoney.fistful.reporter.utils;
+
+import com.rbkmoney.AbstractUtils;
+import com.rbkmoney.fistful.account.Account;
+import com.rbkmoney.fistful.base.BankCard;
+import com.rbkmoney.fistful.destination.*;
+
+import java.util.List;
+
+import static io.github.benas.randombeans.api.EnhancedRandom.random;
+import static java.util.Arrays.asList;
+
+public class DestinationSinkEventUtils extends AbstractUtils {
+
+    public static SinkEvent create(String destinationId, String identityId) {
+        List<Change> changes = asList(
+                createCreatedChange(),
+                createStatusChangedChange(),
+                createAccountCreatedChange(identityId)
+        );
+
+        Event event = new Event(generateInt(), generateDate(), changes);
+
+        SinkEvent sinkEvent = new SinkEvent(
+                generateLong(),
+                generateDate(),
+                destinationId,
+                event
+        );
+
+        return sinkEvent;
+    }
+
+    private static Change createAccountCreatedChange(String identityId) {
+        Account account = random(Account.class);
+        account.setIdentity(identityId);
+        return Change.account(AccountChange.created(account));
+    }
+
+    private static Change createStatusChangedChange() {
+        return Change.status(StatusChange.changed(Status.authorized(new Authorized())));
+    }
+
+    private static Change createCreatedChange() {
+        return Change.created(
+                new com.rbkmoney.fistful.destination.Destination(
+                        generateString(),
+                        Resource.bank_card(random(BankCard.class))
+                )
+        );
+    }
+}

@@ -23,8 +23,8 @@
         <postgresql.version>42.2.5</postgresql.version>
         <lombok.version>1.18.4</lombok.version>
         <sonar.jacoco.reportPath>${project.basedir}/../target/jacoco.exec</sonar.jacoco.reportPath>
-        <dockerfile.base.service.tag>81f57f9ef5e5854c27659c9f56f59cdb2b7c43e5</dockerfile.base.service.tag>
-        <shared.resources.version>0.3.2</shared.resources.version>
+        <dockerfile.base.service.tag>4f3b89c6381373923f5fdea18b08741b9bada1e6</dockerfile.base.service.tag>
+        <shared.resources.version>0.3.3</shared.resources.version>
         <jxls.version>2.4.0</jxls.version>
         <jxls.poi.version>1.0.14</jxls.poi.version>
         <hikari.version>3.1.0</hikari.version>
@@ -156,6 +156,12 @@
         <dependency>
             <groupId>org.testcontainers</groupId>
             <artifactId>postgresql</artifactId>
+            <version>1.8.3</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.testcontainers</groupId>
+            <artifactId>testcontainers</artifactId>
             <version>1.8.3</version>
             <scope>test</scope>
         </dependency>
