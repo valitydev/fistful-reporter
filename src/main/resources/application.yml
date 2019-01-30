@@ -36,8 +36,8 @@ partymanagement:
   url: http://hellgate:8022/v1/processing/partymgmt
   timeout: 5000
 filestorage:
-  url: http://localhost:8022/file-storage
-  healthCheckUrl: http://localhost:8022/actuator/health
+  url: http://file-storage:8022/file_storage
+  healthCheckUrl: http://file-storage:8022/actuator/health
   clientTimeout: 5000
   urlLifeTimeDuration: 360
   timeZone: Europe/Moscow
@@ -48,42 +48,42 @@ reporting:
   pollingDelay: 3000
 deposit:
   polling:
-    url: http://localhost:8022/v1/eventsink/deposit
+    url: http://wapi:8022/v1/eventsink/deposit
     delay: 10000
     retryDelay: 1000
     maxPoolSize: 1
     querySize: 100
 destination:
   polling:
-    url: http://localhost:8022/v1/eventsink/destination
+    url: http://wapi:8022/v1/eventsink/destination
     delay: 10000
     retryDelay: 1000
     maxPoolSize: 1
     querySize: 100
 identity:
   polling:
-    url: http://localhost:8022/v1/eventsink/identity
+    url: http://wapi:8022/v1/eventsink/identity
     delay: 10000
     retryDelay: 1000
     maxPoolSize: 1
     querySize: 100
 source:
   polling:
-    url: http://localhost:8022/v1/eventsink/source
+    url: http://wapi:8022/v1/eventsink/source
     delay: 10000
     retryDelay: 1000
     maxPoolSize: 1
     querySize: 100
 wallet:
   polling:
-    url: http://localhost:8022/v1/eventsink/wallet
+    url: http://wapi:8022/v1/eventsink/wallet
     delay: 10000
     retryDelay: 1000
     maxPoolSize: 1
     querySize: 100
 withdrawal:
   polling:
-    url: http://localhost:8022/v1/eventsink/withdrawal
+    url: http://wapi:8022/v1/eventsink/withdrawal
     delay: 10000
     retryDelay: 1000
     maxPoolSize: 1
