@@ -10,23 +10,25 @@ import java.time.Duration;
 
 public class TestContainersBuilder {
 
-    private static final String SIGNING_REGION = "RU";
-    private static final String AWS_ACCESS_KEY = "test";
-    private static final String AWS_SECRET_KEY = "test";
-    private static final String PROTOCOL = "HTTP";
-    private static final String MAX_ERROR_RETRY = "10";
-    private static final String BUCKET_NAME = "TEST";
+    private final String SIGNING_REGION = "RU";
+    private final String AWS_ACCESS_KEY = "test";
+    private final String AWS_SECRET_KEY = "test";
+    private final String PROTOCOL = "HTTP";
+    private final String MAX_ERROR_RETRY = "10";
+    private final String BUCKET_NAME = "TEST";
 
-    private static boolean networkEnable;
-    private static boolean postgreSQLTestContainerEnable;
-    private static boolean cephTestContainerEnable;
-    private static boolean fileStorageTestContainerEnable;
+    private boolean dockerContainersEnable;
+    private boolean networkEnable;
+    private boolean postgreSQLTestContainerEnable;
+    private boolean cephTestContainerEnable;
+    private boolean fileStorageTestContainerEnable;
 
-    private TestContainersBuilder() {
+    private TestContainersBuilder(boolean dockerContainersEnable) {
+        this.dockerContainersEnable = dockerContainersEnable;
     }
 
-    public static TestContainersBuilder builder() {
-        return new TestContainersBuilder();
+    public static TestContainersBuilder builder(boolean dockerContainersEnable) {
+        return new TestContainersBuilder(dockerContainersEnable);
     }
 
     public TestContainersBuilder addPostgreSQLTestContainer() {
@@ -47,9 +49,18 @@ public class TestContainersBuilder {
     }
 
     public TestContainers build() {
-        Network.NetworkImpl nt = Network.builder().build();
-
         TestContainers testContainers = new TestContainers();
+
+        if (!dockerContainersEnable) {
+            addTestContainers(testContainers);
+        } else {
+            testContainers.setDockerContainersEnable(true);
+        }
+        return testContainers;
+    }
+
+    private void addTestContainers(TestContainers testContainers) {
+        Network.NetworkImpl nt = Network.builder().build();
         if (networkEnable) {
             testContainers.setNetwork(nt);
         }
@@ -91,7 +102,7 @@ public class TestContainersBuilder {
                             .waitingFor(getWaitStrategy("/actuator/health"))
             );
         }
-        return testContainers;
+        testContainers.setDockerContainersEnable(false);
     }
 
     private WaitStrategy getWaitStrategy(String path) {

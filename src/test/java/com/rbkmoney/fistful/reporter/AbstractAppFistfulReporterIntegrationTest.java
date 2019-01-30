@@ -35,7 +35,7 @@ public abstract class AbstractAppFistfulReporterIntegrationTest extends Abstract
 
     private static final int TIMEOUT = 555000;
 
-    private static TestContainers testContainers = TestContainersBuilder.builder()
+    private static TestContainers testContainers = TestContainersBuilder.builder(false)
             .addPostgreSQLTestContainer()
             .addCephTestContainer()
             .addFileStorageTestContainer()

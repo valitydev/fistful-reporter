@@ -10,6 +10,18 @@ public class FistfulReporterTestPropertyValuesBuilder {
 
     public static TestPropertyValues build(TestContainers testContainers) {
         List<String> strings = new ArrayList<>();
+        if (!testContainers.isDockerContainersEnable()) {
+            withUsingTestContainers(testContainers, strings);
+        } else {
+            withoutUsingTestContainers(strings);
+        }
+
+        strings.add("eventstock.pollingEnable=false");
+        strings.add("reporting.pollingEnable=false");
+        return TestPropertyValues.of(strings);
+    }
+
+    private static void withUsingTestContainers(TestContainers testContainers, List<String> strings) {
         testContainers.getPostgresSQLTestContainer().ifPresent(
                 c -> {
                     strings.add("spring.datasource.url=" + c.getJdbcUrl());
@@ -29,14 +41,6 @@ public class FistfulReporterTestPropertyValuesBuilder {
                     strings.add("filestorage.healthCheckUrl=http://" + c.getContainerIpAddress() + ":" + c.getMappedPort(8022) + "/actuator/health");
                 }
         );
-
-
-        // with local containers in docker-compose-dev.yml
-        // withoutUsingTestContainers(strings);
-
-        strings.add("eventstock.pollingEnable=false");
-        strings.add("reporting.pollingEnable=false");
-        return TestPropertyValues.of(strings);
     }
 
     private static void withoutUsingTestContainers(List<String> strings) {

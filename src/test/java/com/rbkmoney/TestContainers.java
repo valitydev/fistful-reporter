@@ -12,6 +12,7 @@ import java.util.Optional;
 @Setter
 public class TestContainers {
 
+    private Boolean dockerContainersEnable;
     private Network.NetworkImpl network;
     private PostgreSQLContainer postgresSQLTestContainer;
     private GenericContainer cephTestContainer;
@@ -33,18 +34,26 @@ public class TestContainers {
         return Optional.ofNullable(fileStorageTestContainer);
     }
 
+    public Boolean isDockerContainersEnable() {
+        return dockerContainersEnable;
+    }
+
     public void startTestContainers() {
-        getPostgresSQLTestContainer().ifPresent(GenericContainer::start);
-        getCephTestContainer().ifPresent(GenericContainer::start);
-        getFileStorageTestContainer().ifPresent(GenericContainer::start);
+        if (!isDockerContainersEnable()) {
+            getPostgresSQLTestContainer().ifPresent(GenericContainer::start);
+            getCephTestContainer().ifPresent(GenericContainer::start);
+            getFileStorageTestContainer().ifPresent(GenericContainer::start);
+        }
     }
 
     public void stopTestContainers() {
-        getPostgresSQLTestContainer().ifPresent(GenericContainer::stop);
-        getFileStorageTestContainer().ifPresent(GenericContainer::stop);
-        getCephTestContainer().ifPresent(GenericContainer::stop);
+        if (!isDockerContainersEnable()) {
+            getPostgresSQLTestContainer().ifPresent(GenericContainer::stop);
+            getFileStorageTestContainer().ifPresent(GenericContainer::stop);
+            getCephTestContainer().ifPresent(GenericContainer::stop);
 
-        //network last for close
-        getNetwork().ifPresent(Network.NetworkImpl::close);
+            //network last for close
+            getNetwork().ifPresent(Network.NetworkImpl::close);
+        }
     }
 }

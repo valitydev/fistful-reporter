@@ -23,7 +23,7 @@ import static org.springframework.boot.test.context.SpringBootTest.WebEnvironmen
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
 public abstract class AbstractAppEventServiceTests extends AbstractTestUtils {
 
-    private static TestContainers testContainers = TestContainersBuilder.builder()
+    private static TestContainers testContainers = TestContainersBuilder.builder(false)
             .addPostgreSQLTestContainer()
             .build();
 
