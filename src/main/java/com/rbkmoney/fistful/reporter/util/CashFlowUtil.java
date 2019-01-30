@@ -14,10 +14,6 @@ import java.util.stream.Collectors;
 
 public class CashFlowUtil {
 
-    private CashFlowUtil() {
-        throw new IllegalStateException("Utility class");
-    }
-
     public static List<FistfulCashFlow> convertFistfulCashFlows(FistfulCashFlowSinkEvent event) {
         return event.getPostings().stream()
                 .map(

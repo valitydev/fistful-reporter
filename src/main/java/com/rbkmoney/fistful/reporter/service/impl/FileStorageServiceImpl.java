@@ -2,6 +2,7 @@ package com.rbkmoney.fistful.reporter.service.impl;
 
 import com.rbkmoney.file.storage.FileStorageSrv;
 import com.rbkmoney.file.storage.NewFileResult;
+import com.rbkmoney.fistful.reporter.config.properties.FileStorageProperties;
 import com.rbkmoney.fistful.reporter.service.FileStorageService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -12,17 +13,15 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPut;
 import org.apache.http.entity.FileEntity;
 import org.apache.thrift.TException;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.net.URI;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.time.Instant;
 import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.util.Collections;
 
@@ -31,20 +30,9 @@ import java.util.Collections;
 @RequiredArgsConstructor
 public class FileStorageServiceImpl implements FileStorageService {
 
+    private final FileStorageProperties fileStorageProperties;
     private final FileStorageSrv.Iface fileStorageClient;
     private final HttpClient httpClient;
-
-    @Value("${fileStorage.timeZone:Europe/Moscow}")
-    private ZoneId timeZone;
-
-    @Value("${fileStorage.urlLifeTimeDuration:360}")
-    private Long urlLifeTime;
-
-    @Value("${fileStorage.healthCheckUrl}")
-    private Resource healthCheckUrl;
-
-    @Value("${fileStorage.url}")
-    private Resource fileStorageUrl;
 
     @Override
     public String saveFile(Path file) throws IOException {
@@ -91,17 +79,16 @@ public class FileStorageServiceImpl implements FileStorageService {
     }
 
     private Instant getTime() {
-        // меняем на UTC , сдвигаем на тайм зону file-storage сервиса
-        return LocalDateTime.now().plusMinutes(urlLifeTime)
-                .toInstant(ZoneOffset.UTC)
-                .atZone(timeZone)
-                .toInstant();
+        return LocalDateTime.now(fileStorageProperties.getTimeZone())
+                .plusMinutes(fileStorageProperties.getUrlLifeTimeDuration())
+                .toInstant(ZoneOffset.UTC);
     }
 
     private void checkStorageConnection() {
         log.info("Trying to connect to storage");
         try {
-            HttpResponse httpResponse = httpClient.execute(new HttpGet(healthCheckUrl.getURI()));
+            URI uri = fileStorageProperties.getHealthCheckUrl().getURI();
+            HttpResponse httpResponse = httpClient.execute(new HttpGet(uri));
             if (httpResponse.getStatusLine().getStatusCode() != HttpStatus.SC_OK) {
                 throw new RuntimeException("Failed to connect to storage");
             }
@@ -124,9 +111,9 @@ public class FileStorageServiceImpl implements FileStorageService {
     // костыль для FileStorageServiceImplTest >.<
     // тк при генерации ссылки для загрузки в url вставляется то, что указано в {storage.endpoint: "ceph-test:80"}
     // {network_mode: host} не работает на Docker For Mac
-    private String checkTestSignature(String uploadUrl) {
-        if (uploadUrl.contains("ceph-test:80")) {
-            uploadUrl = uploadUrl.replaceAll("ceph-test:80", "localhost:42827");
+    private String checkTestSignature(String uploadUrl) throws IOException {
+        if (uploadUrl.contains("ceph-test-container:80")) {
+            uploadUrl = uploadUrl.replaceAll("ceph-test-container:80", fileStorageProperties.getCephEndpoint());
         }
         return uploadUrl;
     }

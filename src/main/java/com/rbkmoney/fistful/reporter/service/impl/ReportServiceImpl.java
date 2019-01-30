@@ -1,5 +1,6 @@
 package com.rbkmoney.fistful.reporter.service.impl;
 
+import com.rbkmoney.fistful.reporter.config.properties.ReportingProperties;
 import com.rbkmoney.fistful.reporter.dao.ReportDao;
 import com.rbkmoney.fistful.reporter.domain.enums.ReportStatus;
 import com.rbkmoney.fistful.reporter.domain.tables.pojos.Report;
@@ -9,7 +10,6 @@ import com.rbkmoney.fistful.reporter.exception.StorageException;
 import com.rbkmoney.fistful.reporter.service.ReportService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,15 +26,13 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class ReportServiceImpl implements ReportService {
 
+    private final ReportingProperties reportingProperties;
     private final ReportDao reportDao;
-
-    @Value("${reporting.defaultTimeZone:Europe/Moscow}")
-    private ZoneId defaultTimeZone;
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
     public long createReport(String partyId, String contractId, Instant fromTime, Instant toTime, String reportType) throws StorageException {
-        return createReport(partyId, contractId, fromTime, toTime, reportType, defaultTimeZone, Instant.now());
+        return createReport(partyId, contractId, fromTime, toTime, reportType, reportingProperties.getDefaultTimeZone(), Instant.now());
     }
 
     @Override

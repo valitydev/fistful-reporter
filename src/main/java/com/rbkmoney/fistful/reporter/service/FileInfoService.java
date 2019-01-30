@@ -6,6 +6,8 @@ import java.util.List;
 
 public interface FileInfoService {
 
+    List<Long> save(long reportId, List<String> fileDataIds) throws StorageException;
+
     Long save(long reportId, String fileDataId) throws StorageException;
 
     List<String> getFileDataIds(long reportId) throws StorageException;

@@ -45,6 +45,7 @@ public class ReportDaoImpl extends AbstractGenericDao implements ReportDao {
                 .and(REPORT.TO_TIME.le(toTime));
 
         if (!reportTypes.isEmpty()) {
+            // https://github.com/rbkmoney/fistful-reporter-proto/blob/e5157befc28943c9c60d22a8fb2f18c23bf1d48f/proto/fistful_reporter.thrift#L83
             condition = condition.and(REPORT.TYPE.in(reportTypes));
         }
 

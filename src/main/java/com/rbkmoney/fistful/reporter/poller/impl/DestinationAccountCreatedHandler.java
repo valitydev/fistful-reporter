@@ -65,7 +65,7 @@ public class DestinationAccountCreatedHandler implements DestinationEventHandler
     private Destination getDestination(SinkEvent event) throws DaoException {
         Destination destination = destinationDao.get(event.getSource());
         if (destination == null) {
-            throw new NotFoundException(String.format("Destination not found, walletId='%s'", event.getSource()));
+            throw new NotFoundException(String.format("Destination not found, destinationId='%s'", event.getSource()));
         }
         return destination;
     }
@@ -73,7 +73,7 @@ public class DestinationAccountCreatedHandler implements DestinationEventHandler
     private Identity getIdentity(SinkEvent event, Account account) throws DaoException {
         Identity identity = identityDao.get(account.getIdentity());
         if (identity == null) {
-            throw new NotFoundException(String.format("Identity not found, walletId='%s'", event.getSource()));
+            throw new NotFoundException(String.format("Identity not found, destinationId='%s', identityId='%s'", event.getSource(), account.getIdentity()));
         }
         return identity;
     }

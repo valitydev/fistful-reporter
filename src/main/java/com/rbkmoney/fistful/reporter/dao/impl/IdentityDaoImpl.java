@@ -22,6 +22,8 @@ import static com.rbkmoney.fistful.reporter.domain.tables.Identity.IDENTITY;
 @Component
 public class IdentityDaoImpl extends AbstractGenericDao implements IdentityDao {
 
+    private static final String EVENT_ID = "event_id";
+
     private final RowMapper<Identity> identityRowMapper;
 
     @Autowired
@@ -32,13 +34,12 @@ public class IdentityDaoImpl extends AbstractGenericDao implements IdentityDao {
 
     @Override
     public Optional<Long> getLastEventId() throws DaoException {
-        String eventId = "event_id";
-        Query query = getDslContext().select(DSL.max(DSL.field(eventId)))
+        Query query = getDslContext().select(DSL.max(DSL.field(EVENT_ID)))
                 .from(
-                        getDslContext().select(DSL.max(IDENTITY.EVENT_ID).as(eventId))
+                        getDslContext().select(DSL.max(IDENTITY.EVENT_ID).as(EVENT_ID))
                                 .from(IDENTITY)
                                 .unionAll(
-                                        getDslContext().select(DSL.max(CHALLENGE.EVENT_ID).as(eventId))
+                                        getDslContext().select(DSL.max(CHALLENGE.EVENT_ID).as(EVENT_ID))
                                                 .from(CHALLENGE)
                                 )
                 );

@@ -4,6 +4,7 @@ import com.rbkmoney.damsel.domain.Contract;
 import com.rbkmoney.damsel.domain.Party;
 import com.rbkmoney.damsel.payment_processing.*;
 import com.rbkmoney.file.storage.FileStorageSrv;
+import com.rbkmoney.fistful.reporter.config.properties.FileStorageProperties;
 import com.rbkmoney.fistful.reporter.domain.enums.ReportStatus;
 import com.rbkmoney.fistful.reporter.domain.tables.pojos.Report;
 import com.rbkmoney.fistful.reporter.domain.tables.pojos.Withdrawal;
@@ -14,11 +15,9 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.thrift.TException;
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.jdbc.core.JdbcTemplate;
 
@@ -60,8 +59,8 @@ public class ServiceTests extends AbstractAppServiceTests {
     @Autowired
     private FileStorageSrv.Iface client;
 
-    @Value("${fileStorage.cephEndpoint:none}")
-    private String fileStorageCephEndpoint;
+    @Autowired
+    private FileStorageProperties fileStorageProperties;
 
     @Autowired
     private PartyManagementService partyManagementService;
@@ -74,11 +73,6 @@ public class ServiceTests extends AbstractAppServiceTests {
 
     @Autowired
     private WithdrawalService withdrawalService;
-
-    @Before
-    public void setUp() throws Exception {
-        jdbcTemplate.execute("truncate table fr.report cascade");
-    }
 
     @Test
     public void fileInfoServiceTest() {
@@ -103,7 +97,7 @@ public class ServiceTests extends AbstractAppServiceTests {
         String downloadUrl = client.generateDownloadUrl(fileDataId, generateCurrentTimePlusDay().toString());
 
         if (downloadUrl.contains("ceph-test-container:80")) {
-            downloadUrl = downloadUrl.replaceAll("ceph-test-container:80", fileStorageCephEndpoint);
+            downloadUrl = downloadUrl.replaceAll("ceph-test-container:80", fileStorageProperties.getCephEndpoint());
         }
         HttpResponse responseGet = httpClient.execute(new HttpGet(downloadUrl));
         InputStream content = responseGet.getEntity().getContent();
@@ -137,6 +131,8 @@ public class ServiceTests extends AbstractAppServiceTests {
 
     @Test
     public void reportServiceTest() {
+        jdbcTemplate.execute("truncate table fr.report cascade");
+
         List<Long> reportIds = range(0, 5)
                 .mapToLong(i -> createReport("withdrawalRegistry"))
                 .boxed()

@@ -12,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import javax.validation.ValidationException;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -29,11 +30,7 @@ public class ReportGenerator {
 
     public void generateReportFile(Report report) {
         try {
-            log.info(
-                    "Trying to process report, reportId='{}', " +
-                            "reportType='{}', partyId='{}', contractId='{}', fromTime='{}', toTime='{}'",
-                    report.getId(), report.getType(), report.getPartyId(), report.getContractId(), report.getFromTime(), report.getToTime()
-            );
+            logInfo("Trying to process report, ", report);
 
             List<String> fileDataIds = new ArrayList<>();
             for (TemplateService templateService : templateServices) {
@@ -43,6 +40,9 @@ public class ReportGenerator {
                         templateService.processReportFileByTemplate(report, Files.newOutputStream(reportFile));
                         String fileDataId = fileStorageService.saveFile(reportFile);
                         fileDataIds.add(fileDataId);
+                    } catch (IOException ex) {
+                        logError("The report has failed to save, ", report);
+                        throw ex;
                     } finally {
                         Files.deleteIfExists(reportFile);
                     }
@@ -51,28 +51,63 @@ public class ReportGenerator {
 
             finishedReportTask(report, fileDataIds);
 
-            log.info(
-                    "Report has been successfully processed, " +
-                            "reportId='{}', reportType='{}', partyId='{}', contractId='{}', fromTime='{}', toTime='{}'",
-                    report.getId(), report.getType(), report.getPartyId(), report.getContractId(), report.getFromTime(), report.getToTime()
-            );
+            logInfo("Report has been successfully processed, ", report);
         } catch (ValidationException ex) {
-            log.error("Report data validation failed, reportId='{}'", report.getId(), ex);
+            logError("Report data validation failed, ", report);
             reportService.changeReportStatus(report, ReportStatus.cancelled);
-        } catch (Throwable throwable) {
-            log.error(
-                    "The report has failed to process, " +
-                            "reportId='{}', reportType='{}', partyId='{}', contractId='{}', fromTime='{}', toTime='{}'",
-                    report.getId(), report.getType(), report.getPartyId(), report.getContractId(), report.getFromTime(), report.getToTime(),
-                    throwable
-            );
+        } catch (Exception ex) {
+            logError("The report has failed to process, ", report);
         }
     }
 
     private void finishedReportTask(Report report, List<String> fileDataIds) throws StorageException {
-        for (String fileDataId : fileDataIds) {
-            fileInfoService.save(report.getId(), fileDataId);
-        }
+        fileInfoService.save(report.getId(), fileDataIds);
         reportService.changeReportStatus(report, ReportStatus.created);
+    }
+
+    private void logInfo(String message, Report report) {
+        log.info(
+                message +
+                        "reportId='{}', " +
+                        "partyId='{}', " +
+                        "contractId='{}', " +
+                        "fromTime='{}', " +
+                        "toTime='{}', " +
+                        "createdAt='{}', " +
+                        "reportType='{}', " +
+                        "status='{}'"
+                ,
+                report.getId(),
+                report.getPartyId(),
+                report.getContractId(),
+                report.getFromTime(),
+                report.getToTime(),
+                report.getCreatedAt(),
+                report.getType(),
+                report.getStatus()
+        );
+    }
+
+    private void logError(String message, Report report) {
+        log.error(
+                message +
+                        "reportId='{}', " +
+                        "partyId='{}', " +
+                        "contractId='{}', " +
+                        "fromTime='{}', " +
+                        "toTime='{}', " +
+                        "createdAt='{}', " +
+                        "reportType='{}', " +
+                        "status='{}'"
+                ,
+                report.getId(),
+                report.getPartyId(),
+                report.getContractId(),
+                report.getFromTime(),
+                report.getToTime(),
+                report.getCreatedAt(),
+                report.getType(),
+                report.getStatus()
+        );
     }
 }

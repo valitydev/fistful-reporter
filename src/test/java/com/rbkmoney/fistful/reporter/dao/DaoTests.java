@@ -6,6 +6,7 @@ import com.rbkmoney.fistful.reporter.domain.tables.pojos.*;
 import com.rbkmoney.fistful.reporter.exception.DaoException;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -17,6 +18,9 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
 public class DaoTests extends AbstractAppDaoTests {
+
+    @Autowired
+    private JdbcTemplate jdbcTemplate;
 
     @Autowired
     private ChallengeDao challengeDao;
@@ -114,6 +118,8 @@ public class DaoTests extends AbstractAppDaoTests {
 
     @Test
     public void reportDaoTest() throws DaoException {
+        jdbcTemplate.execute("truncate table fr.report cascade");
+
         Report report = random(Report.class);
         configReport(report, fromTime, toTime);
         long id = reportDao.save(report);

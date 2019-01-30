@@ -1,6 +1,7 @@
 package com.rbkmoney.fistful.reporter.handler;
 
 import com.rbkmoney.fistful.reporter.*;
+import com.rbkmoney.fistful.reporter.config.properties.ReportingProperties;
 import com.rbkmoney.fistful.reporter.dto.ReportType;
 import com.rbkmoney.fistful.reporter.exception.ContractNotFoundException;
 import com.rbkmoney.fistful.reporter.exception.PartyNotFoundException;
@@ -12,11 +13,11 @@ import com.rbkmoney.fistful.reporter.util.ThriftUtils;
 import com.rbkmoney.geck.common.util.TypeUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.time.Instant;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -27,31 +28,17 @@ import static com.rbkmoney.fistful.reporter.util.ThriftUtils.buildInvalidRequest
 @RequiredArgsConstructor
 public class FistfulReportsHandler implements ReportingSrv.Iface {
 
-    @Value("${reporting.reportsLimit:0}")
-    private int reportsLimit;
-
+    private final ReportingProperties reportingProperties;
     private final ReportService reportService;
     private final FileInfoService fileService;
     private final PartyManagementService partyManagementService;
 
     @Override
     public List<Report> getReports(ReportRequest reportRequest, List<String> reportTypes) throws DatasetTooBig, InvalidRequest {
-        Instant fromTime;
-        Instant toTime;
-        try {
-            fromTime = TypeUtil.stringToInstant(reportRequest.getTimeRange().getFromTime());
-            toTime = TypeUtil.stringToInstant(reportRequest.getTimeRange().getToTime());
+        checkArgs(reportRequest, reportTypes);
 
-            if (fromTime.compareTo(toTime) > 0) {
-                throw new IllegalArgumentException("fromTime must be less that toTime");
-            }
-
-            for (String reportType : reportTypes) {
-                ReportType.valueOf(reportType);
-            }
-        } catch (IllegalArgumentException ex) {
-            throw buildInvalidRequest(ex);
-        }
+        Instant toTime = TypeUtil.stringToInstant(reportRequest.getTimeRange().getToTime());
+        Instant fromTime = TypeUtil.stringToInstant(reportRequest.getTimeRange().getFromTime());
 
         List<com.rbkmoney.fistful.reporter.domain.tables.pojos.Report> reportsByRange = reportService.getReportsByRangeNotCancelled(
                 reportRequest.getPartyId(),
@@ -61,8 +48,8 @@ public class FistfulReportsHandler implements ReportingSrv.Iface {
                 reportTypes
         );
 
-        if (reportsLimit > 0 && reportsByRange.size() > reportsLimit) {
-            throw new DatasetTooBig(reportsLimit);
+        if (reportingProperties.getReportsLimit() > 0 && reportsByRange.size() > reportingProperties.getReportsLimit()) {
+            throw new DatasetTooBig(reportingProperties.getReportsLimit());
         }
 
         return reportsByRange.stream()
@@ -72,19 +59,12 @@ public class FistfulReportsHandler implements ReportingSrv.Iface {
 
     @Override
     public long generateReport(ReportRequest reportRequest, String reportType) throws PartyNotFound, ContractNotFound, InvalidRequest {
+        checkArgs(reportRequest, Collections.singletonList(reportType));
+
+        Instant toTime = TypeUtil.stringToInstant(reportRequest.getTimeRange().getToTime());
+        Instant fromTime = TypeUtil.stringToInstant(reportRequest.getTimeRange().getFromTime());
+
         try {
-            Instant fromTime = TypeUtil.stringToInstant(reportRequest.getTimeRange().getFromTime());
-            Instant toTime = TypeUtil.stringToInstant(reportRequest.getTimeRange().getToTime());
-
-            if (fromTime.compareTo(toTime) > 0) {
-                throw new IllegalArgumentException("fromTime must be less that toTime");
-            }
-
-            if (Arrays.stream(ReportType.values())
-                    .noneMatch(r -> r.getType().equals(reportType))) {
-                throw new IllegalArgumentException("reportType does not exist");
-            }
-
             // проверка на существование в хелгейте
             partyManagementService.getContract(reportRequest.getPartyId(), reportRequest.getContractId());
 
@@ -99,8 +79,6 @@ public class FistfulReportsHandler implements ReportingSrv.Iface {
             throw new PartyNotFound();
         } catch (ContractNotFoundException ex) {
             throw new ContractNotFound();
-        } catch (IllegalArgumentException ex) {
-            throw buildInvalidRequest(ex);
         }
     }
 
@@ -122,6 +100,30 @@ public class FistfulReportsHandler implements ReportingSrv.Iface {
             reportService.cancelReport(partyId, contractId, reportId);
         } catch (ReportNotFoundException ex) {
             throw new ReportNotFound();
+        }
+    }
+
+    private void checkReportType(String reportType) throws IllegalArgumentException {
+        if (Arrays.stream(ReportType.values())
+                .noneMatch(r -> r.getType().equals(reportType))) {
+            throw new IllegalArgumentException("reportType does not exist");
+        }
+    }
+
+    private void checkArgs(ReportRequest reportRequest, List<String> reportTypes) throws InvalidRequest {
+        try {
+            Instant fromTime = TypeUtil.stringToInstant(reportRequest.getTimeRange().getFromTime());
+            Instant toTime = TypeUtil.stringToInstant(reportRequest.getTimeRange().getToTime());
+
+            if (fromTime.isAfter(toTime)) {
+                throw new IllegalArgumentException("fromTime must be less that toTime");
+            }
+
+            for (String reportType : reportTypes) {
+                checkReportType(reportType);
+            }
+        } catch (IllegalArgumentException ex) {
+            throw buildInvalidRequest(ex);
         }
     }
 }

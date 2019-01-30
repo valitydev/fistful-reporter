@@ -64,7 +64,7 @@ public class SourceAccountCreatedHandler implements SourceEventHandler {
     private Source getSource(SinkEvent event) throws DaoException {
         Source source = sourceDao.get(event.getSource());
         if (source == null) {
-            throw new NotFoundException(String.format("Source not found, walletId='%s'", event.getSource()));
+            throw new NotFoundException(String.format("Source not found, sourceId='%s'", event.getSource()));
         }
         return source;
     }
@@ -72,7 +72,7 @@ public class SourceAccountCreatedHandler implements SourceEventHandler {
     private Identity getIdentity(SinkEvent event, Account account) throws DaoException {
         Identity identity = identityDao.get(account.getIdentity());
         if (identity == null) {
-            throw new NotFoundException(String.format("Identity not found, walletId='%s'", event.getSource()));
+            throw new NotFoundException(String.format("Identity not found, sourceId='%s', identityId='%s'", event.getSource(), account.getIdentity()));
         }
         return identity;
     }

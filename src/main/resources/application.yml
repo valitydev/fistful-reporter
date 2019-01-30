@@ -27,12 +27,15 @@ spring:
       maximum-pool-size: 3
   flyway:
     schemas: @db.schema@
-eventStock:
+  output:
+    ansi:
+      enabled: always
+eventstock:
   pollingEnable: true
-partyManagement:
+partymanagement:
   url: http://hellgate:8022/v1/processing/partymgmt
   timeout: 5000
-fileStorage:
+filestorage:
   url: http://localhost:8022/file-storage
   healthCheckUrl: http://localhost:8022/actuator/health
   clientTimeout: 5000

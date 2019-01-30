@@ -17,18 +17,17 @@
     <description>Reporter</description>
 
     <properties>
-        <java.version>11</java.version>
-        <server.port>8022</server.port>
-        <exposed.ports>${server.port}</exposed.ports>
         <postgresql.version>42.2.5</postgresql.version>
         <lombok.version>1.18.4</lombok.version>
         <sonar.jacoco.reportPath>${project.basedir}/../target/jacoco.exec</sonar.jacoco.reportPath>
-        <dockerfile.base.service.tag>4f3b89c6381373923f5fdea18b08741b9bada1e6</dockerfile.base.service.tag>
         <shared.resources.version>0.3.3</shared.resources.version>
         <jxls.version>2.4.0</jxls.version>
         <jxls.poi.version>1.0.14</jxls.poi.version>
         <hikari.version>3.1.0</hikari.version>
         <!---->
+        <server.port>8022</server.port>
+        <exposed.ports>${server.port}</exposed.ports>
+        <dockerfile.base.service.tag>4f3b89c6381373923f5fdea18b08741b9bada1e6</dockerfile.base.service.tag>
         <metrics.version>1.1.0</metrics.version>
         <eventstock.version>1.2.6</eventstock.version>
         <fistful-proto.version>1.8-37ccefb</fistful-proto.version>
@@ -356,16 +355,6 @@
                     </execution>
                 </executions>
             </plugin>
-            <!--
-                        <plugin>
-                            <groupId>org.apache.maven.plugins</groupId>
-                            <artifactId>maven-surefire-plugin</artifactId>
-                            <version>2.12.4</version>
-                            <configuration>
-                                <skipTests>true</skipTests>
-                            </configuration>
-                        </plugin>
-            -->
         </plugins>
     </build>
 

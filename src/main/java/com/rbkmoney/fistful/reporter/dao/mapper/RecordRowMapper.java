@@ -1,6 +1,7 @@
 package com.rbkmoney.fistful.reporter.dao.mapper;
 
 import com.rbkmoney.geck.common.util.TypeUtil;
+import lombok.RequiredArgsConstructor;
 import org.jooq.Field;
 import org.jooq.Table;
 import org.jooq.TableRecord;
@@ -11,16 +12,11 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 
+@RequiredArgsConstructor
 public class RecordRowMapper<T> implements RowMapper<T> {
 
     private final Table table;
-
     private final Class<T> type;
-
-    public RecordRowMapper(Table table, Class<T> type) {
-        this.table = table;
-        this.type = type;
-    }
 
     @Override
     public T mapRow(ResultSet resultSet, int i) throws SQLException {

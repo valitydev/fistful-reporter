@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -20,6 +21,16 @@ import java.util.stream.Collectors;
 public class FileInfoServiceImpl implements FileInfoService {
 
     private final FileInfoDao fileInfoDao;
+
+    @Override
+    @Transactional(propagation = Propagation.REQUIRED)
+    public List<Long> save(long reportId, List<String> fileDataIds) throws StorageException {
+        List<Long> fileInfoIds = new ArrayList<>();
+        for (String fileDataId : fileDataIds) {
+            fileInfoIds.add(save(reportId, fileDataId));
+        }
+        return fileInfoIds;
+    }
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED)

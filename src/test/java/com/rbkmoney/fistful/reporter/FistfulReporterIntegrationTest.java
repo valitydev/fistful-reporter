@@ -3,6 +3,7 @@ package com.rbkmoney.fistful.reporter;
 import com.rbkmoney.damsel.domain.Contract;
 import com.rbkmoney.file.storage.FileStorageSrv;
 import com.rbkmoney.fistful.reporter.component.ReportGenerator;
+import com.rbkmoney.fistful.reporter.config.properties.FileStorageProperties;
 import com.rbkmoney.fistful.reporter.exception.DaoException;
 import com.rbkmoney.fistful.reporter.service.PartyManagementService;
 import com.rbkmoney.fistful.reporter.service.ReportService;
@@ -13,8 +14,8 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.thrift.TException;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.jdbc.core.JdbcTemplate;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -27,6 +28,9 @@ import static org.mockito.Mockito.anyString;
 import static org.mockito.Mockito.when;
 
 public class FistfulReporterIntegrationTest extends AbstractAppFistfulReporterIntegrationTest {
+
+    @Autowired
+    private JdbcTemplate jdbcTemplate;
 
     @MockBean
     private PartyManagementService partyManagementService;
@@ -49,8 +53,8 @@ public class FistfulReporterIntegrationTest extends AbstractAppFistfulReporterIn
     @Autowired
     private ReportingSrv.Iface reportClient;
 
-    @Value("${fileStorage.cephEndpoint:none}")
-    private String fileStorageCephEndpoint;
+    @Autowired
+    private FileStorageProperties fileStorageProperties;
 
     private ReportTimeRange reportTimeRange = new ReportTimeRange(
             temporalToString(fromTime),
@@ -65,6 +69,8 @@ public class FistfulReporterIntegrationTest extends AbstractAppFistfulReporterIn
 
     @Test
     public void fistfulReporterTest() throws TException, IOException, DaoException {
+        jdbcTemplate.execute("truncate table fr.report cascade");
+
         when(partyManagementService.getContract(anyString(), anyString())).thenReturn(new Contract());
         saveWithdrawalsDependencies();
         try {
@@ -103,7 +109,7 @@ public class FistfulReporterIntegrationTest extends AbstractAppFistfulReporterIn
         );
 
         if (downloadUrl.contains("ceph-test-container:80")) {
-            downloadUrl = downloadUrl.replaceAll("ceph-test-container:80", fileStorageCephEndpoint);
+            downloadUrl = downloadUrl.replaceAll("ceph-test-container:80", fileStorageProperties.getCephEndpoint());
         }
         HttpResponse responseGet = httpClient.execute(new HttpGet(downloadUrl));
         InputStream content = responseGet.getEntity().getContent();

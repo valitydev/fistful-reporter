@@ -135,9 +135,7 @@ public class PartyManagementServiceImpl implements PartyManagementService {
     public Value getMetaData(String partyId, String namespace) throws NotFoundException {
         try {
             return partyManagementClient.getMetaData(userInfo, partyId, namespace);
-        } catch (PartyMetaNamespaceNotFound ex) {
-            return null;
-        } catch (PartyNotFound ex) {
+        } catch (PartyMetaNamespaceNotFound | PartyNotFound ex) {
             throw new NotFoundException(
                     String.format("Party not found, partyId='%s', namespace='%s'", partyId, namespace),
                     ex
