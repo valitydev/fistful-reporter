@@ -14,7 +14,7 @@ import static io.github.benas.randombeans.api.EnhancedRandom.random;
 import static java.time.LocalDateTime.now;
 import static java.time.ZoneId.systemDefault;
 
-public abstract class AbstractUtils {
+public abstract class AbstractTestUtils {
 
     protected LocalDateTime fromTime = LocalDateTime.now().minusHours(3);
     protected LocalDateTime toTime = LocalDateTime.now().minusHours(1);

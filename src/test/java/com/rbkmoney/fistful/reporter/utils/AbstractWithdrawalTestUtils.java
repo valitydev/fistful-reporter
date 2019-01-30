@@ -1,6 +1,6 @@
 package com.rbkmoney.fistful.reporter.utils;
 
-import com.rbkmoney.AbstractUtils;
+import com.rbkmoney.AbstractTestUtils;
 import com.rbkmoney.fistful.reporter.dao.IdentityDao;
 import com.rbkmoney.fistful.reporter.dao.WalletDao;
 import com.rbkmoney.fistful.reporter.dao.WithdrawalDao;
@@ -19,7 +19,7 @@ import java.util.List;
 
 import static io.github.benas.randombeans.api.EnhancedRandom.randomListOf;
 
-public abstract class AbstractWithdrawalUtils extends AbstractUtils {
+public abstract class AbstractWithdrawalTestUtils extends AbstractTestUtils {
 
     protected String identityId = generateString();
     protected String partyId = generateString();

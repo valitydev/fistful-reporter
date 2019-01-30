@@ -1,45 +1,42 @@
 package com.rbkmoney.fistful.reporter.utils;
 
-import com.rbkmoney.AbstractUtils;
+import com.rbkmoney.AbstractTestUtils;
 import com.rbkmoney.fistful.base.Cash;
 import com.rbkmoney.fistful.cashflow.*;
-import com.rbkmoney.fistful.deposit.*;
+import com.rbkmoney.fistful.withdrawal.*;
 
 import java.util.List;
 
 import static io.github.benas.randombeans.api.EnhancedRandom.random;
 import static java.util.Arrays.asList;
-import static java.util.Collections.singletonList;
 
-public class DepositSinkEventUtils extends AbstractUtils {
+public class WithdrawalSinkEventTestUtils extends AbstractTestUtils {
 
-    public static SinkEvent create(String depositId) {
+    public static SinkEvent create(String withdrawalId) {
         List<Change> changes = asList(
                 createCreatedChange(),
                 createStatusChangedChange(),
                 createTransferCreatedChange(),
-                createTransferStatusChangedChange()
+                createTransferStatusChangedChange(),
+                createRouteChangedChange()
         );
+
         Event event = new Event(generateInt(), generateDate(), changes);
 
         return new SinkEvent(
                 generateLong(),
                 generateDate(),
-                depositId,
+                withdrawalId,
                 event
         );
     }
 
     private static Change createCreatedChange() {
-        return Change.created(random(com.rbkmoney.fistful.deposit.Deposit.class));
+        return Change.created(random(com.rbkmoney.fistful.withdrawal.Withdrawal.class));
     }
 
     private static Change createStatusChangedChange() {
-        return Change.status_changed(DepositStatus.succeeded(new DepositSucceeded()));
-    }
-
-    private static Change createTransferStatusChangedChange() {
-        return Change.transfer(TransferChange.status_changed(TransferStatus.committed(new TransferCommitted())));
+        return Change.status_changed(WithdrawalStatus.failed(new WithdrawalFailed()));
     }
 
     private static Change createTransferCreatedChange() {
@@ -47,7 +44,7 @@ public class DepositSinkEventUtils extends AbstractUtils {
                 TransferChange.created(
                         new Transfer(
                                 new FinalCashFlow(
-                                        singletonList(
+                                        asList(
                                                 new FinalCashFlowPosting(
                                                         new FinalCashFlowAccount(
                                                                 CashFlowAccount.merchant(MerchantCashFlowAccount.payout),
@@ -64,5 +61,17 @@ public class DepositSinkEventUtils extends AbstractUtils {
                         )
                 )
         );
+    }
+
+    private static Change createTransferStatusChangedChange() {
+        return Change.transfer(
+                TransferChange.status_changed(
+                        TransferStatus.cancelled(new TransferCancelled())
+                )
+        );
+    }
+
+    private static Change createRouteChangedChange() {
+        return Change.route(new RouteChange(generateString()));
     }
 }

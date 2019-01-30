@@ -43,7 +43,7 @@ public class EventServiceTests extends AbstractAppEventServiceTests {
     @Test
     public void depositEventServiceTest() {
         String depositId = generateString();
-        depositEventService.processSinkEvent(DepositSinkEventUtils.create(depositId));
+        depositEventService.processSinkEvent(DepositSinkEventTestUtils.create(depositId));
 
         List<Deposit> deposits = jdbcTemplate.query(
                 "SELECT * FROM fr.deposit AS deposit WHERE deposit.deposit_id = ?",
@@ -65,7 +65,7 @@ public class EventServiceTests extends AbstractAppEventServiceTests {
         String identityId = generateAndSaveIdentity();
 
         String destinationId = generateString();
-        destinationEventService.processSinkEvent(DestinationSinkEventUtils.create(destinationId, identityId));
+        destinationEventService.processSinkEvent(DestinationSinkEventTestUtils.create(destinationId, identityId));
 
         List<Destination> deposits = jdbcTemplate.query(
                 "SELECT * FROM fr.destination AS destination WHERE destination.destination_id = ?",
@@ -85,7 +85,7 @@ public class EventServiceTests extends AbstractAppEventServiceTests {
     @Test
     public void identityEventServiceTest() {
         String identityId = generateString();
-        identityEventService.processSinkEvent(IdentitySinkEventUtils.create(identityId));
+        identityEventService.processSinkEvent(IdentitySinkEventTestUtils.create(identityId));
 
         List<Identity> identities = jdbcTemplate.query(
                 "SELECT * FROM fr.identity AS identity WHERE identity.identity_id = ?",
@@ -107,7 +107,7 @@ public class EventServiceTests extends AbstractAppEventServiceTests {
         String identityId = generateAndSaveIdentity();
 
         String sourceId = generateString();
-        sourceEventService.processSinkEvent(SourceSinkEventUtils.create(sourceId, identityId));
+        sourceEventService.processSinkEvent(SourceSinkEventTestUtils.create(sourceId, identityId));
 
         List<Source> sources = jdbcTemplate.query(
                 "SELECT * FROM fr.source AS source WHERE source.source_id = ?",
@@ -129,7 +129,7 @@ public class EventServiceTests extends AbstractAppEventServiceTests {
         String identityId = generateAndSaveIdentity();
 
         String walletId = generateString();
-        walletEventService.processSinkEvent(WalletSinkEventUtils.test(walletId, identityId));
+        walletEventService.processSinkEvent(WalletSinkEventTestUtils.test(walletId, identityId));
 
         List<Wallet> wallets = jdbcTemplate.query(
                 "SELECT * FROM fr.wallet AS wallet WHERE wallet.wallet_id = ?",
@@ -149,7 +149,7 @@ public class EventServiceTests extends AbstractAppEventServiceTests {
     @Test
     public void withdrawalEventServiceTest() {
         String withdrawalId = generateString();
-        withdrawalEventService.processSinkEvent(WithdrawalSinkEventUtils.create(withdrawalId));
+        withdrawalEventService.processSinkEvent(WithdrawalSinkEventTestUtils.create(withdrawalId));
 
         List<Withdrawal> withdrawals = jdbcTemplate.query(
                 "SELECT * FROM fr.withdrawal AS withdrawal WHERE withdrawal.withdrawal_id = ?",

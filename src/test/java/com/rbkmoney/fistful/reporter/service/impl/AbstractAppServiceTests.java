@@ -3,7 +3,7 @@ package com.rbkmoney.fistful.reporter.service.impl;
 import com.rbkmoney.TestContainers;
 import com.rbkmoney.TestContainersBuilder;
 import com.rbkmoney.fistful.reporter.FistfulReporterApplication;
-import com.rbkmoney.fistful.reporter.utils.AbstractWithdrawalUtils;
+import com.rbkmoney.fistful.reporter.utils.AbstractWithdrawalTestUtils;
 import com.rbkmoney.fistful.reporter.utils.FistfulReporterTestPropertyValuesBuilder;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
@@ -21,7 +21,7 @@ import static org.springframework.boot.test.context.SpringBootTest.WebEnvironmen
 @SpringBootTest(webEnvironment = RANDOM_PORT)
 @ContextConfiguration(classes = FistfulReporterApplication.class, initializers = AbstractAppServiceTests.Initializer.class)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
-public abstract class AbstractAppServiceTests extends AbstractWithdrawalUtils {
+public abstract class AbstractAppServiceTests extends AbstractWithdrawalTestUtils {
 
     private static TestContainers testContainers = TestContainersBuilder.builder()
             .addPostgreSQLTestContainer()

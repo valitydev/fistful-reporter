@@ -1,6 +1,6 @@
 package com.rbkmoney.fistful.reporter.utils;
 
-import com.rbkmoney.AbstractUtils;
+import com.rbkmoney.AbstractTestUtils;
 import com.rbkmoney.fistful.account.Account;
 import com.rbkmoney.fistful.base.BankCard;
 import com.rbkmoney.fistful.destination.*;
@@ -10,7 +10,7 @@ import java.util.List;
 import static io.github.benas.randombeans.api.EnhancedRandom.random;
 import static java.util.Arrays.asList;
 
-public class DestinationSinkEventUtils extends AbstractUtils {
+public class DestinationSinkEventTestUtils extends AbstractTestUtils {
 
     public static SinkEvent create(String destinationId, String identityId) {
         List<Change> changes = asList(
@@ -21,14 +21,12 @@ public class DestinationSinkEventUtils extends AbstractUtils {
 
         Event event = new Event(generateInt(), generateDate(), changes);
 
-        SinkEvent sinkEvent = new SinkEvent(
+        return new SinkEvent(
                 generateLong(),
                 generateDate(),
                 destinationId,
                 event
         );
-
-        return sinkEvent;
     }
 
     private static Change createAccountCreatedChange(String identityId) {

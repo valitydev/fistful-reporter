@@ -1,6 +1,6 @@
 package com.rbkmoney.fistful.reporter.utils;
 
-import com.rbkmoney.AbstractUtils;
+import com.rbkmoney.AbstractTestUtils;
 import com.rbkmoney.fistful.identity.*;
 
 import java.util.List;
@@ -8,7 +8,7 @@ import java.util.List;
 import static io.github.benas.randombeans.api.EnhancedRandom.random;
 import static java.util.Arrays.asList;
 
-public class IdentitySinkEventUtils extends AbstractUtils {
+public class IdentitySinkEventTestUtils extends AbstractTestUtils {
 
     public static SinkEvent create(String identityId) {
         String challengeId = generateString();
@@ -23,13 +23,12 @@ public class IdentitySinkEventUtils extends AbstractUtils {
 
         Event event = new Event(generateInt(), generateDate(), changes);
 
-        SinkEvent sinkEvent = new SinkEvent(
+        return new SinkEvent(
                 generateLong(),
                 generateDate(),
                 identityId,
                 event
         );
-        return sinkEvent;
     }
 
     private static Change createCreatedChange() {

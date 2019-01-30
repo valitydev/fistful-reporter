@@ -2,7 +2,7 @@ package com.rbkmoney.fistful.reporter;
 
 import com.rbkmoney.TestContainers;
 import com.rbkmoney.TestContainersBuilder;
-import com.rbkmoney.fistful.reporter.utils.AbstractWithdrawalUtils;
+import com.rbkmoney.fistful.reporter.utils.AbstractWithdrawalTestUtils;
 import com.rbkmoney.fistful.reporter.utils.FistfulReporterTestPropertyValuesBuilder;
 import com.rbkmoney.woody.thrift.impl.http.THSpawnClientBuilder;
 import org.junit.AfterClass;
@@ -31,7 +31,7 @@ import static org.springframework.boot.test.context.SpringBootTest.WebEnvironmen
 @SpringBootTest(webEnvironment = RANDOM_PORT)
 @ContextConfiguration(classes = FistfulReporterApplication.class, initializers = AbstractAppFistfulReporterIntegrationTest.Initializer.class)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
-public abstract class AbstractAppFistfulReporterIntegrationTest extends AbstractWithdrawalUtils {
+public abstract class AbstractAppFistfulReporterIntegrationTest extends AbstractWithdrawalTestUtils {
 
     private static final int TIMEOUT = 555000;
 

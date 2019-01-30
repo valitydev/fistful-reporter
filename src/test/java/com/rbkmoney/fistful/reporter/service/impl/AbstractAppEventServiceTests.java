@@ -1,6 +1,6 @@
 package com.rbkmoney.fistful.reporter.service.impl;
 
-import com.rbkmoney.AbstractUtils;
+import com.rbkmoney.AbstractTestUtils;
 import com.rbkmoney.TestContainers;
 import com.rbkmoney.TestContainersBuilder;
 import com.rbkmoney.fistful.reporter.FistfulReporterApplication;
@@ -21,7 +21,7 @@ import static org.springframework.boot.test.context.SpringBootTest.WebEnvironmen
 @SpringBootTest(webEnvironment = RANDOM_PORT)
 @ContextConfiguration(classes = FistfulReporterApplication.class, initializers = AbstractAppEventServiceTests.Initializer.class)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
-public abstract class AbstractAppEventServiceTests extends AbstractUtils {
+public abstract class AbstractAppEventServiceTests extends AbstractTestUtils {
 
     private static TestContainers testContainers = TestContainersBuilder.builder()
             .addPostgreSQLTestContainer()

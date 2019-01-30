@@ -28,8 +28,8 @@ import java.net.URL;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.ZoneOffset;
-import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static java.lang.String.valueOf;
 import static java.nio.file.Files.*;
@@ -110,11 +110,8 @@ public class ServiceTests extends AbstractAppServiceTests {
         contract.setId("0");
         Party party = new Party();
         party.setId("0");
-        party.setContracts(
-                new HashMap<>() {{
-                    put(contract.getId(), contract);
-                }}
-        );
+
+        party.setContracts(Map.of(contract.getId(), contract));
         UserInfo userInfo = new UserInfo("fistful-reporter", UserType.internal_user(new InternalUser()));
         PartyRevisionParam revision = PartyRevisionParam.revision(0L);
 

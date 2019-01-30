@@ -17,10 +17,10 @@ public class TestContainersBuilder {
     private static final String MAX_ERROR_RETRY = "10";
     private static final String BUCKET_NAME = "TEST";
 
-    private static boolean network;
-    private static boolean postgreSQLTestContainer;
-    private static boolean cephTestContainer;
-    private static boolean fileStorageTestContainer;
+    private static boolean networkEnable;
+    private static boolean postgreSQLTestContainerEnable;
+    private static boolean cephTestContainerEnable;
+    private static boolean fileStorageTestContainerEnable;
 
     private TestContainersBuilder() {
     }
@@ -30,19 +30,19 @@ public class TestContainersBuilder {
     }
 
     public TestContainersBuilder addPostgreSQLTestContainer() {
-        postgreSQLTestContainer = true;
+        postgreSQLTestContainerEnable = true;
         return this;
     }
 
     public TestContainersBuilder addCephTestContainer() {
-        cephTestContainer = true;
-        network = true;
+        cephTestContainerEnable = true;
+        networkEnable = true;
         return this;
     }
 
     public TestContainersBuilder addFileStorageTestContainer() {
-        fileStorageTestContainer = true;
-        network = true;
+        fileStorageTestContainerEnable = true;
+        networkEnable = true;
         return this;
     }
 
@@ -50,16 +50,16 @@ public class TestContainersBuilder {
         Network.NetworkImpl nt = Network.builder().build();
 
         TestContainers testContainers = new TestContainers();
-        if (network) {
+        if (networkEnable) {
             testContainers.setNetwork(nt);
         }
-        if (postgreSQLTestContainer) {
+        if (postgreSQLTestContainerEnable) {
             testContainers.setPostgresSQLTestContainer(
                     new PostgreSQLContainer<>("postgres:9.6")
                             .withStartupTimeout(Duration.ofMinutes(5))
             );
         }
-        if (cephTestContainer && network) {
+        if (cephTestContainerEnable && networkEnable) {
             testContainers.setCephTestContainer(
                     new GenericContainer<>("dr.rbkmoney.com/ceph-demo:latest")
                             .withEnv("RGW_NAME", "localhost")
@@ -74,7 +74,7 @@ public class TestContainersBuilder {
                             .waitingFor(getWaitStrategy("/api/v0.1/health"))
             );
         }
-        if (fileStorageTestContainer && network) {
+        if (fileStorageTestContainerEnable && networkEnable) {
             testContainers.setFileStorageTestContainer(
                     new GenericContainer<>("dr.rbkmoney.com/rbkmoney/file-storage:0d66e41b5c6200bb2101929f6c03b7430fa98958")
                             .withEnv("storage.endpoint", "http://ceph-test-container:80")
