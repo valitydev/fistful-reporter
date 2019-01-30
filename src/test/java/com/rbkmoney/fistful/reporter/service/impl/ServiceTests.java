@@ -86,8 +86,8 @@ public class ServiceTests extends AbstractAppServiceTests {
 
         range(0, 4).forEach(i -> fileInfoService.save(reportId, valueOf(i)));
 
-        assertEquals(fileInfoService.getFileDataIds(reportId).size(), 4);
-        assertEquals(fileInfoService.getFileDataIds(reportId + 1).size(), 0);
+        assertEquals(4, fileInfoService.getFileDataIds(reportId).size());
+        assertEquals(0, fileInfoService.getFileDataIds(reportId + 1).size());
     }
 
     @Test
@@ -140,6 +140,7 @@ public class ServiceTests extends AbstractAppServiceTests {
         reportIds.add(createReport("anotherReportType"));
 
         assertEquals(
+                5,
                 reportService.getReportsByRange(
                         partyId,
                         contractId,
@@ -147,17 +148,17 @@ public class ServiceTests extends AbstractAppServiceTests {
                         toTime.toInstant(ZoneOffset.UTC),
                         singletonList("withdrawalRegistry")
                 )
-                        .size(),
-                5
+                        .size()
         );
 
         Long reportId = reportIds.get(0);
         Report report = reportService.getReport(partyId, contractId, reportId);
-        assertEquals(report.getToTime(), toTime);
+        assertEquals(toTime, report.getToTime());
 
         reportService.cancelReport(partyId, contractId, reportId);
 
         assertEquals(
+                4,
                 reportService.getReportsByRangeNotCancelled(
                         partyId,
                         contractId,
@@ -165,13 +166,13 @@ public class ServiceTests extends AbstractAppServiceTests {
                         toTime.toInstant(ZoneOffset.UTC),
                         singletonList("withdrawalRegistry")
                 )
-                        .size(),
-                4
+                        .size()
         );
 
         reportService.changeReportStatus(report, ReportStatus.created);
 
         assertEquals(
+                5,
                 reportService.getReportsByRangeNotCancelled(
                         partyId,
                         contractId,
@@ -179,11 +180,10 @@ public class ServiceTests extends AbstractAppServiceTests {
                         toTime.toInstant(ZoneOffset.UTC),
                         singletonList("withdrawalRegistry")
                 )
-                        .size(),
-                5
+                        .size()
         );
 
-        assertEquals(reportService.getPendingReports().size(), 5);
+        assertEquals(5, reportService.getPendingReports().size());
     }
 
     @Test

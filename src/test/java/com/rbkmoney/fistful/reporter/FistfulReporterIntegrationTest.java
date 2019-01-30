@@ -95,14 +95,14 @@ public class FistfulReporterIntegrationTest extends AbstractAppFistfulReporterIn
 
     private void serverSideInitLogic() {
         List<com.rbkmoney.fistful.reporter.domain.tables.pojos.Report> pendingReports = reportService.getPendingReports();
-        assertEquals(pendingReports.size(), 1);
+        assertEquals(1, pendingReports.size());
         reportGenerator.generateReportFile(pendingReports.get(0));
     }
 
     private void clientSideLogic(long reportId) throws TException, IOException {
         Report report = reportClient.getReport(partyId, contractId, reportId);
-        assertEquals(report.getStatus(), ReportStatus.created);
-        assertEquals(report.getFileDataIds().size(), 1);
+        assertEquals(ReportStatus.created, report.getStatus());
+        assertEquals(1, report.getFileDataIds().size());
         String downloadUrl = fileStorageClient.generateDownloadUrl(
                 report.getFileDataIds().get(0),
                 generateCurrentTimePlusDay().toString()

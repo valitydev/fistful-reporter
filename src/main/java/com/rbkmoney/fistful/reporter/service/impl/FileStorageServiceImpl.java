@@ -111,7 +111,7 @@ public class FileStorageServiceImpl implements FileStorageService {
     // костыль для FileStorageServiceImplTest >.<
     // тк при генерации ссылки для загрузки в url вставляется то, что указано в {storage.endpoint: "ceph-test:80"}
     // {network_mode: host} не работает на Docker For Mac
-    private String checkTestSignature(String uploadUrl) throws IOException {
+    private String checkTestSignature(String uploadUrl) {
         if (uploadUrl.contains("ceph-test-container:80")) {
             uploadUrl = uploadUrl.replaceAll("ceph-test-container:80", fileStorageProperties.getCephEndpoint());
         }

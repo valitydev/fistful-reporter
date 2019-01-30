@@ -124,21 +124,21 @@ public class DaoTests extends AbstractAppDaoTests {
         configReport(report, fromTime, toTime);
         long id = reportDao.save(report);
         Report expectedReport = reportDao.getReport(id, report.getPartyId(), report.getContractId());
-        assertEquals(expectedReport, report);
+        assertEquals(report, expectedReport);
 
         List<Report> reports = randomListOf(4, Report.class);
         for (Report r : reports) {
             configReport(r, fromTime, toTime);
             reportDao.save(r);
         }
-        assertEquals(reportDao.getPendingReports().size(), 5);
+        assertEquals(5, reportDao.getPendingReports().size());
 
         reportDao.changeReportStatus(id, ReportStatus.created);
-        assertEquals(reportDao.getPendingReports().size(), 4);
+        assertEquals(4, reportDao.getPendingReports().size());
 
-        assertEquals(reportDao.getReportsByRange(partyId, contractId, fromTime, toTime, emptyList()).size(), 5);
+        assertEquals(5, reportDao.getReportsByRange(partyId, contractId, fromTime, toTime, emptyList()).size());
 
-        assertEquals(reportDao.getReportsByRange(partyId, contractId, fromTime.plusMinutes(1), toTime, emptyList()).size(), 0);
+        assertEquals(0, reportDao.getReportsByRange(partyId, contractId, fromTime.plusMinutes(1), toTime, emptyList()).size());
     }
 
     @Test
