@@ -42,7 +42,6 @@ public class ReportGenerator {
                         fileDataIds.add(fileDataId);
                     } catch (IOException ex) {
                         logError("The report has failed to save, ", report);
-                        throw ex;
                     } finally {
                         Files.deleteIfExists(reportFile);
                     }
