@@ -94,32 +94,6 @@ public class WithdrawalDaoImpl extends AbstractGenericDao implements WithdrawalD
                 .orderBy(WITHDRAWAL.ID)
                 .limit(limit);
 
-        /*
-        Table identityIdsTable = getDslContext().selectDistinct(IDENTITY.IDENTITY_ID).from(IDENTITY)
-                .where(
-                        IDENTITY.PARTY_ID.eq(partyId)
-                                .and(IDENTITY.PARTY_CONTRACT_ID.eq(contractId))
-                )
-                .asTable(IDENTITY_IDS_TABLE_ALIAS);
-
-        Table walletIdsTable = getDslContext().selectDistinct(WALLET.WALLET_ID).from(WALLET)
-                .join(identityIdsTable)
-                .on(WALLET.IDENTITY_ID.eq((Field<String>) identityIdsTable.field(IDENTITY_ID)))
-                .asTable(WALLET_IDS_TABLE_ALIAS);
-
-        Query query = getDslContext().select().from(WITHDRAWAL)
-                .join(walletIdsTable)
-                .on(
-                        WITHDRAWAL.WALLET_ID.eq((Field<String>) walletIdsTable.field(WALLET_ID))
-                                .and(WITHDRAWAL.EVENT_TYPE.eq(WithdrawalEventType.WITHDRAWAL_STATUS_CHANGED))
-                                .and(WITHDRAWAL.WITHDRAWAL_STATUS.eq(WithdrawalStatus.succeeded))
-                                .and(WITHDRAWAL.EVENT_CREATED_AT.ge(fromTime))
-                                .and(WITHDRAWAL.EVENT_CREATED_AT.le(toTime))
-                                .and(WITHDRAWAL.ID.gt(fromId))
-                )
-                .orderBy(WITHDRAWAL.ID)
-                .limit(limit);*/
-
         return fetch(query, withdrawalRowMapper);
     }
 }
