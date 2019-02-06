@@ -4,10 +4,13 @@ import com.rbkmoney.fistful.base.Cash;
 import com.rbkmoney.fistful.deposit.Change;
 import com.rbkmoney.fistful.deposit.SinkEvent;
 import com.rbkmoney.fistful.reporter.dao.DepositDao;
+import com.rbkmoney.fistful.reporter.dao.WalletDao;
 import com.rbkmoney.fistful.reporter.domain.enums.DepositEventType;
 import com.rbkmoney.fistful.reporter.domain.enums.DepositStatus;
 import com.rbkmoney.fistful.reporter.domain.tables.pojos.Deposit;
+import com.rbkmoney.fistful.reporter.domain.tables.pojos.Wallet;
 import com.rbkmoney.fistful.reporter.exception.DaoException;
+import com.rbkmoney.fistful.reporter.exception.NotFoundException;
 import com.rbkmoney.fistful.reporter.exception.StorageException;
 import com.rbkmoney.fistful.reporter.poller.DepositEventHandler;
 import com.rbkmoney.geck.common.util.TypeUtil;
@@ -21,6 +24,7 @@ import org.springframework.stereotype.Component;
 public class DepositCreatedHandler implements DepositEventHandler {
 
     private final DepositDao depositDao;
+    private final WalletDao walletDao;
 
     @Override
     public boolean accept(Change change) {
@@ -31,6 +35,8 @@ public class DepositCreatedHandler implements DepositEventHandler {
     public void handle(Change change, SinkEvent event) {
         try {
             log.info("Start deposit created handling, eventId={}, depositId={}", event.getId(), event.getSource());
+            Wallet wallet = getWallet(event, change.getCreated().getWallet());
+
             Deposit deposit = new Deposit();
 
             deposit.setEventId(event.getId());
@@ -43,6 +49,10 @@ public class DepositCreatedHandler implements DepositEventHandler {
             deposit.setSourceId(change.getCreated().getSource());
             deposit.setDepositStatus(DepositStatus.pending);
 
+            deposit.setPartyId(wallet.getPartyId());
+            deposit.setPartyContractId(wallet.getPartyContractId());
+            deposit.setIdentityId(wallet.getIdentityId());
+
             Cash cash = change.getCreated().getBody();
             deposit.setAmount(cash.getAmount());
             deposit.setCurrencyCode(cash.getCurrency().getSymbolicCode());
@@ -54,4 +64,11 @@ public class DepositCreatedHandler implements DepositEventHandler {
         }
     }
 
+    private Wallet getWallet(SinkEvent event, String walletId) throws DaoException {
+        Wallet wallet = walletDao.get(walletId);
+        if (wallet == null) {
+            throw new NotFoundException(String.format("Wallet not found, destinationId='%s', walletId='%s'", event.getSource(), walletId));
+        }
+        return wallet;
+    }
 }

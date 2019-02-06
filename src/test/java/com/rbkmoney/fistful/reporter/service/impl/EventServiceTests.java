@@ -1,6 +1,7 @@
 package com.rbkmoney.fistful.reporter.service.impl;
 
 import com.rbkmoney.fistful.reporter.dao.IdentityDao;
+import com.rbkmoney.fistful.reporter.dao.WalletDao;
 import com.rbkmoney.fistful.reporter.domain.tables.pojos.*;
 import com.rbkmoney.fistful.reporter.exception.DaoException;
 import com.rbkmoney.fistful.reporter.utils.*;
@@ -23,6 +24,9 @@ public class EventServiceTests extends AbstractAppEventServiceTests {
     private IdentityDao identityDao;
 
     @Autowired
+    private WalletDao walletDao;
+
+    @Autowired
     private DepositEventService depositEventService;
 
     @Autowired
@@ -41,9 +45,11 @@ public class EventServiceTests extends AbstractAppEventServiceTests {
     private WithdrawalEventService withdrawalEventService;
 
     @Test
-    public void depositEventServiceTest() {
+    public void depositEventServiceTest() throws DaoException {
+        String walletId = generateAndSaveWallet();
+
         String depositId = generateString();
-        depositEventService.processSinkEvent(DepositSinkEventTestUtils.create(depositId));
+        depositEventService.processSinkEvent(DepositSinkEventTestUtils.create(depositId, walletId));
 
         List<Deposit> deposits = jdbcTemplate.query(
                 "SELECT * FROM fr.deposit AS deposit WHERE deposit.deposit_id = ?",
@@ -147,9 +153,11 @@ public class EventServiceTests extends AbstractAppEventServiceTests {
     }
 
     @Test
-    public void withdrawalEventServiceTest() {
+    public void withdrawalEventServiceTest() throws DaoException {
+        String walletId = generateAndSaveWallet();
+
         String withdrawalId = generateString();
-        withdrawalEventService.processSinkEvent(WithdrawalSinkEventTestUtils.create(withdrawalId));
+        withdrawalEventService.processSinkEvent(WithdrawalSinkEventTestUtils.create(withdrawalId, walletId));
 
         List<Withdrawal> withdrawals = jdbcTemplate.query(
                 "SELECT * FROM fr.withdrawal AS withdrawal WHERE withdrawal.withdrawal_id = ?",
@@ -174,5 +182,15 @@ public class EventServiceTests extends AbstractAppEventServiceTests {
         identity.setCurrent(true);
         identityDao.save(identity);
         return identityId;
+    }
+
+    private String generateAndSaveWallet() throws DaoException {
+        String walletId = generateString();
+        Wallet wallet = random(Wallet.class);
+        wallet.setId(null);
+        wallet.setWalletId(walletId);
+        wallet.setCurrent(true);
+        walletDao.save(wallet);
+        return walletId;
     }
 }

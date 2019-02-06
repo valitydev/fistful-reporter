@@ -9,9 +9,7 @@ import com.rbkmoney.fistful.reporter.domain.tables.pojos.Withdrawal;
 import com.rbkmoney.fistful.reporter.domain.tables.records.WithdrawalRecord;
 import com.rbkmoney.fistful.reporter.exception.DaoException;
 import org.jooq.Condition;
-import org.jooq.Field;
 import org.jooq.Query;
-import org.jooq.Table;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -22,8 +20,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
-import static com.rbkmoney.fistful.reporter.domain.tables.Identity.IDENTITY;
-import static com.rbkmoney.fistful.reporter.domain.tables.Wallet.WALLET;
 import static com.rbkmoney.fistful.reporter.domain.tables.Withdrawal.WITHDRAWAL;
 import static org.jooq.impl.DSL.max;
 
@@ -85,6 +81,20 @@ public class WithdrawalDaoImpl extends AbstractGenericDao implements WithdrawalD
         LocalDateTime fromTime = report.getFromTime();
         LocalDateTime toTime = report.getToTime();
 
+        Query query = getDslContext().select().from(WITHDRAWAL)
+                .where(
+                        WITHDRAWAL.PARTY_ID.eq(partyId)
+                                .and(WITHDRAWAL.PARTY_CONTRACT_ID.eq(contractId))
+                                .and(WITHDRAWAL.EVENT_TYPE.eq(WithdrawalEventType.WITHDRAWAL_STATUS_CHANGED))
+                                .and(WITHDRAWAL.WITHDRAWAL_STATUS.eq(WithdrawalStatus.succeeded))
+                                .and(WITHDRAWAL.EVENT_CREATED_AT.ge(fromTime))
+                                .and(WITHDRAWAL.EVENT_CREATED_AT.le(toTime))
+                                .and(WITHDRAWAL.ID.gt(fromId))
+                )
+                .orderBy(WITHDRAWAL.ID)
+                .limit(limit);
+
+        /*
         Table identityIdsTable = getDslContext().selectDistinct(IDENTITY.IDENTITY_ID).from(IDENTITY)
                 .where(
                         IDENTITY.PARTY_ID.eq(partyId)
@@ -108,7 +118,7 @@ public class WithdrawalDaoImpl extends AbstractGenericDao implements WithdrawalD
                                 .and(WITHDRAWAL.ID.gt(fromId))
                 )
                 .orderBy(WITHDRAWAL.ID)
-                .limit(limit);
+                .limit(limit);*/
 
         return fetch(query, withdrawalRowMapper);
     }

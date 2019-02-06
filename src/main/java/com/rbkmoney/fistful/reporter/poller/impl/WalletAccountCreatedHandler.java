@@ -48,10 +48,12 @@ public class WalletAccountCreatedHandler implements WalletEventHandler {
             wallet.setEventOccuredAt(TypeUtil.stringToLocalDateTime(event.getPayload().getOccuredAt()));
             wallet.setEventType(WalletEventType.WALLET_ACCOUNT_CREATED);
             wallet.setAccountId(account.getId());
-            wallet.setIdentityId(account.getIdentity());
             wallet.setAccounterAccountId(account.getAccounterAccountId());
             wallet.setCurrencyCode(account.getCurrency().getSymbolicCode());
+
             wallet.setPartyId(identity.getPartyId());
+            wallet.setPartyContractId(identity.getPartyContractId());
+            wallet.setIdentityId(identity.getIdentityId());
 
             walletDao.updateNotCurrent(event.getSource());
             walletDao.save(wallet);
