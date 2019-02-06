@@ -139,9 +139,9 @@ public class WithdrawalRegistryTemplateServiceImpl implements TemplateService {
     private void initDataSecondRowAllCell(Row secondRow) {
         secondRow.getCell(0).setCellValue("Дата");
         secondRow.getCell(1).setCellValue("Id вывода");
-        secondRow.getCell(2).setCellValue("amount");
-        secondRow.getCell(3).setCellValue("currency_code");
-        secondRow.getCell(4).setCellValue("fee");
+        secondRow.getCell(2).setCellValue("Сумма");
+        secondRow.getCell(3).setCellValue("Валюта");
+        secondRow.getCell(4).setCellValue("Комиссия");
     }
 
     private String getTime(LocalDateTime localDateTime, ZoneId reportZoneId) {
