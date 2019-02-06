@@ -12,9 +12,9 @@ import static java.util.Arrays.asList;
 
 public class WithdrawalSinkEventTestUtils extends AbstractTestUtils {
 
-    public static SinkEvent create(String withdrawalId) {
+    public static SinkEvent create(String withdrawalId, String walletId) {
         List<Change> changes = asList(
-                createCreatedChange(),
+                createCreatedChange(walletId),
                 createStatusChangedChange(),
                 createTransferCreatedChange(),
                 createTransferStatusChangedChange(),
@@ -31,8 +31,10 @@ public class WithdrawalSinkEventTestUtils extends AbstractTestUtils {
         );
     }
 
-    private static Change createCreatedChange() {
-        return Change.created(random(com.rbkmoney.fistful.withdrawal.Withdrawal.class));
+    private static Change createCreatedChange(String walletId) {
+        Withdrawal withdrawal = random(Withdrawal.class);
+        withdrawal.setSource(walletId);
+        return Change.created(withdrawal);
     }
 
     private static Change createStatusChangedChange() {

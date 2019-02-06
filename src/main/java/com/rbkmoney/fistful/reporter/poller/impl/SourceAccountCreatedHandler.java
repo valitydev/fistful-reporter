@@ -48,10 +48,12 @@ public class SourceAccountCreatedHandler implements SourceEventHandler {
             source.setEventOccuredAt(TypeUtil.stringToLocalDateTime(event.getPayload().getOccuredAt()));
             source.setEventType(SourceEventType.SOURCE_ACCOUNT_CREATED);
             source.setAccountId(account.getId());
-            source.setIdentityId(account.getIdentity());
             source.setAccounterAccountId(account.getAccounterAccountId());
             source.setCurrencyCode(account.getCurrency().getSymbolicCode());
+
             source.setPartyId(identity.getPartyId());
+            source.setPartyContractId(identity.getPartyContractId());
+            source.setIdentityId(identity.getIdentityId());
 
             sourceDao.updateNotCurrent(event.getSource());
             sourceDao.save(source);

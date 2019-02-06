@@ -42,10 +42,10 @@ public abstract class AbstractWithdrawalTestUtils extends AbstractTestUtils {
         for (Identity identity : createIdentities(identityId, partyId, contractId)) {
             identityDao.save(identity);
         }
-        for (Wallet wallet : createWallets(identityId, walletId)) {
+        for (Wallet wallet : createWallets(identityId, partyId, contractId, walletId)) {
             walletDao.save(wallet);
         }
-        for (Withdrawal withdrawal : createWithdrawals(walletId, inFromToPeriodTime)) {
+        for (Withdrawal withdrawal : createWithdrawals(identityId, partyId, contractId, walletId, inFromToPeriodTime)) {
             withdrawalDao.save(withdrawal);
         }
     }
@@ -79,18 +79,20 @@ public abstract class AbstractWithdrawalTestUtils extends AbstractTestUtils {
         return identities;
     }
 
-    private List<Wallet> createWallets(String identityId, String walletId) {
+    private List<Wallet> createWallets(String identityId, String partyId, String contractId, String walletId) {
         List<Wallet> wallets = new ArrayList<>();
         for (Wallet wallet : randomListOf(2, Wallet.class)) {
-            wallet.setIdentityId(identityId);
             wallet.setWalletId(walletId);
+            wallet.setPartyId(partyId);
+            wallet.setPartyContractId(contractId);
+            wallet.setIdentityId(identityId);
             wallets.add(wallet);
         }
         wallets.addAll(randomListOf(4, Wallet.class));
         return wallets;
     }
 
-    private List<Withdrawal> createWithdrawals(String walletId, LocalDateTime eventCreatedAtTime) {
+    private List<Withdrawal> createWithdrawals(String identityId, String partyId, String contractId, String walletId, LocalDateTime eventCreatedAtTime) {
         List<Withdrawal> withdrawals = new ArrayList<>();
         for (Withdrawal withdrawal : randomListOf(getExpectedSize(), Withdrawal.class)) {
             withdrawal.setId(null);
@@ -98,6 +100,9 @@ public abstract class AbstractWithdrawalTestUtils extends AbstractTestUtils {
             withdrawal.setWithdrawalStatus(WithdrawalStatus.succeeded);
             withdrawal.setEventType(WithdrawalEventType.WITHDRAWAL_STATUS_CHANGED);
             withdrawal.setEventCreatedAt(eventCreatedAtTime);
+            withdrawal.setPartyId(partyId);
+            withdrawal.setPartyContractId(contractId);
+            withdrawal.setIdentityId(identityId);
             withdrawals.add(withdrawal);
         }
         for (Withdrawal withdrawal : randomListOf(4, Withdrawal.class)) {
@@ -110,6 +115,9 @@ public abstract class AbstractWithdrawalTestUtils extends AbstractTestUtils {
             withdrawal.setWithdrawalStatus(WithdrawalStatus.pending);
             withdrawal.setEventType(WithdrawalEventType.WITHDRAWAL_STATUS_CHANGED);
             withdrawal.setEventCreatedAt(eventCreatedAtTime);
+            withdrawal.setPartyId(partyId);
+            withdrawal.setPartyContractId(contractId);
+            withdrawal.setIdentityId(identityId);
             withdrawals.add(withdrawal);
         }
         for (Withdrawal withdrawal : randomListOf(4, Withdrawal.class)) {
@@ -126,6 +134,9 @@ public abstract class AbstractWithdrawalTestUtils extends AbstractTestUtils {
             withdrawal.setWithdrawalStatus(WithdrawalStatus.succeeded);
             withdrawal.setEventType(WithdrawalEventType.WITHDRAWAL_STATUS_CHANGED);
             withdrawal.setEventCreatedAt(eventCreatedAtTime.minusDays(21));
+            withdrawal.setPartyId(partyId);
+            withdrawal.setPartyContractId(contractId);
+            withdrawal.setIdentityId(identityId);
             withdrawals.add(withdrawal);
         }
         return withdrawals;

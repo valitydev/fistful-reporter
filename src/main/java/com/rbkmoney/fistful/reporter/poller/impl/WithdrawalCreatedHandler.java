@@ -1,11 +1,14 @@
 package com.rbkmoney.fistful.reporter.poller.impl;
 
 import com.rbkmoney.fistful.base.Cash;
+import com.rbkmoney.fistful.reporter.dao.WalletDao;
 import com.rbkmoney.fistful.reporter.dao.WithdrawalDao;
 import com.rbkmoney.fistful.reporter.domain.enums.WithdrawalEventType;
 import com.rbkmoney.fistful.reporter.domain.enums.WithdrawalStatus;
+import com.rbkmoney.fistful.reporter.domain.tables.pojos.Wallet;
 import com.rbkmoney.fistful.reporter.domain.tables.pojos.Withdrawal;
 import com.rbkmoney.fistful.reporter.exception.DaoException;
+import com.rbkmoney.fistful.reporter.exception.NotFoundException;
 import com.rbkmoney.fistful.reporter.exception.StorageException;
 import com.rbkmoney.fistful.reporter.poller.WithdrawalEventHandler;
 import com.rbkmoney.fistful.withdrawal.Change;
@@ -21,6 +24,7 @@ import org.springframework.stereotype.Component;
 public class WithdrawalCreatedHandler implements WithdrawalEventHandler {
 
     private final WithdrawalDao withdrawalDao;
+    private final WalletDao walletDao;
 
     @Override
     public boolean accept(Change change) {
@@ -31,6 +35,8 @@ public class WithdrawalCreatedHandler implements WithdrawalEventHandler {
     public void handle(Change change, SinkEvent event) {
         try {
             log.info("Start withdrawal created handling, eventId={}, walletId={}", event.getId(), event.getSource());
+            Wallet wallet = getWallet(event, change.getCreated().getSource());
+
             Withdrawal withdrawal = new Withdrawal();
 
             withdrawal.setEventId(event.getId());
@@ -43,6 +49,10 @@ public class WithdrawalCreatedHandler implements WithdrawalEventHandler {
             withdrawal.setDestinationId(change.getCreated().getDestination());
             withdrawal.setWithdrawalStatus(WithdrawalStatus.pending);
 
+            withdrawal.setPartyId(wallet.getPartyId());
+            withdrawal.setPartyContractId(wallet.getPartyContractId());
+            withdrawal.setIdentityId(wallet.getIdentityId());
+
             Cash cash = change.getCreated().getBody();
             withdrawal.setAmount(cash.getAmount());
             withdrawal.setCurrencyCode(cash.getCurrency().getSymbolicCode());
@@ -52,5 +62,13 @@ public class WithdrawalCreatedHandler implements WithdrawalEventHandler {
         } catch (DaoException e) {
             throw new StorageException(e);
         }
+    }
+
+    private Wallet getWallet(SinkEvent event, String walletId) throws DaoException {
+        Wallet wallet = walletDao.get(walletId);
+        if (wallet == null) {
+            throw new NotFoundException(String.format("Wallet not found, destinationId='%s', walletId='%s'", event.getSource(), walletId));
+        }
+        return wallet;
     }
 }

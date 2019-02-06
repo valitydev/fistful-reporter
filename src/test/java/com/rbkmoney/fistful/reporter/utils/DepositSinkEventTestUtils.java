@@ -13,9 +13,9 @@ import static java.util.Collections.singletonList;
 
 public class DepositSinkEventTestUtils extends AbstractTestUtils {
 
-    public static SinkEvent create(String depositId) {
+    public static SinkEvent create(String depositId, String walletId) {
         List<Change> changes = asList(
-                createCreatedChange(),
+                createCreatedChange(walletId),
                 createStatusChangedChange(),
                 createTransferCreatedChange(),
                 createTransferStatusChangedChange()
@@ -30,8 +30,10 @@ public class DepositSinkEventTestUtils extends AbstractTestUtils {
         );
     }
 
-    private static Change createCreatedChange() {
-        return Change.created(random(com.rbkmoney.fistful.deposit.Deposit.class));
+    private static Change createCreatedChange(String walletId) {
+        Deposit deposit = random(Deposit.class);
+        deposit.setWallet(walletId);
+        return Change.created(deposit);
     }
 
     private static Change createStatusChangedChange() {
