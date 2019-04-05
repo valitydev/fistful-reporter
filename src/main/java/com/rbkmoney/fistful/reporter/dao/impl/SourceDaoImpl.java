@@ -61,6 +61,6 @@ public class SourceDaoImpl extends AbstractGenericDao implements SourceDao {
                 .and(SOURCE.CURRENT);
         Query query = getDslContext().update(SOURCE).set(SOURCE.CURRENT, false).where(condition);
 
-        executeOne(query);
+        execute(query);
     }
 }

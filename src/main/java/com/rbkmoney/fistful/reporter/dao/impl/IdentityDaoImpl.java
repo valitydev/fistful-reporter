@@ -72,6 +72,6 @@ public class IdentityDaoImpl extends AbstractGenericDao implements IdentityDao {
                 .and(IDENTITY.CURRENT);
         Query query = getDslContext().update(IDENTITY).set(IDENTITY.CURRENT, false).where(condition);
 
-        executeOne(query);
+        execute(query);
     }
 }

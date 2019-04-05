@@ -65,6 +65,19 @@ public class DaoTests extends AbstractAppDaoTests {
         assertNull(depositDao.get(deposit.getDepositId()));
     }
 
+    public void depositDaoDuplicationTest() throws DaoException {
+        Deposit deposit = random(Deposit.class);
+        deposit.setCurrent(true);
+        depositDao.updateNotCurrent(deposit.getDepositId());
+        depositDao.save(deposit);
+        depositDao.updateNotCurrent(deposit.getDepositId());
+        Long id = depositDao.save(deposit);
+        deposit.setId(id);
+        assertEquals(deposit, depositDao.get(deposit.getDepositId()));
+        depositDao.updateNotCurrent(deposit.getDepositId());
+        assertNull(depositDao.get(deposit.getDepositId()));
+    }
+
     @Test
     public void destinationDaoTest() throws DaoException {
         Destination destination = random(Destination.class);

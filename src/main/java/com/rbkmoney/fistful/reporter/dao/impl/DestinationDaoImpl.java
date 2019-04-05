@@ -61,6 +61,6 @@ public class DestinationDaoImpl extends AbstractGenericDao implements Destinatio
                 .and(DESTINATION.CURRENT);
         Query query = getDslContext().update(DESTINATION).set(DESTINATION.CURRENT, false).where(condition);
 
-        executeOne(query);
+        execute(query);
     }
 }

@@ -67,6 +67,7 @@ public class IdentityChallengeCreatedHandler implements IdentityEventHandler {
         challenge.setChallengeClassId(challengePayload.getCreated().getCls());
         challenge.setChallengeStatus(ChallengeStatus.pending);
 
+        challengeDao.updateNotCurrent(event.getSource(), challengeChange.getId());
         challengeDao.save(challenge);
         return challengeChange;
     }

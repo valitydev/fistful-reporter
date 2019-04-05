@@ -42,6 +42,7 @@ public class IdentityCreatedHandler implements IdentityEventHandler {
             identity.setIdentityClassId(change.getCreated().getCls());
             identity.setPartyContractId(change.getCreated().getContract());
 
+            identityDao.updateNotCurrent(event.getSource());
             identityDao.save(identity);
             log.info("Identity haven been saved, eventId={}, identityId={}", event.getId(), event.getSource());
         } catch (DaoException e) {
