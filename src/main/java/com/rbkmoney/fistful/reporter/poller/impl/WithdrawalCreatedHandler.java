@@ -57,6 +57,7 @@ public class WithdrawalCreatedHandler implements WithdrawalEventHandler {
             withdrawal.setAmount(cash.getAmount());
             withdrawal.setCurrencyCode(cash.getCurrency().getSymbolicCode());
 
+            withdrawalDao.updateNotCurrent(event.getSource());
             withdrawalDao.save(withdrawal);
             log.info("Withdrawal have been saved, eventId={}, walletId={}", event.getId(), event.getSource());
         } catch (DaoException e) {

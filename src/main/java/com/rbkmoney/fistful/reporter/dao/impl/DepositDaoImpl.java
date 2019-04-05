@@ -61,7 +61,7 @@ public class DepositDaoImpl extends AbstractGenericDao implements DepositDao {
                 .and(DEPOSIT.CURRENT);
         Query query = getDslContext().update(DEPOSIT).set(DEPOSIT.CURRENT, false).where(condition);
 
-        executeOne(query);
+        execute(query);
     }
 
 }

@@ -54,6 +54,6 @@ public class ChallengeDaoImpl extends AbstractGenericDao implements ChallengeDao
                 .and(CHALLENGE.CURRENT);
         Query query = getDslContext().update(CHALLENGE).set(CHALLENGE.CURRENT, false).where(condition);
 
-        executeOne(query);
+        execute(query);
     }
 }

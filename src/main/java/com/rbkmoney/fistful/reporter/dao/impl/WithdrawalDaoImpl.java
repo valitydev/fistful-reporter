@@ -71,7 +71,7 @@ public class WithdrawalDaoImpl extends AbstractGenericDao implements WithdrawalD
                 .and(WITHDRAWAL.CURRENT);
         Query query = getDslContext().update(WITHDRAWAL).set(WITHDRAWAL.CURRENT, false).where(condition);
 
-        executeOne(query);
+        execute(query);
     }
 
     @Override

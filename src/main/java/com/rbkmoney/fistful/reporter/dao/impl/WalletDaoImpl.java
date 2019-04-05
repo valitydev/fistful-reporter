@@ -61,7 +61,7 @@ public class WalletDaoImpl extends AbstractGenericDao implements WalletDao {
                 .and(WALLET.CURRENT);
         Query query = getDslContext().update(WALLET).set(WALLET.CURRENT, false).where(condition);
 
-        executeOne(query);
+        execute(query);
     }
 
 }
