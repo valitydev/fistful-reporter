@@ -5,6 +5,7 @@ import com.rbkmoney.fistful.reporter.domain.tables.pojos.Withdrawal;
 import com.rbkmoney.fistful.reporter.dto.ReportType;
 import com.rbkmoney.fistful.reporter.service.TemplateService;
 import com.rbkmoney.fistful.reporter.service.WithdrawalService;
+import com.rbkmoney.fistful.reporter.util.FormatUtil;
 import com.rbkmoney.fistful.reporter.util.TimeUtil;
 import lombok.RequiredArgsConstructor;
 import org.apache.poi.ss.usermodel.*;
@@ -69,9 +70,9 @@ public class WithdrawalRegistryTemplateServiceImpl implements TemplateService {
                     Row row = sh.createRow(inc.intValue());
                     row.createCell(0).setCellValue(getTime(withdrawal.getEventCreatedAt(), reportZoneId));
                     row.createCell(1).setCellValue(withdrawal.getWithdrawalId());
-                    row.createCell(2).setCellValue(withdrawal.getAmount());
+                    row.createCell(2).setCellValue(FormatUtil.formatCurrency(withdrawal.getAmount(), withdrawal.getCurrencyCode()));
                     row.createCell(3).setCellValue(withdrawal.getCurrencyCode());
-                    row.createCell(4).setCellValue(withdrawal.getFee());
+                    row.createCell(4).setCellValue(FormatUtil.formatCurrency(withdrawal.getFee(), withdrawal.getCurrencyCode()));
                     inc.increment();
                 }
         );
