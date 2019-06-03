@@ -1,6 +1,8 @@
 package com.rbkmoney;
 
 import com.rbkmoney.geck.common.util.TypeUtil;
+import com.rbkmoney.geck.serializer.kit.mock.MockMode;
+import com.rbkmoney.geck.serializer.kit.mock.MockTBaseProcessor;
 import org.testcontainers.shaded.org.apache.commons.io.IOUtils;
 
 import java.io.IOException;
@@ -15,6 +17,8 @@ import static java.time.LocalDateTime.now;
 import static java.time.ZoneId.systemDefault;
 
 public abstract class AbstractTestUtils {
+
+    protected static MockTBaseProcessor mockTBaseProcessor = new MockTBaseProcessor(MockMode.ALL, 10, 1);
 
     protected LocalDateTime fromTime = LocalDateTime.now().minusHours(3);
     protected LocalDateTime toTime = LocalDateTime.now().minusHours(1);
