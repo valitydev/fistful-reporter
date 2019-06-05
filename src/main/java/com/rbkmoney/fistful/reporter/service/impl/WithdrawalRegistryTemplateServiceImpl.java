@@ -26,7 +26,7 @@ import java.util.concurrent.atomic.LongAdder;
 @RequiredArgsConstructor
 public class WithdrawalRegistryTemplateServiceImpl implements TemplateService {
 
-    private static final int CELLS_COUNT = 5;
+    private static final int CELLS_COUNT = 6;
     private final WithdrawalService withdrawalService;
 
     @Override
@@ -70,9 +70,10 @@ public class WithdrawalRegistryTemplateServiceImpl implements TemplateService {
                     Row row = sh.createRow(inc.intValue());
                     row.createCell(0).setCellValue(getTime(withdrawal.getEventCreatedAt(), reportZoneId));
                     row.createCell(1).setCellValue(withdrawal.getWithdrawalId());
-                    row.createCell(2).setCellValue(FormatUtil.formatCurrency(withdrawal.getAmount(), withdrawal.getCurrencyCode()));
-                    row.createCell(3).setCellValue(withdrawal.getCurrencyCode());
-                    row.createCell(4).setCellValue(FormatUtil.formatCurrency(withdrawal.getFee(), withdrawal.getCurrencyCode()));
+                    row.createCell(2).setCellValue(withdrawal.getWalletId());
+                    row.createCell(3).setCellValue(FormatUtil.formatCurrency(withdrawal.getAmount(), withdrawal.getCurrencyCode()));
+                    row.createCell(4).setCellValue(withdrawal.getCurrencyCode());
+                    row.createCell(5).setCellValue(FormatUtil.formatCurrency(withdrawal.getFee(), withdrawal.getCurrencyCode()));
                     inc.increment();
                 }
         );
@@ -150,9 +151,10 @@ public class WithdrawalRegistryTemplateServiceImpl implements TemplateService {
     private void initDataSecondRowAllCell(Row secondRow) {
         secondRow.getCell(0).setCellValue("Дата");
         secondRow.getCell(1).setCellValue("Id вывода");
-        secondRow.getCell(2).setCellValue("Сумма");
-        secondRow.getCell(3).setCellValue("Валюта");
-        secondRow.getCell(4).setCellValue("Комиссия");
+        secondRow.getCell(2).setCellValue("Id кошелька");
+        secondRow.getCell(3).setCellValue("Сумма");
+        secondRow.getCell(4).setCellValue("Валюта");
+        secondRow.getCell(5).setCellValue("Комиссия");
     }
 
     private String getTime(LocalDateTime localDateTime, ZoneId reportZoneId) {
