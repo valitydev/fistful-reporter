@@ -26,14 +26,15 @@
         <!---->
         <server.port>8022</server.port>
         <exposed.ports>${server.port}</exposed.ports>
-        <dockerfile.base.service.tag>4f3b89c6381373923f5fdea18b08741b9bada1e6</dockerfile.base.service.tag>
+        <dockerfile.base.service.tag>c0d0900ec19c907d866f8360031a836049985110</dockerfile.base.service.tag>
+        <dockerfile.registry>${env.REGISTRY}</dockerfile.registry>
         <metrics.version>1.1.0</metrics.version>
-        <shared.resources.version>0.3.5</shared.resources.version>
+        <shared.resources.version>0.3.6</shared.resources.version>
         <eventstock.version>1.2.6</eventstock.version>
         <fistful-proto.version>1.27-e2c29cb</fistful-proto.version>
         <fistful-reporter-proto.version>1.5-e5157be</fistful-reporter-proto.version>
         <file-storage-proto.version>1.24-a77c0c4</file-storage-proto.version>
-        <damsel.version>1.267-5711f53</damsel.version>
+        <damsel.version>1.315-78c1128</damsel.version>
         <!---->
         <db.name>fistful_reporter</db.name>
         <db.schema>fr</db.schema>
@@ -179,6 +180,12 @@
             <groupId>com.palantir.docker.compose</groupId>
             <artifactId>docker-compose-rule</artifactId>
             <version>0.28.1</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.rbkmoney</groupId>
+            <artifactId>easyway</artifactId>
+            <version>0.1.0</version>
             <scope>test</scope>
         </dependency>
     </dependencies>

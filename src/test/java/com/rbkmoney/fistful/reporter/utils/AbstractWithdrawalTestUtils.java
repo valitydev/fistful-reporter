@@ -1,6 +1,6 @@
 package com.rbkmoney.fistful.reporter.utils;
 
-import com.rbkmoney.AbstractTestUtils;
+import com.rbkmoney.easyway.AbstractTestUtils;
 import com.rbkmoney.fistful.reporter.dao.IdentityDao;
 import com.rbkmoney.fistful.reporter.dao.WalletDao;
 import com.rbkmoney.fistful.reporter.dao.WithdrawalDao;
@@ -11,6 +11,8 @@ import com.rbkmoney.fistful.reporter.domain.tables.pojos.Report;
 import com.rbkmoney.fistful.reporter.domain.tables.pojos.Wallet;
 import com.rbkmoney.fistful.reporter.domain.tables.pojos.Withdrawal;
 import com.rbkmoney.fistful.reporter.exception.DaoException;
+import com.rbkmoney.geck.serializer.kit.mock.MockMode;
+import com.rbkmoney.geck.serializer.kit.mock.MockTBaseProcessor;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.LocalDateTime;
@@ -20,6 +22,8 @@ import java.util.List;
 import static io.github.benas.randombeans.api.EnhancedRandom.randomListOf;
 
 public abstract class AbstractWithdrawalTestUtils extends AbstractTestUtils {
+
+    public static MockTBaseProcessor mockTBaseProcessor = new MockTBaseProcessor(MockMode.ALL, 10, 1);
 
     protected String identityId = generateString();
     protected String partyId = generateString();
@@ -45,13 +49,13 @@ public abstract class AbstractWithdrawalTestUtils extends AbstractTestUtils {
         for (Wallet wallet : createWallets(identityId, partyId, contractId, walletId)) {
             walletDao.save(wallet);
         }
-        for (Withdrawal withdrawal : createWithdrawals(identityId, partyId, contractId, walletId, inFromToPeriodTime)) {
+        for (Withdrawal withdrawal : createWithdrawals(identityId, partyId, contractId, walletId, getInFromToPeriodTime())) {
             withdrawalDao.save(withdrawal);
         }
     }
 
     protected Report createReport() {
-        return createReport(partyId, contractId, toTime, fromTime);
+        return createReport(partyId, contractId, getToTime(), getFromTime());
     }
 
     private com.rbkmoney.fistful.reporter.domain.tables.pojos.Report createReport(String partyId, String contractId, LocalDateTime toTime, LocalDateTime fromTime) {

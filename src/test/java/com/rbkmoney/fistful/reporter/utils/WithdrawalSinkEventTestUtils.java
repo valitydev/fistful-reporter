@@ -1,15 +1,15 @@
 package com.rbkmoney.fistful.reporter.utils;
 
-import com.rbkmoney.AbstractTestUtils;
+import com.rbkmoney.easyway.AbstractTestUtils;
 import com.rbkmoney.fistful.base.Cash;
 import com.rbkmoney.fistful.cashflow.*;
-import com.rbkmoney.fistful.identity.Challenge;
 import com.rbkmoney.fistful.withdrawal.*;
 import com.rbkmoney.geck.serializer.kit.tbase.TBaseHandler;
 import lombok.SneakyThrows;
 
 import java.util.List;
 
+import static com.rbkmoney.fistful.reporter.utils.AbstractWithdrawalTestUtils.mockTBaseProcessor;
 import static io.github.benas.randombeans.api.EnhancedRandom.random;
 import static java.util.Arrays.asList;
 
