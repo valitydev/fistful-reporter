@@ -26,7 +26,7 @@ import java.util.concurrent.atomic.LongAdder;
 @RequiredArgsConstructor
 public class WithdrawalRegistryTemplateServiceImpl implements TemplateService {
 
-    private static final int CELLS_COUNT = 6;
+    private static final int CELLS_COUNT = 7;
     private final WithdrawalService withdrawalService;
 
     @Override
@@ -74,6 +74,7 @@ public class WithdrawalRegistryTemplateServiceImpl implements TemplateService {
                     row.createCell(3).setCellValue(FormatUtil.formatCurrency(withdrawal.getAmount(), withdrawal.getCurrencyCode()));
                     row.createCell(4).setCellValue(withdrawal.getCurrencyCode());
                     row.createCell(5).setCellValue(FormatUtil.formatCurrency(withdrawal.getFee(), withdrawal.getCurrencyCode()));
+                    row.createCell(6).setCellValue(withdrawal.getExternalId());
                     inc.increment();
                 }
         );
@@ -155,6 +156,7 @@ public class WithdrawalRegistryTemplateServiceImpl implements TemplateService {
         secondRow.getCell(3).setCellValue("Сумма");
         secondRow.getCell(4).setCellValue("Валюта");
         secondRow.getCell(5).setCellValue("Комиссия");
+        secondRow.getCell(6).setCellValue("Уникальный идентификатор");
     }
 
     private String getTime(LocalDateTime localDateTime, ZoneId reportZoneId) {

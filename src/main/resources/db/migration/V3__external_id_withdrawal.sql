@@ -1,0 +1,1 @@
+ALTER TABLE fr.withdrawal ADD COLUMN external_id CHARACTER VARYING;
