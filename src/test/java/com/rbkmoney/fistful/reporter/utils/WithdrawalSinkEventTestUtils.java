@@ -16,7 +16,7 @@ public class WithdrawalSinkEventTestUtils extends AbstractTestUtils {
 
     public static SinkEvent create(String withdrawalId, String walletId) {
         List<Change> changes = asList(
-                createCreatedChange(walletId),
+                createCreatedChange(withdrawalId, walletId),
                 createStatusChangedChange(),
                 createTransferCreatedChange(),
                 createTransferStatusChangedChange(),
@@ -33,9 +33,10 @@ public class WithdrawalSinkEventTestUtils extends AbstractTestUtils {
         );
     }
 
-    private static Change createCreatedChange(String walletId) {
+    private static Change createCreatedChange(String withdrawalId, String walletId) {
         Withdrawal withdrawal = random(Withdrawal.class, "context", "status");
-        withdrawal.setSource(walletId);
+        withdrawal.setId(withdrawalId);
+        withdrawal.setWalletId(walletId);
         return Change.created(new CreatedChange(withdrawal));
     }
 

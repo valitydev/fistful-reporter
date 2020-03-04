@@ -31,7 +31,7 @@
         <metrics.version>1.1.0</metrics.version>
         <shared.resources.version>0.3.6</shared.resources.version>
         <eventstock.version>1.2.6</eventstock.version>
-        <fistful-proto.version>1.37-b3ce731</fistful-proto.version>
+        <fistful-proto.version>1.57-c43acb5</fistful-proto.version>
         <fistful-reporter-proto.version>1.5-e5157be</fistful-reporter-proto.version>
         <file-storage-proto.version>1.24-a77c0c4</file-storage-proto.version>
         <damsel.version>1.315-78c1128</damsel.version>
@@ -103,7 +103,7 @@
             <artifactId>custom-actuator-endpoints</artifactId>
             <version>0.0.1</version>
         </dependency>
-        
+
         <!--spring-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -166,7 +166,7 @@
         <dependency>
             <groupId>org.testcontainers</groupId>
             <artifactId>postgresql</artifactId>
-            <version>1.8.3</version>
+            <version>1.12.5</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -195,7 +195,7 @@
         <dependency>
             <groupId>com.rbkmoney</groupId>
             <artifactId>easyway</artifactId>
-            <version>0.1.0</version>
+            <version>0.3.0</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
@@ -358,7 +358,7 @@
             <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
-                <version>0.8.2</version>
+                <version>0.8.4</version>
                 <configuration>
                     <destFile>${sonar.jacoco.reportPath}</destFile>
                     <append>true</append>
