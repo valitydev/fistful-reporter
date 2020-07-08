@@ -34,9 +34,8 @@ public class WithdrawalRouteChangeHandler implements WithdrawalEventHandler {
     @Override
     public void handle(Change change, SinkEvent event) {
         try {
-            String providerId = change.getRoute().getRoute().getProviderId();
 
-            log.info("Start withdrawal provider id changed handling, eventId={}, walletId={}, providerId={}", event.getId(), event.getSource(), providerId);
+            log.info("Start withdrawal provider id changed handling, eventId={}, walletId={}", event.getId(), event.getSource());
             Withdrawal withdrawal = withdrawalDao.get(event.getSource());
 
             withdrawal.setId(null);
@@ -48,7 +47,6 @@ public class WithdrawalRouteChangeHandler implements WithdrawalEventHandler {
             withdrawal.setSequenceId(event.getPayload().getSequence());
             withdrawal.setEventOccuredAt(TypeUtil.stringToLocalDateTime(event.getPayload().getOccuredAt()));
             withdrawal.setEventType(WithdrawalEventType.WITHDRAWAL_ROUTE_CHANGED);
-            withdrawal.setProviderId(providerId);
 
             withdrawalDao.updateNotCurrent(event.getSource());
             long id = withdrawalDao.save(withdrawal);
@@ -57,7 +55,7 @@ public class WithdrawalRouteChangeHandler implements WithdrawalEventHandler {
             fillCashFlows(cashFlows, event, WithdrawalEventType.WITHDRAWAL_ROUTE_CHANGED, id);
 
             fistfulCashFlowDao.save(cashFlows);
-            log.info("Withdrawal provider id have been changed, eventId={}, walletId={}, providerId={}", event.getId(), event.getSource(), providerId);
+            log.info("Withdrawal provider id have been changed, eventId={}, walletId={}", event.getId(), event.getSource());
         } catch (DaoException e) {
             throw new StorageException(e);
         }

@@ -8,7 +8,7 @@ import com.rbkmoney.fistful.transfer.*;
 import static io.github.benas.randombeans.api.EnhancedRandom.random;
 import static java.util.Collections.singletonList;
 
-public class TrasnferTestUtil extends AbstractTestUtils {
+public class TransferTestUtil extends AbstractTestUtils {
 
     public static com.rbkmoney.fistful.transfer.Change getCommitedPayload() {
         return new com.rbkmoney.fistful.transfer.Change(
@@ -34,9 +34,8 @@ public class TrasnferTestUtil extends AbstractTestUtils {
         return new Change(
                 Change.created(
                         new CreatedChange(
-                                new Transfer(
-                                        getFinalCashFlow()
-                                )
+                                new Transfer()
+                                .setCashflow(getFinalCashFlow())
                         )
                 )
         );

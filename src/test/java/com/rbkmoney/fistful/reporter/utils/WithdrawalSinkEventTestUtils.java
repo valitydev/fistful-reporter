@@ -7,8 +7,8 @@ import com.rbkmoney.fistful.withdrawal.status.Status;
 
 import java.util.List;
 
-import static com.rbkmoney.fistful.reporter.utils.TrasnferTestUtil.getCancelledPayload;
-import static com.rbkmoney.fistful.reporter.utils.TrasnferTestUtil.getCashFlowPayload;
+import static com.rbkmoney.fistful.reporter.utils.TransferTestUtil.getCancelledPayload;
+import static com.rbkmoney.fistful.reporter.utils.TransferTestUtil.getCashFlowPayload;
 import static io.github.benas.randombeans.api.EnhancedRandom.random;
 import static java.util.Arrays.asList;
 
@@ -34,7 +34,7 @@ public class WithdrawalSinkEventTestUtils extends AbstractTestUtils {
     }
 
     private static Change createCreatedChange(String withdrawalId, String walletId) {
-        Withdrawal withdrawal = random(Withdrawal.class, "context", "status");
+        Withdrawal withdrawal = random(Withdrawal.class, "context", "status", "metadata", "quote");
         withdrawal.setId(withdrawalId);
         withdrawal.setWalletId(walletId);
         return Change.created(new CreatedChange(withdrawal));
@@ -55,6 +55,6 @@ public class WithdrawalSinkEventTestUtils extends AbstractTestUtils {
     }
 
     private static Change createRouteChangedChange() {
-        return Change.route(new RouteChange(new Route(generateString())));
+        return Change.route(new RouteChange(new Route(generateInt())));
     }
 }
