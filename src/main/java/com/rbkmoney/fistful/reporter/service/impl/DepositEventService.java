@@ -1,12 +1,9 @@
 package com.rbkmoney.fistful.reporter.service.impl;
 
-import com.rbkmoney.dao.DaoException;
-import com.rbkmoney.fistful.deposit.Change;
-import com.rbkmoney.fistful.deposit.SinkEvent;
-import com.rbkmoney.fistful.reporter.dao.DepositDao;
-import com.rbkmoney.fistful.reporter.exception.StorageException;
-import com.rbkmoney.fistful.reporter.poller.DepositEventHandler;
-import com.rbkmoney.fistful.reporter.service.EventService;
+import com.rbkmoney.fistful.deposit.TimestampedChange;
+import com.rbkmoney.fistful.reporter.handler.deposit.DepositEventHandler;
+import com.rbkmoney.machinegun.eventsink.MachineEvent;
+import com.rbkmoney.sink.common.parser.impl.MachineEventParser;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -14,37 +11,27 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @Slf4j
 @RequiredArgsConstructor
-public class DepositEventService implements EventService<SinkEvent> {
+public class DepositEventService {
 
-    private final List<DepositEventHandler> eventHandlers;
-    private final DepositDao depositDao;
+    private final List<DepositEventHandler> depositEventHandlers;
+    private final MachineEventParser<TimestampedChange> parser;
 
-    @Override
     @Transactional(propagation = Propagation.REQUIRED)
-    public Optional<Long> getLastEventId() {
-        try {
-            Optional<Long> lastEventId = depositDao.getLastEventId();
-            log.info("Last deposit eventId = {}", lastEventId);
-            return lastEventId;
-        } catch (DaoException e) {
-            throw new StorageException("Failed to get last deposit event id", e);
-        }
+    public void handleEvents(List<MachineEvent> machineEvents) {
+        machineEvents.forEach(this::handleIfAccept);
     }
 
-    @Override
-    @Transactional(propagation = Propagation.REQUIRED)
-    public void processSinkEvent(SinkEvent event) {
-        for (Change change : event.getPayload().getChanges()) {
-            for (DepositEventHandler identityEventHandler : eventHandlers) {
-                if (identityEventHandler.accept(change)) {
-                    identityEventHandler.handle(change, event);
-                }
-            }
+    private void handleIfAccept(MachineEvent machineEvent) {
+        TimestampedChange change = parser.parse(machineEvent);
+
+        if (change.isSetChange()) {
+            depositEventHandlers.stream()
+                    .filter(handler -> handler.accept(change))
+                    .forEach(handler -> handler.handle(change, machineEvent));
         }
     }
 }

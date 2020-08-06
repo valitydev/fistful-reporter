@@ -23,7 +23,6 @@ public class CashFlowConverter {
                             fcf.setEventId(event.getEventId());
                             fcf.setEventCreatedAt(TypeUtil.stringToLocalDateTime(event.getEventCreatedAt()));
                             fcf.setSourceId(event.getSourceId());
-                            fcf.setSequenceId(event.getSequenceId());
                             fcf.setEventOccuredAt(TypeUtil.stringToLocalDateTime(event.getEventOccuredAt()));
                             fcf.setEventType(DepositEventType.DEPOSIT_STATUS_CHANGED.toString());
                             fcf.setObjId(event.getObjId());
