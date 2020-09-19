@@ -34,9 +34,9 @@
         <fistful-reporter-proto.version>1.7-8bec5e6</fistful-reporter-proto.version>
         <file-storage-proto.version>1.24-a77c0c4</file-storage-proto.version>
         <damsel.version>1.315-78c1128</damsel.version>
-        <kafka.common.lib.version>0.1.5</kafka.common.lib.version>
+        <kafka.common.lib.version>0.1.6</kafka.common.lib.version>
         <machinegun-proto.version>1.18-d814d69</machinegun-proto.version>
-        <sink-common-lib.version>0.0.4</sink-common-lib.version>
+        <sink-common-lib.version>0.0.7</sink-common-lib.version>
         <!---->
         <db.name>fistful_reporter</db.name>
         <db.schema>fr</db.schema>
@@ -192,7 +192,7 @@
         <dependency>
             <groupId>org.testcontainers</groupId>
             <artifactId>postgresql</artifactId>
-            <version>1.14.3</version>
+            <version>1.12.5</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -206,12 +206,6 @@
                     <artifactId>commons-compress</artifactId>
                 </exclusion>
             </exclusions>
-        </dependency>
-        <dependency>
-            <groupId>org.testcontainers</groupId>
-            <artifactId>kafka</artifactId>
-            <version>1.14.3</version>
-            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
