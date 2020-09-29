@@ -29,13 +29,15 @@ public class DepositCreatedHandler implements DepositEventHandler {
     public boolean accept(TimestampedChange change) {
         return change.getChange().isSetCreated() && change.getChange().getCreated().isSetDeposit();
     }
+
     @Override
     public void handle(TimestampedChange change, MachineEvent event) {
         try {
             var depositDamsel = change
                     .getChange()
                     .getCreated()
-                    .getDeposit();;
+                    .getDeposit();
+            ;
 
             log.info("Start deposit created handling, eventId={}, depositId={}", event.getEventId(), event.getSourceId());
 

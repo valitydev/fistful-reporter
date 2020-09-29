@@ -1,7 +1,10 @@
 package com.rbkmoney.fistful.reporter.handler.identity;
 
 import com.rbkmoney.dao.DaoException;
-import com.rbkmoney.fistful.identity.*;
+import com.rbkmoney.fistful.identity.ChallengeChange;
+import com.rbkmoney.fistful.identity.ChallengeCompleted;
+import com.rbkmoney.fistful.identity.ChallengeStatus;
+import com.rbkmoney.fistful.identity.TimestampedChange;
 import com.rbkmoney.fistful.reporter.dao.ChallengeDao;
 import com.rbkmoney.fistful.reporter.dao.IdentityDao;
 import com.rbkmoney.fistful.reporter.domain.enums.ChallengeEventType;
@@ -13,7 +16,6 @@ import com.rbkmoney.geck.common.util.TypeUtil;
 import com.rbkmoney.machinegun.eventsink.MachineEvent;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 @Slf4j
@@ -49,7 +51,7 @@ public class IdentityChallengeStatusChangedHandler implements IdentityEventHandl
         }
     }
 
-    private void updateChallenge(MachineEvent event, ChallengeChange challengeChange, ChallengeStatus status,TimestampedChange change) {
+    private void updateChallenge(MachineEvent event, ChallengeChange challengeChange, ChallengeStatus status, TimestampedChange change) {
         com.rbkmoney.fistful.reporter.domain.tables.pojos.Challenge challenge = challengeDao.get(event.getSourceId(), challengeChange.getId());
 
         challenge.setId(null);

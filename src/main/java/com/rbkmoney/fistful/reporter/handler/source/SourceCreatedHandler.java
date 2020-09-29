@@ -6,12 +6,13 @@ import com.rbkmoney.fistful.reporter.domain.enums.SourceEventType;
 import com.rbkmoney.fistful.reporter.domain.enums.SourceStatus;
 import com.rbkmoney.fistful.reporter.domain.tables.pojos.Source;
 import com.rbkmoney.fistful.reporter.exception.StorageException;
-import com.rbkmoney.fistful.source.*;
+import com.rbkmoney.fistful.source.Internal;
+import com.rbkmoney.fistful.source.Resource;
+import com.rbkmoney.fistful.source.TimestampedChange;
 import com.rbkmoney.geck.common.util.TypeUtil;
 import com.rbkmoney.machinegun.eventsink.MachineEvent;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 @Slf4j

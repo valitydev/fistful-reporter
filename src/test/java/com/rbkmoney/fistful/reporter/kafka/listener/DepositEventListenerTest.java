@@ -64,7 +64,7 @@ public class DepositEventListenerTest extends AbstractListenerTest {
 
         // Then
         verify(depositDao, times(1))
-                    .save(captor.capture());
+                .save(captor.capture());
         assertThat(captor.getValue().getDepositStatus())
                 .isEqualTo(DepositStatus.succeeded);
     }

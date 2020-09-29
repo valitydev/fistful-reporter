@@ -70,6 +70,7 @@ public class KafkaConfig {
     public ConcurrentKafkaListenerContainerFactory<String, MachineEvent> withdrawalEventListenerContainerFactory() {
         return listenerContainerFactory();
     }
+
     @Bean
     public ConcurrentKafkaListenerContainerFactory<String, MachineEvent> sourceEventListenerContainerFactory() {
         return listenerContainerFactory();

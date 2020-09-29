@@ -1,7 +1,9 @@
 package com.rbkmoney.fistful.reporter.handler.identity;
 
 import com.rbkmoney.dao.DaoException;
-import com.rbkmoney.fistful.identity.*;
+import com.rbkmoney.fistful.identity.ChallengeChange;
+import com.rbkmoney.fistful.identity.ChallengeChangePayload;
+import com.rbkmoney.fistful.identity.TimestampedChange;
 import com.rbkmoney.fistful.reporter.dao.ChallengeDao;
 import com.rbkmoney.fistful.reporter.dao.IdentityDao;
 import com.rbkmoney.fistful.reporter.domain.enums.ChallengeEventType;
@@ -14,7 +16,6 @@ import com.rbkmoney.geck.common.util.TypeUtil;
 import com.rbkmoney.machinegun.eventsink.MachineEvent;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 @Slf4j
