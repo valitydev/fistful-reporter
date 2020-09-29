@@ -1,11 +1,15 @@
 package com.rbkmoney.fistful.reporter.kafka.listener;
 
 import com.rbkmoney.dao.DaoException;
+import com.rbkmoney.fistful.deposit.Change;
+import com.rbkmoney.fistful.deposit.StatusChange;
+import com.rbkmoney.fistful.deposit.TimestampedChange;
+import com.rbkmoney.fistful.deposit.status.Status;
+import com.rbkmoney.fistful.deposit.status.Succeeded;
 import com.rbkmoney.fistful.reporter.FistfulReporterApplication;
-import com.rbkmoney.fistful.reporter.dao.WalletDao;
-import com.rbkmoney.fistful.reporter.domain.tables.pojos.Wallet;
-import com.rbkmoney.fistful.wallet.Change;
-import com.rbkmoney.fistful.wallet.TimestampedChange;
+import com.rbkmoney.fistful.reporter.dao.DepositDao;
+import com.rbkmoney.fistful.reporter.domain.enums.DepositStatus;
+import com.rbkmoney.fistful.reporter.domain.tables.pojos.Deposit;
 import com.rbkmoney.kafka.common.serialization.ThriftSerializer;
 import com.rbkmoney.machinegun.eventsink.SinkEvent;
 import lombok.extern.slf4j.Slf4j;
@@ -32,36 +36,36 @@ public class DepositEventListenerTest extends AbstractListenerTest {
     private static final long MESSAGE_TIMEOUT = 4_000L;
 
     @MockBean
-    private WalletDao walletDao;
+    private DepositDao depositDao;
 
     @Captor
-    private ArgumentCaptor<Wallet> captor;
+    private ArgumentCaptor<Deposit> captor;
 
     @Test
     public void shouldListenAndSave() throws InterruptedException, DaoException {
         // Given
-
-        TimestampedChange created = new TimestampedChange()
+        TimestampedChange statusChanged = new TimestampedChange()
                 .setOccuredAt("2016-03-22T06:12:27Z")
-                .setChange(Change.created(new com.rbkmoney.fistful.wallet.Wallet()
-                        .setName("wallet")));
+                .setChange(Change.status_changed(
+                        new StatusChange().setStatus(
+                                Status.succeeded(new Succeeded()))));
 
         SinkEvent sinkEvent = sinkEvent(
                 machineEvent(
                         new ThriftSerializer<>(),
-                        created));
+                        statusChanged));
 
-        when(walletDao.get("source_id"))
-                .thenReturn(new Wallet());
+        when(depositDao.get("source_id"))
+                .thenReturn(new Deposit());
 
         // When
-        produce(sinkEvent, "wallet");
+        produce(sinkEvent, "deposit");
         Thread.sleep(MESSAGE_TIMEOUT);
 
         // Then
-        verify(walletDao, times(1))
+        verify(depositDao, times(1))
                 .save(captor.capture());
-        assertThat(captor.getValue().getWalletName())
-                .isEqualTo("wallet");
+        assertThat(captor.getValue().getDepositStatus())
+                .isEqualTo(DepositStatus.succeeded);
     }
 }
