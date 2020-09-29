@@ -26,7 +26,7 @@
         <server.port>8022</server.port>
         <exposed.ports>${server.port}</exposed.ports>
         <dockerfile.base.service.tag>c0d0900ec19c907d866f8360031a836049985110</dockerfile.base.service.tag>
-        <dockerfile.registry>dr2.rbkmoney.com</dockerfile.registry>
+        <dockerfile.registry>${env.REGISTRY}</dockerfile.registry>
         <metrics.version>1.1.0</metrics.version>
         <shared.resources.version>0.3.6</shared.resources.version>
         <eventstock.version>1.2.6</eventstock.version>
@@ -41,7 +41,7 @@
         <db.name>fistful_reporter</db.name>
         <db.schema>fr</db.schema>
         <db.user>postgres</db.user>
-        <db.password>admin</db.password>
+        <db.password>postgres</db.password>
         <db.port>5432</db.port>
         <db.url>jdbc:postgresql://localhost:${db.port}/${db.name}</db.url>
         <!---->
