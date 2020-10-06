@@ -33,11 +33,7 @@ public class DepositCreatedHandler implements DepositEventHandler {
     @Override
     public void handle(TimestampedChange change, MachineEvent event) {
         try {
-            var depositDamsel = change
-                    .getChange()
-                    .getCreated()
-                    .getDeposit();
-            ;
+            var depositDamsel = change.getChange().getCreated().getDeposit();
 
             log.info("Start deposit created handling, eventId={}, depositId={}", event.getEventId(), event.getSourceId());
 

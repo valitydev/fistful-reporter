@@ -36,10 +36,7 @@ public class DepositStatusChangedHandler implements DepositEventHandler {
     @Override
     public void handle(TimestampedChange change, MachineEvent event) {
         try {
-            Status status = change
-                    .getChange()
-                    .getStatusChanged()
-                    .getStatus();
+            Status status = change.getChange().getStatusChanged().getStatus();
 
             log.info("Start deposit status changed handling, eventId={}, depositId={}, status={}", event.getEventId(), event.getSourceId(), status);
 

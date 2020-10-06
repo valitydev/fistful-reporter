@@ -3,7 +3,6 @@ package com.rbkmoney.fistful.reporter.kafka.listener;
 import com.rbkmoney.dao.DaoException;
 import com.rbkmoney.fistful.reporter.FistfulReporterApplication;
 import com.rbkmoney.fistful.reporter.dao.WalletDao;
-import com.rbkmoney.fistful.reporter.domain.tables.pojos.Identity;
 import com.rbkmoney.fistful.reporter.domain.tables.pojos.Wallet;
 import com.rbkmoney.fistful.wallet.Change;
 import com.rbkmoney.fistful.wallet.TimestampedChange;
