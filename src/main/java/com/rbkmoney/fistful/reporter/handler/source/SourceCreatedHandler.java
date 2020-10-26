@@ -1,4 +1,4 @@
-package com.rbkmoney.fistful.reporter.handler.source;
+package com.rbkmoney.fistful.reporter.poller.impl;
 
 import com.rbkmoney.dao.DaoException;
 import com.rbkmoney.fistful.reporter.dao.SourceDao;
@@ -49,7 +49,7 @@ public class SourceCreatedHandler implements SourceEventHandler {
 
             sourceDao.updateNotCurrent(event.getSourceId());
             sourceDao.save(source);
-            log.info("Source have been saved, eventId={}, sourceId={}", event.getEventId(), event.getSourceId());
+            log.info("Source has been saved, eventId={}, sourceId={}", event.getId(), event.getSource());
         } catch (DaoException e) {
             throw new StorageException(e);
         }

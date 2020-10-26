@@ -1,4 +1,4 @@
-package com.rbkmoney.fistful.reporter.handler.withdrawal;
+package com.rbkmoney.fistful.reporter.poller.impl;
 
 import com.rbkmoney.dao.DaoException;
 import com.rbkmoney.fistful.reporter.dao.FistfulCashFlowDao;
@@ -53,7 +53,7 @@ public class WithdrawalRouteChangeHandler implements WithdrawalEventHandler {
             fillCashFlows(cashFlows, event, WithdrawalEventType.WITHDRAWAL_ROUTE_CHANGED, id, change);
 
             fistfulCashFlowDao.save(cashFlows);
-            log.info("Withdrawal provider id have been changed, eventId={}, walletId={}", event.getEventId(), event.getSourceId());
+            log.info("Withdrawal provider id has been changed, eventId={}, walletId={}", event.getId(), event.getSource());
         } catch (DaoException e) {
             throw new StorageException(e);
         }

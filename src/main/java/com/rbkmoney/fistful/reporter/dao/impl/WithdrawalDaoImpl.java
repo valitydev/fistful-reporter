@@ -15,6 +15,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -70,7 +72,7 @@ public class WithdrawalDaoImpl extends AbstractGenericDao implements WithdrawalD
     }
 
     @Override
-    public List<Withdrawal> getSucceededWithdrawalsByReport(Report report, Long fromId, int limit) {
+    public List<Withdrawal> getSucceededWithdrawals(Report report, Long fromId, int limit) {
         String partyId = report.getPartyId();
         String contractId = report.getContractId();
         LocalDateTime fromTime = report.getFromTime();

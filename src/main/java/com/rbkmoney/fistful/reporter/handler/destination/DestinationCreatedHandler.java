@@ -1,4 +1,4 @@
-package com.rbkmoney.fistful.reporter.handler.destination;
+package com.rbkmoney.fistful.reporter.poller.impl;
 
 import com.rbkmoney.dao.DaoException;
 import com.rbkmoney.fistful.base.BankCard;
@@ -62,7 +62,7 @@ public class DestinationCreatedHandler implements DestinationEventHandler {
 
             destinationDao.updateNotCurrent(event.getSourceId());
             destinationDao.save(destination);
-            log.info("Destination have been saved, eventId={}, destinationId={}", event.getEventId(), event.getSourceId());
+            log.info("Destination has been saved, eventId={}, destinationId={}", event.getId(), event.getSource());
         } catch (DaoException e) {
             throw new StorageException(e);
         }

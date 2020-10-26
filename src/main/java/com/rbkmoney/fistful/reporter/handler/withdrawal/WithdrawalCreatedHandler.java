@@ -1,4 +1,4 @@
-package com.rbkmoney.fistful.reporter.handler.withdrawal;
+package com.rbkmoney.fistful.reporter.poller.impl;
 
 import com.rbkmoney.dao.DaoException;
 import com.rbkmoney.fistful.base.Cash;
@@ -60,7 +60,7 @@ public class WithdrawalCreatedHandler implements WithdrawalEventHandler {
 
             withdrawalDao.updateNotCurrent(event.getSourceId());
             withdrawalDao.save(withdrawal);
-            log.info("Withdrawal have been saved, eventId={}, walletId={}", event.getEventId(), event.getSourceId());
+            log.info("Withdrawal has been saved, eventId={}, walletId={}", event.getId(), event.getSource());
         } catch (DaoException e) {
             throw new StorageException(e);
         }
@@ -69,7 +69,7 @@ public class WithdrawalCreatedHandler implements WithdrawalEventHandler {
     private Wallet getWallet(MachineEvent event, String walletId) {
         Wallet wallet = walletDao.get(walletId);
         if (wallet == null) {
-            throw new SinkEventNotFoundException(String.format("Wallet not found, destinationId='%s', walletId='%s'", event.getSourceId(), walletId));
+            throw new SinkEventNotFoundException(String.format("Wallet not found, destinationId=%s, walletId=%s", event.getSource(), walletId));
         }
         return wallet;
     }

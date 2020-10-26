@@ -65,19 +65,6 @@ public class DaoTests extends AbstractDaoConfig {
         assertNull(depositDao.get(deposit.getDepositId()));
     }
 
-    public void depositDaoDuplicationTest() {
-        Deposit deposit = random(Deposit.class);
-        deposit.setCurrent(true);
-        depositDao.updateNotCurrent(deposit.getDepositId());
-        depositDao.save(deposit);
-        depositDao.updateNotCurrent(deposit.getDepositId());
-        Long id = depositDao.save(deposit);
-        deposit.setId(id);
-        assertEquals(deposit, depositDao.get(deposit.getDepositId()));
-        depositDao.updateNotCurrent(deposit.getDepositId());
-        assertNull(depositDao.get(deposit.getDepositId()));
-    }
-
     @Test
     public void destinationDaoTest() {
         Destination destination = random(Destination.class);
@@ -190,7 +177,7 @@ public class DaoTests extends AbstractDaoConfig {
     @Test
     public void takeSucceededWithdrawalsTest() {
         saveWithdrawalsDependencies();
-        List<Withdrawal> withdrawalsByReport = withdrawalDao.getSucceededWithdrawalsByReport(report, 0L, 1000);
+        List<Withdrawal> withdrawalsByReport = withdrawalDao.getSucceededWithdrawals(report, 0L, 1000);
         assertEquals(getExpectedSize(), withdrawalsByReport.size());
     }
 

@@ -1,4 +1,4 @@
-package com.rbkmoney.fistful.reporter.handler.identity;
+package com.rbkmoney.fistful.reporter.poller.impl;
 
 import com.rbkmoney.dao.DaoException;
 import com.rbkmoney.fistful.identity.ChallengeChange;
@@ -38,11 +38,11 @@ public class IdentityChallengeCreatedHandler implements IdentityEventHandler {
             log.info("Start identity challenge created handling, eventId={}, identityId={}", event.getEventId(), event.getSourceId());
             ChallengeChange challengeChange = saveChallenge(change, event);
 
-            log.info("Challenge created handling: start update identity, eventId={}, identityId={}", event.getEventId(), event.getSourceId());
-            updateIdentity(event, change);
-            log.info("Challenge created handling: identity have been updated, eventId={}, identityId={}", event.getEventId(), event.getSourceId());
+            log.info("Challenge created handling: start update identity, eventId={}, identityId={}", event.getId(), event.getSource());
+            updateIdentity(event);
+            log.info("Challenge created handling: identity has been updated, eventId={}, identityId={}", event.getId(), event.getSource());
 
-            log.info("Start identity challenge have been created, eventId={}, identityId={}, challengeId={}", event.getEventId(), event.getSourceId(), challengeChange.getId());
+            log.info("Start identity challenge has been created, eventId={}, identityId={}, challengeId={}", event.getId(), event.getSource(), challengeChange.getId());
         } catch (DaoException e) {
             throw new StorageException(e);
         }
