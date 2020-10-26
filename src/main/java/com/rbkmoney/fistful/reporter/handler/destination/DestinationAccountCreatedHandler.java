@@ -1,4 +1,4 @@
-package com.rbkmoney.fistful.reporter.poller.impl;
+package com.rbkmoney.fistful.reporter.handler.destination;
 
 import com.rbkmoney.dao.DaoException;
 import com.rbkmoney.fistful.account.Account;
@@ -56,7 +56,7 @@ public class DestinationAccountCreatedHandler implements DestinationEventHandler
 
             destinationDao.updateNotCurrent(event.getSourceId());
             destinationDao.save(destination);
-            log.info("Destination account has been saved, eventId={}, destinationId={}, identityId={}", event.getId(), event.getSource(), account.getIdentity());
+            log.info("Destination account have been saved, eventId={}, destinationId={}, identityId={}", event.getEventId(), event.getSourceId(), account.getIdentity());
         } catch (DaoException e) {
             throw new StorageException(e);
         }
@@ -65,7 +65,7 @@ public class DestinationAccountCreatedHandler implements DestinationEventHandler
     private Destination getDestination(MachineEvent event) {
         Destination destination = destinationDao.get(event.getSourceId());
         if (destination == null) {
-            throw new SinkEventNotFoundException(String.format("Destination not found, destinationId=%s", event.getSource()));
+            throw new SinkEventNotFoundException(String.format("Destination not found, destinationId='%s'", event.getSourceId()));
         }
         return destination;
     }
@@ -73,7 +73,7 @@ public class DestinationAccountCreatedHandler implements DestinationEventHandler
     private Identity getIdentity(MachineEvent event, Account account) {
         Identity identity = identityDao.get(account.getIdentity());
         if (identity == null) {
-            throw new SinkEventNotFoundException(String.format("Identity not found, destinationId=%s, identityId=%s", event.getSource(), account.getIdentity()));
+            throw new SinkEventNotFoundException(String.format("Identity not found, destinationId='%s', identityId='%s'", event.getSourceId(), account.getIdentity()));
         }
         return identity;
     }

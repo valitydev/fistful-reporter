@@ -1,4 +1,4 @@
-package com.rbkmoney.fistful.reporter.poller.impl;
+package com.rbkmoney.fistful.reporter.handler.withdrawal;
 
 import com.rbkmoney.dao.DaoException;
 import com.rbkmoney.fistful.reporter.dao.FistfulCashFlowDao;
@@ -59,7 +59,7 @@ public class WithdrawalStatusChangedHandler implements WithdrawalEventHandler {
             fillCashFlows(cashFlows, event, WithdrawalEventType.WITHDRAWAL_STATUS_CHANGED, id, change);
 
             fistfulCashFlowDao.save(cashFlows);
-            log.info("Withdrawal status has been changed, eventId={}, walletId={}, status={}", event.getId(), event.getSource(), change.getStatusChanged());
+            log.info("Withdrawal status have been changed, eventId={}, walletId={}, status={}", event.getEventId(), event.getSourceId(), change.getChange().getStatusChanged());
         } catch (DaoException e) {
             throw new StorageException(e);
         }

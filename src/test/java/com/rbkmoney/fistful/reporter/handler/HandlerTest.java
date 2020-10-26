@@ -15,6 +15,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.UUID;
 
 import static com.rbkmoney.geck.common.util.TypeUtil.temporalToString;
@@ -85,7 +86,8 @@ public class HandlerTest extends AbstractHandlerConfig {
     }
 
     private void schedulerEmulation() {
-        var pendingReports = reportService.getPendingReports();
+        List<com.rbkmoney.fistful.reporter.domain.tables.pojos.Report> pendingReports = reportService.getPendingReports();
+        assertEquals(1, pendingReports.size());
         reportGenerator.generateReportFile(pendingReports.get(0));
     }
 }

@@ -1,4 +1,4 @@
-package com.rbkmoney.fistful.reporter.poller.impl;
+package com.rbkmoney.fistful.reporter.handler.identity;
 
 import com.rbkmoney.dao.DaoException;
 import com.rbkmoney.fistful.identity.TimestampedChange;
@@ -42,7 +42,7 @@ public class IdentityLevelChangedHandler implements IdentityEventHandler {
 
             identityDao.updateNotCurrent(event.getSourceId());
             identityDao.save(identity);
-            log.info("Identity level has been changed, eventId={}, identityId={}, level={}", event.getId(), event.getSource(), change.getLevelChanged());
+            log.info("Identity level have been changed, eventId={}, identityId={}, level={}", event.getEventId(), event.getSourceId(), change.getChange().getLevelChanged());
         } catch (DaoException e) {
             throw new StorageException(e);
         }

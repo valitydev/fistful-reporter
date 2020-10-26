@@ -1,4 +1,4 @@
-package com.rbkmoney.fistful.reporter.poller.impl;
+package com.rbkmoney.fistful.reporter.handler.deposit;
 
 import com.rbkmoney.dao.DaoException;
 import com.rbkmoney.fistful.base.Cash;
@@ -60,7 +60,7 @@ public class DepositCreatedHandler implements DepositEventHandler {
 
             depositDao.updateNotCurrent(event.getSourceId());
             depositDao.save(deposit);
-            log.info("Deposit has been saved, eventId={}, depositId={}", event.getId(), event.getSource());
+            log.info("Deposit have been saved, eventId={}, depositId={}", event.getEventId(), event.getSourceId());
         } catch (DaoException e) {
             throw new StorageException(e);
         }

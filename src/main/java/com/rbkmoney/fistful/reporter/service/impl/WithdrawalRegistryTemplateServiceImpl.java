@@ -22,14 +22,11 @@ import java.time.ZoneOffset;
 import java.util.List;
 import java.util.concurrent.atomic.LongAdder;
 
-import static com.rbkmoney.fistful.reporter.service.WithdrawalService.WITHDRAWAL_LIMIT;
-
 @Component
 @RequiredArgsConstructor
 public class WithdrawalRegistryTemplateServiceImpl implements TemplateService {
 
     private static final int CELLS_COUNT = 7;
-
     private final WithdrawalService withdrawalService;
 
     @Override
@@ -55,36 +52,19 @@ public class WithdrawalRegistryTemplateServiceImpl implements TemplateService {
         LongAdder inc = new LongAdder();
 
         // keep 100 rows in memory, exceeding rows will be flushed to disk
-        try (SXSSFWorkbook wb = new SXSSFWorkbook(100)) {
-            Sheet sh = getSheet(wb);
-            Font font = getFont(wb);
-            CellStyle greyStyle = getCellStyle(wb);
+        SXSSFWorkbook wb = new SXSSFWorkbook(100);
+        Sheet sh = getSheet(wb);
+        Font font = getFont(wb);
+        CellStyle greyStyle = getCellStyle(wb);
 
-            // first row
-            createFirstRow(sh, font, inc, fromTime, toTime);
+        // first row
+        createFirstRow(fromTime, toTime, inc, sh, font);
 
-            // second row
-            createSecondRow(sh, font, inc, greyStyle);
+        // second row
+        createSecondRow(inc, sh, font, greyStyle);
 
-            List<Withdrawal> withdrawals = withdrawalService.getSucceededLimitWithdrawals(report, 0);
+        List<Withdrawal> withdrawals = withdrawalService.getSucceededWithdrawalsByReport(report);
 
-            createWithdrawalsRows(sh, inc, reportZoneId, withdrawals);
-
-            while (withdrawals.size() == WITHDRAWAL_LIMIT) {
-                long lastWithdrawalId = withdrawals.get(withdrawals.size() - 1).getId();
-
-                withdrawals = withdrawalService.getSucceededLimitWithdrawals(report, lastWithdrawalId);
-
-                createWithdrawalsRows(sh, inc, reportZoneId, withdrawals);
-            }
-
-            wb.write(outputStream);
-            outputStream.close();
-            wb.dispose();
-        }
-    }
-
-    private void createWithdrawalsRows(Sheet sh, LongAdder inc, ZoneId reportZoneId, List<Withdrawal> withdrawals) {
         withdrawals.forEach(
                 withdrawal -> {
                     Row row = sh.createRow(inc.intValue());
@@ -98,6 +78,10 @@ public class WithdrawalRegistryTemplateServiceImpl implements TemplateService {
                     inc.increment();
                 }
         );
+
+        wb.write(outputStream);
+        outputStream.close();
+        wb.dispose();
     }
 
     private Sheet getSheet(SXSSFWorkbook wb) {
@@ -119,7 +103,7 @@ public class WithdrawalRegistryTemplateServiceImpl implements TemplateService {
         return greyStyle;
     }
 
-    private void createFirstRow(Sheet sh, Font font, LongAdder inc, String fromTime, String toTime) {
+    private void createFirstRow(String fromTime, String toTime, LongAdder inc, Sheet sh, Font font) {
         Row firstRow = sh.createRow(inc.intValue());
         configUIFirstRow(sh, firstRow);
 
@@ -145,7 +129,7 @@ public class WithdrawalRegistryTemplateServiceImpl implements TemplateService {
         firstRowFirstCell.setCellValue(String.format("Выводы за период с %s по %s", fromTime, toTime));
     }
 
-    private void createSecondRow(Sheet sh, Font font, LongAdder inc, CellStyle greyStyle) {
+    private void createSecondRow(LongAdder inc, Sheet sh, Font font, CellStyle greyStyle) {
         Row secondRow = sh.createRow(inc.intValue());
         configUISecondRowAllCells(font, greyStyle, secondRow);
         initDataSecondRowAllCell(secondRow);

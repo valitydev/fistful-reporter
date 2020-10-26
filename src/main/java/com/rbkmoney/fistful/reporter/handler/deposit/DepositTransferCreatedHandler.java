@@ -1,4 +1,4 @@
-package com.rbkmoney.fistful.reporter.poller.impl;
+package com.rbkmoney.fistful.reporter.handler.deposit;
 
 import com.rbkmoney.dao.DaoException;
 import com.rbkmoney.fistful.cashflow.FinalCashFlowPosting;
@@ -84,7 +84,7 @@ public class DepositTransferCreatedHandler implements DepositEventHandler {
                     )
             );
             fistfulCashFlowDao.save(fistfulCashFlows);
-            log.info("Deposit transfer has been saved, eventId={}, depositId={}, transferChange={}", event.getId(), event.getSource(), change.getTransfer());
+            log.info("Deposit transfer have been saved, eventId={}, depositId={}, transferChange={}", event.getEventId(), event.getSourceId(), change.getChange().getTransfer());
         } catch (DaoException e) {
             throw new StorageException(e);
         }

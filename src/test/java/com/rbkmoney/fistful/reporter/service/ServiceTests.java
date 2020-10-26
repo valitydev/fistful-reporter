@@ -6,6 +6,7 @@ import com.rbkmoney.damsel.payment_processing.*;
 import com.rbkmoney.fistful.reporter.config.AbstractServiceConfig;
 import com.rbkmoney.fistful.reporter.domain.enums.ReportStatus;
 import com.rbkmoney.fistful.reporter.domain.tables.pojos.Report;
+import com.rbkmoney.fistful.reporter.domain.tables.pojos.Withdrawal;
 import com.rbkmoney.fistful.reporter.service.impl.WithdrawalRegistryTemplateServiceImpl;
 import org.apache.thrift.TException;
 import org.junit.Assert;
@@ -46,6 +47,9 @@ public class ServiceTests extends AbstractServiceConfig {
 
     @Autowired
     private WithdrawalRegistryTemplateServiceImpl withdrawalRegistryTemplateService;
+
+    @Autowired
+    private WithdrawalService withdrawalService;
 
     @Test
     public void fileInfoServiceTest() {
@@ -144,8 +148,6 @@ public class ServiceTests extends AbstractServiceConfig {
 
     @Test
     public void withdrawalRegistryTemplateServiceTest() throws IOException {
-        saveWithdrawalsDependencies();
-
         report.setTimezone("Europe/Moscow");
         Path reportFile = createTempFile(report.getType() + "_", "_report.xlsx");
         try {
@@ -155,9 +157,18 @@ public class ServiceTests extends AbstractServiceConfig {
         }
     }
 
+    @Test
+    public void withdrawalServiceTest() {
+        saveWithdrawalsDependencies();
+
+        List<Withdrawal> withdrawals = withdrawalService.getSucceededWithdrawalsByReport(report);
+
+        assertEquals(getExpectedSize(), withdrawals.size());
+    }
+
     @Override
     protected int getExpectedSize() {
-        return 4001;
+        return 2000;
     }
 
     private long createReport(String reportType) {

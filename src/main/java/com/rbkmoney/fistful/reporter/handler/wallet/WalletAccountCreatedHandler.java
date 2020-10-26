@@ -1,4 +1,4 @@
-package com.rbkmoney.fistful.reporter.poller.impl;
+package com.rbkmoney.fistful.reporter.handler.wallet;
 
 import com.rbkmoney.dao.DaoException;
 import com.rbkmoney.fistful.account.Account;
@@ -55,7 +55,7 @@ public class WalletAccountCreatedHandler implements WalletEventHandler {
 
             walletDao.updateNotCurrent(event.getSourceId());
             walletDao.save(wallet);
-            log.info("Wallet account has been saved, eventId={}, walletId={}, identityId={}", event.getId(), event.getSource(), account.getIdentity());
+            log.info("Wallet account have been saved, eventId={}, walletId={}, identityId={}", event.getEventId(), event.getSourceId(), account.getIdentity());
         } catch (DaoException e) {
             throw new StorageException(e);
         }
@@ -64,7 +64,7 @@ public class WalletAccountCreatedHandler implements WalletEventHandler {
     private Identity getIdentity(MachineEvent event, Account account) {
         Identity identity = identityDao.get(account.getIdentity());
         if (identity == null) {
-            throw new SinkEventNotFoundException(String.format("Identity not found, walletId=%s, identityId=%s", event.getSource(), account.getIdentity()));
+            throw new SinkEventNotFoundException(String.format("Identity not found, walletId='%s', identityId='%s'", event.getSourceId(), account.getIdentity()));
         }
         return identity;
     }
@@ -72,7 +72,7 @@ public class WalletAccountCreatedHandler implements WalletEventHandler {
     private Wallet getWallet(MachineEvent event) {
         Wallet wallet = walletDao.get(event.getSourceId());
         if (wallet == null) {
-            throw new SinkEventNotFoundException(String.format("Wallet not found, walletId=%s", event.getSource()));
+            throw new SinkEventNotFoundException(String.format("Wallet not found, walletId='%s'", event.getSourceId()));
         }
         return wallet;
     }

@@ -1,4 +1,4 @@
-package com.rbkmoney.fistful.reporter.poller.impl;
+package com.rbkmoney.fistful.reporter.handler.source;
 
 import com.rbkmoney.dao.DaoException;
 import com.rbkmoney.fistful.account.Account;
@@ -55,7 +55,7 @@ public class SourceAccountCreatedHandler implements SourceEventHandler {
 
             sourceDao.updateNotCurrent(event.getSourceId());
             sourceDao.save(source);
-            log.info("Source account has been saved, eventId={}, sourceId={}, identityId={}", event.getId(), event.getSource(), account.getIdentity());
+            log.info("Source account have been saved, eventId={}, sourceId={}, identityId={}", event.getEventId(), event.getSourceId(), account.getIdentity());
         } catch (DaoException e) {
             throw new StorageException(e);
         }
@@ -64,7 +64,7 @@ public class SourceAccountCreatedHandler implements SourceEventHandler {
     private Source getSource(MachineEvent event) {
         Source source = sourceDao.get(event.getSourceId());
         if (source == null) {
-            throw new SinkEventNotFoundException(String.format("Source not found, sourceId=%s", event.getSource()));
+            throw new SinkEventNotFoundException(String.format("Source not found, sourceId='%s'", event.getSourceId()));
         }
         return source;
     }
@@ -72,7 +72,7 @@ public class SourceAccountCreatedHandler implements SourceEventHandler {
     private Identity getIdentity(MachineEvent event, Account account) {
         Identity identity = identityDao.get(account.getIdentity());
         if (identity == null) {
-            throw new SinkEventNotFoundException(String.format("Identity not found, sourceId=%s, identityId=%s", event.getSource(), account.getIdentity()));
+            throw new SinkEventNotFoundException(String.format("Identity not found, sourceId='%s', identityId='%s'", event.getSourceId(), account.getIdentity()));
         }
         return identity;
     }

@@ -78,7 +78,7 @@ public class CashFlowConverter {
         } else if (cfa.getAccountType().isSetWallet()) {
             return cfa.getAccountType().getWallet().name();
         } else {
-            throw new IllegalArgumentException("Illegal fistful cash flow account type=" + cfa.getAccountType());
+            throw new IllegalArgumentException("Illegal fistful cash flow account type: " + cfa.getAccountType());
         }
     }
 }

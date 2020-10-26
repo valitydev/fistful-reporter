@@ -1,4 +1,4 @@
-package com.rbkmoney.fistful.reporter.poller.impl;
+package com.rbkmoney.fistful.reporter.handler.wallet;
 
 import com.rbkmoney.dao.DaoException;
 import com.rbkmoney.fistful.reporter.dao.WalletDao;
@@ -39,7 +39,7 @@ public class WalletCreatedHandler implements WalletEventHandler {
 
             walletDao.updateNotCurrent(event.getSourceId());
             walletDao.save(wallet);
-            log.info("Wallet has been saved, eventId={}, walletId={}", event.getId(), event.getSource());
+            log.info("Wallet have been saved, eventId={}, walletId={}", event.getEventId(), event.getSourceId());
         } catch (DaoException e) {
             throw new StorageException(e);
         }

@@ -1,4 +1,4 @@
-package com.rbkmoney.fistful.reporter.poller.impl;
+package com.rbkmoney.fistful.reporter.handler.deposit;
 
 import com.rbkmoney.dao.DaoException;
 import com.rbkmoney.fistful.deposit.TimestampedChange;
@@ -60,7 +60,7 @@ public class DepositTransferStatusChangedHandler implements DepositEventHandler 
             List<FistfulCashFlow> cashFlows = fistfulCashFlowDao.getByObjId(deposit.getId(), FistfulCashFlowChangeType.deposit);
             fillCashFlows(cashFlows, event, DepositEventType.DEPOSIT_TRANSFER_STATUS_CHANGED, change, id);
             fistfulCashFlowDao.save(cashFlows);
-            log.info("Withdrawal deposit status has been changed, eventId={}, depositId={}, transferChange={}", event.getId(), event.getSource(), change.getTransfer());
+            log.info("Withdrawal deposit status have been changed, eventId={}, depositId={}, transferChange={}", event.getEventId(), event.getSourceId(), change.getChange().getTransfer());
         } catch (DaoException e) {
             throw new StorageException(e);
         }
