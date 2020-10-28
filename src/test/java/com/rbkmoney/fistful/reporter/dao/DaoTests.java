@@ -190,7 +190,7 @@ public class DaoTests extends AbstractDaoConfig {
     @Test
     public void takeSucceededWithdrawalsTest() {
         saveWithdrawalsDependencies();
-        List<Withdrawal> withdrawalsByReport = withdrawalDao.getSucceededWithdrawalsByReport(report, 0L, 1000);
+        List<Withdrawal> withdrawalsByReport = withdrawalDao.getSucceededWithdrawals(report, 0L, 1000);
         assertEquals(getExpectedSize(), withdrawalsByReport.size());
     }
 

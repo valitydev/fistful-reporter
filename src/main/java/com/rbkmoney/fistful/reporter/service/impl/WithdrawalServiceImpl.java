@@ -34,12 +34,12 @@ public class WithdrawalServiceImpl implements WithdrawalService {
             );
             long fromId = 0L;
             int limit = 1000;
-            List<Withdrawal> pendingReports = withdrawalDao.getSucceededWithdrawalsByReport(report, fromId, limit);
+            List<Withdrawal> pendingReports = withdrawalDao.getSucceededWithdrawals(report, fromId, limit);
             List<Withdrawal> allPendingReports = new ArrayList<>(pendingReports);
 
             while (pendingReports.size() == limit) {
                 fromId = pendingReports.get(pendingReports.size() - 1).getId();
-                pendingReports = withdrawalDao.getSucceededWithdrawalsByReport(report, fromId, limit);
+                pendingReports = withdrawalDao.getSucceededWithdrawals(report, fromId, limit);
                 allPendingReports.addAll(pendingReports);
             }
             log.info("{} succeeded withdrawals by report has been found", allPendingReports.size());
