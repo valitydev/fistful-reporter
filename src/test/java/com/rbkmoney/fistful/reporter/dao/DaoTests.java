@@ -65,19 +65,6 @@ public class DaoTests extends AbstractDaoConfig {
         assertNull(depositDao.get(deposit.getDepositId()));
     }
 
-    public void depositDaoDuplicationTest() {
-        Deposit deposit = random(Deposit.class);
-        deposit.setCurrent(true);
-        depositDao.updateNotCurrent(deposit.getDepositId());
-        depositDao.save(deposit);
-        depositDao.updateNotCurrent(deposit.getDepositId());
-        Long id = depositDao.save(deposit);
-        deposit.setId(id);
-        assertEquals(deposit, depositDao.get(deposit.getDepositId()));
-        depositDao.updateNotCurrent(deposit.getDepositId());
-        assertNull(depositDao.get(deposit.getDepositId()));
-    }
-
     @Test
     public void destinationDaoTest() {
         Destination destination = random(Destination.class);

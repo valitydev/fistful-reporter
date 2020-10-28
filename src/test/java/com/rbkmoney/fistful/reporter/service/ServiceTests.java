@@ -48,9 +48,6 @@ public class ServiceTests extends AbstractServiceConfig {
     @Autowired
     private WithdrawalRegistryTemplateServiceImpl withdrawalRegistryTemplateService;
 
-    @Autowired
-    private WithdrawalService withdrawalService;
-
     @Test
     public void fileInfoServiceTest() {
         long reportId = reportService.createReport(
@@ -148,6 +145,8 @@ public class ServiceTests extends AbstractServiceConfig {
 
     @Test
     public void withdrawalRegistryTemplateServiceTest() throws IOException {
+        saveWithdrawalsDependencies();
+
         report.setTimezone("Europe/Moscow");
         Path reportFile = createTempFile(report.getType() + "_", "_report.xlsx");
         try {
@@ -157,18 +156,9 @@ public class ServiceTests extends AbstractServiceConfig {
         }
     }
 
-    @Test
-    public void withdrawalServiceTest() {
-        saveWithdrawalsDependencies();
-
-        List<Withdrawal> withdrawals = withdrawalService.getSucceededWithdrawalsByReport(report);
-
-        assertEquals(getExpectedSize(), withdrawals.size());
-    }
-
     @Override
     protected int getExpectedSize() {
-        return 2000;
+        return 4001;
     }
 
     private long createReport(String reportType) {

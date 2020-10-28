@@ -52,7 +52,7 @@ public class ReportServiceImpl implements ReportService {
         } catch (DaoException ex) {
             throw new StorageException(
                     String.format(
-                            "Failed to get reports by range, partyId='%s', contractId='%s', fromTime='%s', toTime='%s', reportTypes='%s'",
+                            "Failed to get reports by range, partyId=%s, contractId=%s, fromTime=%s, toTime=%s, reportTypes=%s",
                             partyId, contractId, fromTime, toTime, reportTypes
                     ),
                     ex
@@ -75,14 +75,14 @@ public class ReportServiceImpl implements ReportService {
             log.info("Trying to get report, reportId={}, partyId={}, contractId={}", reportId, partyId, contractId);
             Report report = reportDao.getReport(reportId, partyId, contractId);
             if (report == null) {
-                throw new ReportNotFoundException(String.format("Report not found, partyId='%s', contractId='%s', reportId='%d'", partyId, contractId, reportId));
+                throw new ReportNotFoundException(String.format("Report not found, partyId=%s, contractId=%s, reportId=%d", partyId, contractId, reportId));
             }
             log.info("Report has been found, reportId={}, partyId={}, contractId={}", reportId, partyId, contractId);
             return report;
         } catch (DaoException ex) {
             throw new StorageException(
                     String.format(
-                            "Failed to get report from storage, partyId='%s', contractId='%s', reportId='%d'",
+                            "Failed to get report from storage, partyId=%s, contractId=%s, reportId=%d",
                             partyId, contractId, reportId
                     ),
                     ex
@@ -93,21 +93,21 @@ public class ReportServiceImpl implements ReportService {
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
     public void cancelReport(String partyId, String shopId, long reportId) {
-        log.info("Trying to cancel report, reportId='{}'", reportId);
+        log.info("Trying to cancel report, reportId={}", reportId);
         Report report = getReport(partyId, shopId, reportId);
         changeReportStatus(report, ReportStatus.cancelled);
-        log.info("Report has been cancelled, reportId='{}'", reportId);
+        log.info("Report has been cancelled, reportId={}", reportId);
     }
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
     public void changeReportStatus(Report report, ReportStatus reportStatus) {
         try {
-            log.info("Trying to change report status, reportId='{}', reportStatus='{}'", report.getId(), reportStatus);
+            log.info("Trying to change report status, reportId={}, reportStatus={}", report.getId(), reportStatus);
             reportDao.changeReportStatus(report.getId(), reportStatus);
-            log.info("Report status has been successfully changed, reportId='{}', reportStatus='{}'", report.getId(), reportStatus);
+            log.info("Report status has been successfully changed, reportId={}, reportStatus={}", report.getId(), reportStatus);
         } catch (DaoException ex) {
-            throw new StorageException(String.format("Failed to change report status, reportId='%d', reportStatus='%s'", report.getId(), reportStatus), ex);
+            throw new StorageException(String.format("Failed to change report status, reportId=%d, reportStatus=%s", report.getId(), reportStatus), ex);
         }
     }
 
@@ -115,9 +115,13 @@ public class ReportServiceImpl implements ReportService {
     @Transactional(propagation = Propagation.REQUIRED)
     public List<Report> getPendingReports() {
         try {
-            log.info("Trying to get pending reports");
+            log.info("Trying to get reports with status, reportStatus=pending");
             List<Report> pendingReports = reportDao.getPendingReports();
-            log.info("{} pending reports has been found", pendingReports.size());
+            String reportIds = pendingReports.stream()
+                    .map(Report::getId)
+                    .map(String::valueOf)
+                    .collect(Collectors.joining(", ", "[", "]"));
+            log.info("{} reports has been found, reportStatus=pending, reportIds={}", pendingReports.size(), reportIds);
             return pendingReports;
         } catch (DaoException ex) {
             throw new StorageException("Failed to get pending reports", ex);
@@ -147,7 +151,7 @@ public class ReportServiceImpl implements ReportService {
         } catch (DaoException ex) {
             throw new StorageException(
                     String.format(
-                            "Failed to save report in storage, partyId='%s', contractId='%s', fromTime='%s', toTime='%s', reportType='%s'",
+                            "Failed to save report in storage, partyId=%s, contractId=%s, fromTime=%s, toTime=%s, reportType=%s",
                             partyId, contractId, fromTime, toTime, reportType
                     ),
                     ex

@@ -86,8 +86,7 @@ public class HandlerTest extends AbstractHandlerConfig {
     }
 
     private void schedulerEmulation() {
-        List<com.rbkmoney.fistful.reporter.domain.tables.pojos.Report> pendingReports = reportService.getPendingReports();
-        assertEquals(1, pendingReports.size());
+        var pendingReports = reportService.getPendingReports();
         reportGenerator.generateReportFile(pendingReports.get(0));
     }
 }
