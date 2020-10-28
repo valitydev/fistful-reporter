@@ -49,7 +49,7 @@ public class SourceCreatedHandler implements SourceEventHandler {
 
             sourceDao.updateNotCurrent(event.getSourceId());
             sourceDao.save(source);
-            log.info("Source have been saved, eventId={}, sourceId={}", event.getEventId(), event.getSourceId());
+            log.info("Source has been saved, eventId={}, sourceId={}", event.getEventId(), event.getSourceId());
         } catch (DaoException e) {
             throw new StorageException(e);
         }

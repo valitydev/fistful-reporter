@@ -72,7 +72,7 @@ public class WithdrawalTransferCreatedHandler implements WithdrawalEventHandler 
                     )
             );
             fistfulCashFlowDao.save(fistfulCashFlows);
-            log.info("Withdrawal transfer have been saved, eventId={}, walletId={}, transferChange={}", event.getEventId(), event.getSourceId(), change.getChange().getTransfer());
+            log.info("Withdrawal transfer has been saved, eventId={}, walletId={}, transferChange={}", event.getEventId(), event.getSourceId(), change.getChange().getTransfer());
         } catch (DaoException e) {
             throw new StorageException(e);
         }

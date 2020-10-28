@@ -55,7 +55,7 @@ public class SourceAccountCreatedHandler implements SourceEventHandler {
 
             sourceDao.updateNotCurrent(event.getSourceId());
             sourceDao.save(source);
-            log.info("Source account have been saved, eventId={}, sourceId={}, identityId={}", event.getEventId(), event.getSourceId(), account.getIdentity());
+            log.info("Source account has been saved, eventId={}, sourceId={}, identityId={}", event.getEventId(), event.getSourceId(), account.getIdentity());
         } catch (DaoException e) {
             throw new StorageException(e);
         }

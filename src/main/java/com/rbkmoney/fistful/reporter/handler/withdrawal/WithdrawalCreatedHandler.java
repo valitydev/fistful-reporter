@@ -60,7 +60,7 @@ public class WithdrawalCreatedHandler implements WithdrawalEventHandler {
 
             withdrawalDao.updateNotCurrent(event.getSourceId());
             withdrawalDao.save(withdrawal);
-            log.info("Withdrawal have been saved, eventId={}, walletId={}", event.getEventId(), event.getSourceId());
+            log.info("Withdrawal has been saved, eventId={}, walletId={}", event.getEventId(), event.getSourceId());
         } catch (DaoException e) {
             throw new StorageException(e);
         }

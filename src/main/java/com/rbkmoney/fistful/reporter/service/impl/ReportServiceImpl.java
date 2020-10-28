@@ -47,7 +47,7 @@ public class ReportServiceImpl implements ReportService {
                     LocalDateTime.ofInstant(toTime, ZoneOffset.UTC),
                     reportTypes
             );
-            log.info("Reports by range have been found, partyId={}, contractId={}", partyId, contractId);
+            log.info("Reports by range has been found, partyId={}, contractId={}", partyId, contractId);
             return reportsByRange;
         } catch (DaoException ex) {
             throw new StorageException(
@@ -77,7 +77,7 @@ public class ReportServiceImpl implements ReportService {
             if (report == null) {
                 throw new ReportNotFoundException(String.format("Report not found, partyId='%s', contractId='%s', reportId='%d'", partyId, contractId, reportId));
             }
-            log.info("Report have been found, reportId={}, partyId={}, contractId={}", reportId, partyId, contractId);
+            log.info("Report has been found, reportId={}, partyId={}, contractId={}", reportId, partyId, contractId);
             return report;
         } catch (DaoException ex) {
             throw new StorageException(
@@ -96,7 +96,7 @@ public class ReportServiceImpl implements ReportService {
         log.info("Trying to cancel report, reportId='{}'", reportId);
         Report report = getReport(partyId, shopId, reportId);
         changeReportStatus(report, ReportStatus.cancelled);
-        log.info("Report have been cancelled, reportId='{}'", reportId);
+        log.info("Report has been cancelled, reportId='{}'", reportId);
     }
 
     @Override
@@ -105,7 +105,7 @@ public class ReportServiceImpl implements ReportService {
         try {
             log.info("Trying to change report status, reportId='{}', reportStatus='{}'", report.getId(), reportStatus);
             reportDao.changeReportStatus(report.getId(), reportStatus);
-            log.info("Report status have been successfully changed, reportId='{}', reportStatus='{}'", report.getId(), reportStatus);
+            log.info("Report status has been successfully changed, reportId='{}', reportStatus='{}'", report.getId(), reportStatus);
         } catch (DaoException ex) {
             throw new StorageException(String.format("Failed to change report status, reportId='%d', reportStatus='%s'", report.getId(), reportStatus), ex);
         }
@@ -117,7 +117,7 @@ public class ReportServiceImpl implements ReportService {
         try {
             log.info("Trying to get pending reports");
             List<Report> pendingReports = reportDao.getPendingReports();
-            log.info("{} pending reports have been found", pendingReports.size());
+            log.info("{} pending reports has been found", pendingReports.size());
             return pendingReports;
         } catch (DaoException ex) {
             throw new StorageException("Failed to get pending reports", ex);

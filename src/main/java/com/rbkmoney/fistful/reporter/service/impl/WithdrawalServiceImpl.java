@@ -42,7 +42,7 @@ public class WithdrawalServiceImpl implements WithdrawalService {
                 pendingReports = withdrawalDao.getSucceededWithdrawalsByReport(report, fromId, limit);
                 allPendingReports.addAll(pendingReports);
             }
-            log.info("{} succeeded withdrawals by report have been found", allPendingReports.size());
+            log.info("{} succeeded withdrawals by report has been found", allPendingReports.size());
             Comparator<Withdrawal> comparing = Comparator.comparing(Withdrawal::getEventCreatedAt);
             return allPendingReports.stream()
                     .sorted(comparing.reversed())

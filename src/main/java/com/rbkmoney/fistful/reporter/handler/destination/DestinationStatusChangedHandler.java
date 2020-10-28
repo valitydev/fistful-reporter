@@ -47,7 +47,7 @@ public class DestinationStatusChangedHandler implements DestinationEventHandler 
 
             destinationDao.updateNotCurrent(event.getSourceId());
             destinationDao.save(destination);
-            log.info("Destination status have been changed, eventId={}, destinationId={}, status={}", event.getEventId(), event.getSourceId(), status);
+            log.info("Destination status has been changed, eventId={}, destinationId={}, status={}", event.getEventId(), event.getSourceId(), status);
         } catch (DaoException e) {
             throw new StorageException(e);
         }

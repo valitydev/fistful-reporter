@@ -45,7 +45,7 @@ public class FileInfoServiceImpl implements FileInfoService {
 
             Long id = fileInfoDao.save(fileInfo);
 
-            log.info("File information have been saved, reportId='{}', fileDataId='{}'", reportId, fileDataId);
+            log.info("File information has been saved, reportId='{}', fileDataId='{}'", reportId, fileDataId);
             return id;
         } catch (DaoException ex) {
             throw new StorageException(String.format("Failed to save file info in storage, reportId=%s, fileDataId=%s", reportId, fileDataId), ex);
@@ -62,7 +62,7 @@ public class FileInfoServiceImpl implements FileInfoService {
                     .map(FileInfo::getFileDataId)
                     .collect(Collectors.toList());
 
-            log.info("Files information for report have been found, reportId='{}'", reportId);
+            log.info("Files information for report has been found, reportId='{}'", reportId);
 
             return fileIds;
         } catch (DaoException ex) {

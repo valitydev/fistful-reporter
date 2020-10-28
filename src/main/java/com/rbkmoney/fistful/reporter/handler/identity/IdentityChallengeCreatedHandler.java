@@ -40,9 +40,9 @@ public class IdentityChallengeCreatedHandler implements IdentityEventHandler {
 
             log.info("Challenge created handling: start update identity, eventId={}, identityId={}", event.getEventId(), event.getSourceId());
             updateIdentity(event, change);
-            log.info("Challenge created handling: identity have been updated, eventId={}, identityId={}", event.getEventId(), event.getSourceId());
+            log.info("Challenge created handling: identity has been updated, eventId={}, identityId={}", event.getEventId(), event.getSourceId());
 
-            log.info("Start identity challenge have been created, eventId={}, identityId={}, challengeId={}", event.getEventId(), event.getSourceId(), challengeChange.getId());
+            log.info("Start identity challenge has been created, eventId={}, identityId={}, challengeId={}", event.getEventId(), event.getSourceId(), challengeChange.getId());
         } catch (DaoException e) {
             throw new StorageException(e);
         }

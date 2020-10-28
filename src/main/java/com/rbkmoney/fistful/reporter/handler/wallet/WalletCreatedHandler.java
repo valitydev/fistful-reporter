@@ -39,7 +39,7 @@ public class WalletCreatedHandler implements WalletEventHandler {
 
             walletDao.updateNotCurrent(event.getSourceId());
             walletDao.save(wallet);
-            log.info("Wallet have been saved, eventId={}, walletId={}", event.getEventId(), event.getSourceId());
+            log.info("Wallet has been saved, eventId={}, walletId={}", event.getEventId(), event.getSourceId());
         } catch (DaoException e) {
             throw new StorageException(e);
         }
