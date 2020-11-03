@@ -35,7 +35,7 @@ public class TransferTestUtil extends AbstractTestUtils {
                 Change.created(
                         new CreatedChange(
                                 new Transfer()
-                                .setCashflow(getFinalCashFlow())
+                                        .setCashflow(getFinalCashFlow())
                         )
                 )
         );

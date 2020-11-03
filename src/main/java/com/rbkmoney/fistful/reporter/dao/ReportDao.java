@@ -18,5 +18,4 @@ public interface ReportDao extends GenericDao {
     void changeReportStatus(Long reportId, ReportStatus reportStatus);
 
     List<Report> getPendingReports();
-
 }

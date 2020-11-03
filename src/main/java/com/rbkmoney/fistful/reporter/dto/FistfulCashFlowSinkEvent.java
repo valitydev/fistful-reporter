@@ -14,7 +14,6 @@ public class FistfulCashFlowSinkEvent {
     private final Long eventId;
     private final String eventCreatedAt;
     private final String sourceId;
-    private final Integer sequenceId;
     private final String eventOccuredAt;
     private final String eventType;
     private final Long objId;

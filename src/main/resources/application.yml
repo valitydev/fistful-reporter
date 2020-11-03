@@ -46,45 +46,45 @@ reporting:
   defaultTimeZone: Europe/Moscow
   pollingEnable: true
   pollingDelay: 3000
-deposit:
-  polling:
-    url: http://wapi:8022/v1/eventsink/deposit
-    delay: 10000
-    retryDelay: 1000
-    maxPoolSize: 1
-    querySize: 100
-destination:
-  polling:
-    url: http://wapi:8022/v1/eventsink/destination
-    delay: 10000
-    retryDelay: 1000
-    maxPoolSize: 1
-    querySize: 100
-identity:
-  polling:
-    url: http://wapi:8022/v1/eventsink/identity
-    delay: 10000
-    retryDelay: 1000
-    maxPoolSize: 1
-    querySize: 100
-source:
-  polling:
-    url: http://wapi:8022/v1/eventsink/source
-    delay: 10000
-    retryDelay: 1000
-    maxPoolSize: 1
-    querySize: 100
-wallet:
-  polling:
-    url: http://wapi:8022/v1/eventsink/wallet
-    delay: 10000
-    retryDelay: 1000
-    maxPoolSize: 1
-    querySize: 100
-withdrawal:
-  polling:
-    url: http://wapi:8022/v1/eventsink/withdrawal
-    delay: 10000
-    retryDelay: 1000
-    maxPoolSize: 1
-    querySize: 100
+kafka:
+  bootstrap-servers: changeit:9092
+  consumer:
+    group-id: fistful-reporter
+    concurrency: 7
+  max-poll-records: 100
+  max-poll-interval-ms: 60000
+  max-session-timeout-ms: 60000
+  retry-delay-ms: 1000
+  ssl:
+    enabled: false
+    key-store-type: changeit
+    key-store-location: changeit
+    key-password: changeit
+    trust-store-type: changeit
+    trust-store-location: changeit
+    trust-store-password: changeit
+  topic:
+    deposit:
+      name: deposit
+      listener:
+        enabled: false
+    destination:
+      name: destination
+      listener:
+        enabled: false
+    identity:
+      name: identity
+      listener:
+        enabled: false
+    wallet:
+      name: wallet
+      listener:
+        enabled: false
+    withdrawal:
+      name: withdrawal
+      listener:
+        enabled: false
+    source:
+      name: source
+      listener:
+        enabled: false
