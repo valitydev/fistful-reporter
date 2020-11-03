@@ -6,7 +6,6 @@ import com.rbkmoney.damsel.payment_processing.*;
 import com.rbkmoney.fistful.reporter.config.AbstractServiceConfig;
 import com.rbkmoney.fistful.reporter.domain.enums.ReportStatus;
 import com.rbkmoney.fistful.reporter.domain.tables.pojos.Report;
-import com.rbkmoney.fistful.reporter.domain.tables.pojos.Withdrawal;
 import com.rbkmoney.fistful.reporter.service.impl.WithdrawalRegistryTemplateServiceImpl;
 import org.apache.thrift.TException;
 import org.junit.Assert;

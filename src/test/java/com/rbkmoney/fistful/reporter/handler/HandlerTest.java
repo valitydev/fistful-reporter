@@ -15,7 +15,6 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import java.io.IOException;
-import java.util.List;
 import java.util.UUID;
 
 import static com.rbkmoney.geck.common.util.TypeUtil.temporalToString;

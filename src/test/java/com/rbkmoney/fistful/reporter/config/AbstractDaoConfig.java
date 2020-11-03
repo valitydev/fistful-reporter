@@ -82,8 +82,13 @@ public abstract class AbstractDaoConfig extends AbstractWithdrawalTestUtils {
         public void initialize(ConfigurableApplicationContext configurableApplicationContext) {
             super.initialize(configurableApplicationContext);
             TestPropertyValues.of(
-                    testContainers.getEnvironmentProperties(getEnvironmentPropertiesConsumer())
-            )
+                    "kafka.topic.deposit.listener.enabled=false",
+                    "kafka.topic.destination.listener.enabled=false",
+                    "kafka.topic.source.listener.enabled=false",
+                    "kafka.topic.withdrawal.listener.enabled=false",
+                    "kafka.topic.wallet.listener.enabled=false",
+                    "kafka.topic.identity.listener.enabled=false")
+                    .and(testContainers.getEnvironmentProperties(getEnvironmentPropertiesConsumer()))
                     .applyTo(configurableApplicationContext);
         }
     }
@@ -99,7 +104,6 @@ public abstract class AbstractDaoConfig extends AbstractWithdrawalTestUtils {
 
     private static Consumer<EnvironmentProperties> getEnvironmentPropertiesConsumer() {
         return environmentProperties -> {
-            environmentProperties.put("eventstock.pollingEnable", "false");
             environmentProperties.put("reporting.pollingEnable", "false");
         };
     }

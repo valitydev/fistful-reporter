@@ -40,7 +40,6 @@ public class WalletEventListenerTest extends AbstractListenerTest {
     @Test
     public void shouldListenAndSave() throws InterruptedException, DaoException {
         // Given
-
         TimestampedChange created = new TimestampedChange()
                 .setOccuredAt("2016-03-22T06:12:27Z")
                 .setChange(Change.created(new com.rbkmoney.fistful.wallet.Wallet()

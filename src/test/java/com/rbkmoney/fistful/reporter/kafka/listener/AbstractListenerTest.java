@@ -48,8 +48,14 @@ public abstract class AbstractListenerTest {
         @Override
         public void initialize(ConfigurableApplicationContext configurableApplicationContext) {
             TestPropertyValues.of(
+                    "kafka.topic.deposit.listener.enabled=true",
+                    "kafka.topic.destination.listener.enabled=true",
+                    "kafka.topic.source.listener.enabled=true",
+                    "kafka.topic.withdrawal.listener.enabled=true",
+                    "kafka.topic.wallet.listener.enabled=true",
+                    "kafka.topic.identity.listener.enabled=true",
                     "kafka.bootstrap-servers=" + kafka.getBootstrapServers())
-                    .applyTo(configurableApplicationContext.getEnvironment());
+                    .applyTo(configurableApplicationContext);
             initTopic("deposit");
             initTopic("destination");
             initTopic("wallet");
@@ -81,13 +87,7 @@ public abstract class AbstractListenerTest {
                     "spring.datasource.password=" + postgres.getPassword(),
                     "spring.flyway.url=" + postgres.getJdbcUrl(),
                     "spring.flyway.user=" + postgres.getUsername(),
-                    "spring.flyway.password=" + postgres.getPassword(),
-                    "kafka.topic.deposit.listener.enabled=true",
-                    "kafka.topic.destination.listener.enabled=true",
-                    "kafka.topic.source.listener.enabled=true",
-                    "kafka.topic.withdrawal.listener.enabled=true",
-                    "kafka.topic.wallet.listener.enabled=true",
-                    "kafka.topic.identity.listener.enabled=true")
+                    "spring.flyway.password=" + postgres.getPassword())
                     .and(configurableApplicationContext.getEnvironment().getActiveProfiles())
                     .applyTo(configurableApplicationContext);
         }
