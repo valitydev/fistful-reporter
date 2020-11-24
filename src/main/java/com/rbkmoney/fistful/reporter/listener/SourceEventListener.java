@@ -1,7 +1,7 @@
 package com.rbkmoney.fistful.reporter.listener;
 
 import com.rbkmoney.fistful.reporter.exception.NotFoundException;
-import com.rbkmoney.fistful.reporter.service.impl.WithdrawalEventService;
+import com.rbkmoney.fistful.reporter.service.impl.SourceEventService;
 import com.rbkmoney.machinegun.eventsink.SinkEvent;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,7 +25,7 @@ public class SourceEventListener {
     @Value("${kafka.retry-delay-ms}")
     private int retryDelayMs;
 
-    private final WithdrawalEventService withdrawalEventService;
+    private final SourceEventService sourceEventService;
 
     @KafkaListener(
             autoStartup = "${kafka.topic.source.listener.enabled}",
@@ -38,7 +38,7 @@ public class SourceEventListener {
             Acknowledgment ack) throws InterruptedException {
         log.info("Listening Source: partition={}, offset={}, batch.size()={}", partition, offset, batch.size());
         try {
-            withdrawalEventService.handleEvents(batch.stream().map(SinkEvent::getEvent).collect(toList()));
+            sourceEventService.handleEvents(batch.stream().map(SinkEvent::getEvent).collect(toList()));
         } catch (
                 NotFoundException e) {
             log.info("Delayed retry caused by an exception", e);
