@@ -40,7 +40,7 @@ public class WithdrawalTransferCreatedHandler implements WithdrawalEventHandler 
         try {
             List<FinalCashFlowPosting> postings = change.getChange().getTransfer().getPayload().getCreated().getTransfer().getCashflow().getPostings();
 
-            log.info("Start withdrawal transfer created handling, eventId={}, walletId={}, transferChange={}", event.getEventId(), event.getSourceId(), change.getChange().getTransfer());
+            log.info("Start withdrawal transfer created handling, eventId={}, withdrawalId={}, transferChange={}", event.getEventId(), event.getSourceId(), change.getChange().getTransfer());
             Withdrawal withdrawal = withdrawalDao.get(event.getSourceId());
             Long oldId = withdrawal.getId();
 
@@ -73,10 +73,10 @@ public class WithdrawalTransferCreatedHandler implements WithdrawalEventHandler 
                                 )
                         );
                         fistfulCashFlowDao.save(fistfulCashFlows);
-                        log.info("Withdrawal transfer have been created, eventId={}, walletId={}, transferChange={}",
+                        log.info("Withdrawal transfer have been created, eventId={}, withdrawalId={}, transferChange={}",
                                 event.getEventId(), event.getSourceId(), change.getChange().getTransfer());
                     },
-                    () -> log.info("Withdrawal transfer create bound duplicated, eventId={}, walletId={}, transferChange={}",
+                    () -> log.info("Withdrawal transfer create bound duplicated, eventId={}, withdrawalId={}, transferChange={}",
                             event.getEventId(), event.getSourceId(), change.getChange().getTransfer()));
         } catch (DaoException e) {
             throw new StorageException(e);

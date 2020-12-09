@@ -38,7 +38,7 @@ public class WithdrawalStatusChangedHandler implements WithdrawalEventHandler {
         try {
             Status status = change.getChange().getStatusChanged().getStatus();
 
-            log.info("Start withdrawal status changed handling, eventId={}, walletId={}, status={}", event.getEventId(), event.getSourceId(), change.getChange().getStatusChanged());
+            log.info("Start withdrawal status changed handling, eventId={}, withdrawalId={}, status={}", event.getEventId(), event.getSourceId(), change.getChange().getStatusChanged());
 
             Withdrawal withdrawal = withdrawalDao.get(event.getSourceId());
             Long oldId = withdrawal.getId();
@@ -59,10 +59,10 @@ public class WithdrawalStatusChangedHandler implements WithdrawalEventHandler {
                         List<FistfulCashFlow> cashFlows = fistfulCashFlowDao.getByObjId(withdrawal.getId(), FistfulCashFlowChangeType.withdrawal);
                         fillCashFlows(cashFlows, event, WithdrawalEventType.WITHDRAWAL_STATUS_CHANGED, id, change);
                         fistfulCashFlowDao.save(cashFlows);
-                        log.info("Withdrawal status have been changed, eventId={}, walletId={}, status={}",
+                        log.info("Withdrawal status have been changed, eventId={}, withdrawalId={}, status={}",
                                 event.getEventId(), event.getSourceId(), change.getChange().getStatusChanged());
                     },
-                    () -> log.info("Withdrawal status change bound duplicated, eventId={}, walletId={}, status={}",
+                    () -> log.info("Withdrawal status change bound duplicated, eventId={}, withdrawalId={}, status={}",
                             event.getEventId(), event.getSourceId(), change.getChange().getStatusChanged()));
         } catch (DaoException e) {
             throw new StorageException(e);

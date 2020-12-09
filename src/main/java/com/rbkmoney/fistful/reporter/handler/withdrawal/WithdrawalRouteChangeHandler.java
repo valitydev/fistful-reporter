@@ -33,7 +33,7 @@ public class WithdrawalRouteChangeHandler implements WithdrawalEventHandler {
     @Override
     public void handle(TimestampedChange change, MachineEvent event) {
         try {
-            log.info("Start withdrawal provider id changed handling, eventId={}, walletId={}", event.getEventId(), event.getSourceId());
+            log.info("Start withdrawal provider id changed handling, eventId={}, withdrawalId={}", event.getEventId(), event.getSourceId());
             Withdrawal withdrawal = withdrawalDao.get(event.getSourceId());
             Long oldId = withdrawal.getId();
 
@@ -53,7 +53,7 @@ public class WithdrawalRouteChangeHandler implements WithdrawalEventHandler {
                                 FistfulCashFlowChangeType.withdrawal);
                         fillCashFlows(cashFlows, event, WithdrawalEventType.WITHDRAWAL_ROUTE_CHANGED, id, change);
                         fistfulCashFlowDao.save(cashFlows);
-                        log.info("Withdrawal provider id has been changed, eventId={}, walletId={}",
+                        log.info("Withdrawal provider id has been changed, eventId={}, withdrawalId={}",
                                 event.getEventId(), event.getSourceId());
                     },
                     () -> log.info("Withdrawal provider id change bound duplicated, eventId={}, withdrawalId={}",
