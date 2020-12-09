@@ -42,13 +42,18 @@ public class WithdrawalDaoImpl extends AbstractGenericDao implements WithdrawalD
     }
 
     @Override
-    public Long save(Withdrawal withdrawal) {
+    public Optional<Long> save(Withdrawal withdrawal) {
         WithdrawalRecord record = getDslContext().newRecord(WITHDRAWAL, withdrawal);
-        Query query = getDslContext().insertInto(WITHDRAWAL).set(record).returning(WITHDRAWAL.ID);
+        Query query = getDslContext()
+                .insertInto(WITHDRAWAL)
+                .set(record)
+                .onConflict(WITHDRAWAL.WITHDRAWAL_ID, WITHDRAWAL.EVENT_ID)
+                .doNothing()
+                .returning(WITHDRAWAL.ID);
 
         GeneratedKeyHolder keyHolder = new GeneratedKeyHolder();
-        executeOne(query, keyHolder);
-        return keyHolder.getKey().longValue();
+        execute(query, keyHolder);
+        return Optional.ofNullable(keyHolder.getKey()).map(Number::longValue);
     }
 
     @Override
@@ -61,11 +66,12 @@ public class WithdrawalDaoImpl extends AbstractGenericDao implements WithdrawalD
     }
 
     @Override
-    public void updateNotCurrent(String withdrawalId) {
-        Condition condition = WITHDRAWAL.WITHDRAWAL_ID.eq(withdrawalId)
-                .and(WITHDRAWAL.CURRENT);
-        Query query = getDslContext().update(WITHDRAWAL).set(WITHDRAWAL.CURRENT, false).where(condition);
-
+    public void updateNotCurrent(Long withdrawalId) {
+        Query query = getDslContext()
+                .update(WITHDRAWAL)
+                .set(WITHDRAWAL.CURRENT, false)
+                .where(WITHDRAWAL.ID.eq(withdrawalId)
+                        .and(WITHDRAWAL.CURRENT));
         execute(query);
     }
 

@@ -72,8 +72,16 @@ public class IdentityChallengeStatusChangedHandler implements IdentityEventHandl
             }
         }
 
-        challengeDao.updateNotCurrent(event.getSourceId(), challengeChange.getId());
-        challengeDao.save(challenge);
+        Long oldId = challenge.getId();
+        challengeDao.save(challenge).ifPresentOrElse(
+                id -> {
+                    challengeDao.updateNotCurrent(oldId);
+                    log.info("Start identity challenge status have been changed,  eventId={}, identityId={}",
+                            event.getEventId(), event.getSourceId());
+                },
+                () -> log.info("Identity challenge status bound duplicated, eventId={}, identityId={}",
+                        event.getEventId(), event.getSourceId())
+        );
     }
 
     private void updateIdentity(MachineEvent event, TimestampedChange change) {
@@ -88,7 +96,15 @@ public class IdentityChallengeStatusChangedHandler implements IdentityEventHandl
         identity.setEventOccuredAt(TypeUtil.stringToLocalDateTime(change.getOccuredAt()));
         identity.setEventType(IdentityEventType.IDENTITY_CHALLENGE_STATUS_CHANGED);
 
-        identityDao.updateNotCurrent(event.getSourceId());
-        identityDao.save(identity);
+        Long oldId = identity.getId();
+        identityDao.save(identity).ifPresentOrElse(
+                id -> {
+                    identityDao.updateNotCurrent(oldId);
+                    log.info("Start identity challenge status have been updated, eventId={}, identityId={}",
+                            event.getEventId(), event.getSourceId());
+                },
+                () -> log.info("Identity challenge status bound duplicated, eventId={}, identityId={}",
+                        event.getEventId(), event.getSourceId())
+        );
     }
 }

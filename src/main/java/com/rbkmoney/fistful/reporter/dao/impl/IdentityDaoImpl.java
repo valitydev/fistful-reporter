@@ -48,13 +48,18 @@ public class IdentityDaoImpl extends AbstractGenericDao implements IdentityDao {
     }
 
     @Override
-    public Long save(Identity identity) {
+    public Optional<Long> save(Identity identity) {
         IdentityRecord record = getDslContext().newRecord(IDENTITY, identity);
-        Query query = getDslContext().insertInto(IDENTITY).set(record).returning(IDENTITY.ID);
+        Query query = getDslContext()
+                .insertInto(IDENTITY)
+                .set(record)
+                .onConflict(IDENTITY.IDENTITY_ID, IDENTITY.EVENT_ID)
+                .doNothing()
+                .returning(IDENTITY.ID);
 
         GeneratedKeyHolder keyHolder = new GeneratedKeyHolder();
-        executeOne(query, keyHolder);
-        return keyHolder.getKey().longValue();
+        execute(query, keyHolder);
+        return Optional.ofNullable(keyHolder.getKey()).map(Number::longValue);
     }
 
     @Override
@@ -67,11 +72,13 @@ public class IdentityDaoImpl extends AbstractGenericDao implements IdentityDao {
     }
 
     @Override
-    public void updateNotCurrent(String identityId) {
-        Condition condition = IDENTITY.IDENTITY_ID.eq(identityId)
-                .and(IDENTITY.CURRENT);
-        Query query = getDslContext().update(IDENTITY).set(IDENTITY.CURRENT, false).where(condition);
-
+    public void updateNotCurrent(Long identityId) {
+        Query query = getDslContext()
+                .update(IDENTITY)
+                .set(IDENTITY.CURRENT, false)
+                .where(IDENTITY.ID.eq(identityId)
+                        .and(IDENTITY.CURRENT)
+                );
         execute(query);
     }
 }

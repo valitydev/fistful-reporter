@@ -54,6 +54,7 @@ public class DepositTransferCreatedHandler implements DepositEventHandler {
             log.info("Start deposit transfer created handling, eventId={}, depositId={}, transferChange={}", event.getEventId(), event.getSourceId(), change.getChange().getTransfer());
 
             Deposit deposit = depositDao.get(event.getSourceId());
+            Long oldId = deposit.getId();
 
             deposit.setId(null);
             deposit.setWtime(null);
@@ -68,23 +69,28 @@ public class DepositTransferCreatedHandler implements DepositEventHandler {
             deposit.setFee(CashFlowConverter.getFistfulFee(postings));
             deposit.setProviderFee(CashFlowConverter.getFistfulProviderFee(postings));
 
-            depositDao.updateNotCurrent(event.getSourceId());
-            long id = depositDao.save(deposit);
-
-            List<FistfulCashFlow> fistfulCashFlows = CashFlowConverter.convertFistfulCashFlows(
-                    new FistfulCashFlowSinkEvent(
-                            event.getEventId(),
-                            event.getCreatedAt(),
-                            event.getSourceId(),
-                            change.getOccuredAt(),
-                            DepositEventType.DEPOSIT_TRANSFER_CREATED.toString(),
-                            id,
-                            FistfulCashFlowChangeType.deposit,
-                            postings
-                    )
+            depositDao.save(deposit).ifPresentOrElse(
+                    id -> {
+                        depositDao.updateNotCurrent(oldId);
+                        List<FistfulCashFlow> fistfulCashFlows = CashFlowConverter.convertFistfulCashFlows(
+                                new FistfulCashFlowSinkEvent(
+                                        event.getEventId(),
+                                        event.getCreatedAt(),
+                                        event.getSourceId(),
+                                        change.getOccuredAt(),
+                                        DepositEventType.DEPOSIT_TRANSFER_CREATED.toString(),
+                                        id,
+                                        FistfulCashFlowChangeType.deposit,
+                                        postings
+                                )
+                        );
+                        fistfulCashFlowDao.save(fistfulCashFlows);
+                        log.info("Deposit transfer has been created, eventId={}, depositId={}, transferChange={}",
+                                event.getEventId(), event.getSourceId(), change.getChange().getTransfer());
+                    },
+                    () -> log.info("Deposit transfer bound duplicated, eventId={}, depositId={}, transferChange={}",
+                            event.getEventId(), event.getSourceId(), change.getChange().getTransfer())
             );
-            fistfulCashFlowDao.save(fistfulCashFlows);
-            log.info("Deposit transfer has been saved, eventId={}, depositId={}, transferChange={}", event.getEventId(), event.getSourceId(), change.getChange().getTransfer());
         } catch (DaoException e) {
             throw new StorageException(e);
         }

@@ -1,10 +1,12 @@
 package com.rbkmoney.fistful.reporter.dao;
 
+import java.util.Optional;
+
 public interface FistfulDao<T> extends EventDao {
 
-    Long save(T object);
+    Optional<Long> save(T object);
 
     T get(String id);
 
-    void updateNotCurrent(String id);
+    void updateNotCurrent(Long id);
 }

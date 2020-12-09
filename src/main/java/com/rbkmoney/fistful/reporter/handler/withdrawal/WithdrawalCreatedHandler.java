@@ -58,9 +58,11 @@ public class WithdrawalCreatedHandler implements WithdrawalEventHandler {
             withdrawal.setAmount(cash.getAmount());
             withdrawal.setCurrencyCode(cash.getCurrency().getSymbolicCode());
 
-            withdrawalDao.updateNotCurrent(event.getSourceId());
-            withdrawalDao.save(withdrawal);
-            log.info("Withdrawal has been saved, eventId={}, walletId={}", event.getEventId(), event.getSourceId());
+            withdrawalDao.save(withdrawal).ifPresentOrElse(
+                    dbContractId -> log.info("Withdrawal has been created, eventId={}, walletId={}",
+                            event.getEventId(), event.getSourceId()),
+                    () -> log.info("Withdrawal created bound duplicated, eventId={}, walletId={}",
+                            event.getEventId(), event.getSourceId()));
         } catch (DaoException e) {
             throw new StorageException(e);
         }

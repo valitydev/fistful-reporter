@@ -41,6 +41,7 @@ public class WithdrawalStatusChangedHandler implements WithdrawalEventHandler {
             log.info("Start withdrawal status changed handling, eventId={}, walletId={}, status={}", event.getEventId(), event.getSourceId(), change.getChange().getStatusChanged());
 
             Withdrawal withdrawal = withdrawalDao.get(event.getSourceId());
+            Long oldId = withdrawal.getId();
 
             withdrawal.setId(null);
             withdrawal.setWtime(null);
@@ -52,14 +53,17 @@ public class WithdrawalStatusChangedHandler implements WithdrawalEventHandler {
             withdrawal.setEventType(WithdrawalEventType.WITHDRAWAL_STATUS_CHANGED);
             withdrawal.setWithdrawalStatus(TBaseUtil.unionFieldToEnum(status, WithdrawalStatus.class));
 
-            withdrawalDao.updateNotCurrent(event.getSourceId());
-            long id = withdrawalDao.save(withdrawal);
-
-            List<FistfulCashFlow> cashFlows = fistfulCashFlowDao.getByObjId(withdrawal.getId(), FistfulCashFlowChangeType.withdrawal);
-            fillCashFlows(cashFlows, event, WithdrawalEventType.WITHDRAWAL_STATUS_CHANGED, id, change);
-
-            fistfulCashFlowDao.save(cashFlows);
-            log.info("Withdrawal status has been changed, eventId={}, walletId={}, status={}", event.getEventId(), event.getSourceId(), change.getChange().getStatusChanged());
+            withdrawalDao.save(withdrawal).ifPresentOrElse(
+                    id -> {
+                        withdrawalDao.updateNotCurrent(oldId);
+                        List<FistfulCashFlow> cashFlows = fistfulCashFlowDao.getByObjId(withdrawal.getId(), FistfulCashFlowChangeType.withdrawal);
+                        fillCashFlows(cashFlows, event, WithdrawalEventType.WITHDRAWAL_STATUS_CHANGED, id, change);
+                        fistfulCashFlowDao.save(cashFlows);
+                        log.info("Withdrawal status have been changed, eventId={}, walletId={}, status={}",
+                                event.getEventId(), event.getSourceId(), change.getChange().getStatusChanged());
+                    },
+                    () -> log.info("Withdrawal status change bound duplicated, eventId={}, walletId={}, status={}",
+                            event.getEventId(), event.getSourceId(), change.getChange().getStatusChanged()));
         } catch (DaoException e) {
             throw new StorageException(e);
         }

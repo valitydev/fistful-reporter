@@ -40,9 +40,12 @@ public class IdentityCreatedHandler implements IdentityEventHandler {
             identity.setIdentityClassId(change.getChange().getCreated().getCls());
             identity.setPartyContractId(change.getChange().getCreated().getContract());
 
-            identityDao.updateNotCurrent(event.getSourceId());
-            identityDao.save(identity);
-            log.info("Identity haven been saved, eventId={}, identityId={}", event.getEventId(), event.getSourceId());
+            identityDao.save(identity).ifPresentOrElse(
+                    id -> log.info("Identity haven been saved, eventId={}, identityId={}",
+                            event.getEventId(), event.getSourceId()),
+                    () -> log.info("Identity created bound duplicated, eventId={}, identityId={}",
+                            event.getEventId(), event.getSourceId())
+            );
         } catch (DaoException e) {
             throw new StorageException(e);
         }

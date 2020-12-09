@@ -45,9 +45,16 @@ public class DestinationStatusChangedHandler implements DestinationEventHandler 
             destination.setEventType(DestinationEventType.DESTINATION_STATUS_CHANGED);
             destination.setDestinationStatus(TBaseUtil.unionFieldToEnum(status, DestinationStatus.class));
 
-            destinationDao.updateNotCurrent(event.getSourceId());
-            destinationDao.save(destination);
-            log.info("Destination status has been changed, eventId={}, destinationId={}, status={}", event.getEventId(), event.getSourceId(), status);
+            Long oldId = destination.getId();
+            destinationDao.save(destination).ifPresentOrElse(
+                    id -> {
+                        destinationDao.updateNotCurrent(oldId);
+                        log.info("Destination status has been changed, eventId={}, destinationId={}, status={}",
+                                event.getEventId(), event.getSourceId(), status);
+                    },
+                    () -> log.info("Destination status changed bound duplicated, eventId={}, destinationId={}, status={}",
+                            event.getEventId(), event.getSourceId(), status)
+            );
         } catch (DaoException e) {
             throw new StorageException(e);
         }

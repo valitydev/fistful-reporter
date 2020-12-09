@@ -53,9 +53,15 @@ public class SourceAccountCreatedHandler implements SourceEventHandler {
             source.setPartyContractId(identity.getPartyContractId());
             source.setIdentityId(identity.getIdentityId());
 
-            sourceDao.updateNotCurrent(event.getSourceId());
-            sourceDao.save(source);
-            log.info("Source account has been saved, eventId={}, sourceId={}, identityId={}", event.getEventId(), event.getSourceId(), account.getIdentity());
+            Long oldId = source.getId();
+            sourceDao.save(source).ifPresentOrElse(
+                    id -> {
+                        sourceDao.updateNotCurrent(oldId);
+                        log.info("Source account have been changed, eventId={}, sourceId={}, identityId={}",
+                                event.getEventId(), event.getSourceId(), account.getIdentity());
+                    },
+                    () -> log.info("Source account bound duplicated, eventId={}, sourceId={}, identityId={}",
+                            event.getEventId(), event.getSourceId(), account.getIdentity()));
         } catch (DaoException e) {
             throw new StorageException(e);
         }

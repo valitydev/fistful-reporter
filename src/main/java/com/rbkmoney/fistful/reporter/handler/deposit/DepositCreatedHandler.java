@@ -58,9 +58,11 @@ public class DepositCreatedHandler implements DepositEventHandler {
             deposit.setAmount(cash.getAmount());
             deposit.setCurrencyCode(cash.getCurrency().getSymbolicCode());
 
-            depositDao.updateNotCurrent(event.getSourceId());
-            depositDao.save(deposit);
-            log.info("Deposit has been saved, eventId={}, depositId={}", event.getEventId(), event.getSourceId());
+            depositDao.save(deposit).ifPresentOrElse(
+                    dbContractId -> log.info("Deposit created has been saved, eventId={}, depositId={}",
+                            event.getEventId(), event.getSourceId()),
+                    () -> log.info("Deposit created bound duplicated, eventId={}, depositId={}",
+                            event.getEventId(), event.getSourceId()));
         } catch (DaoException e) {
             throw new StorageException(e);
         }

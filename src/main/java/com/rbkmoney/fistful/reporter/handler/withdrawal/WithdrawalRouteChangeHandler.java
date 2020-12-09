@@ -33,9 +33,9 @@ public class WithdrawalRouteChangeHandler implements WithdrawalEventHandler {
     @Override
     public void handle(TimestampedChange change, MachineEvent event) {
         try {
-
             log.info("Start withdrawal provider id changed handling, eventId={}, walletId={}", event.getEventId(), event.getSourceId());
             Withdrawal withdrawal = withdrawalDao.get(event.getSourceId());
+            Long oldId = withdrawal.getId();
 
             withdrawal.setId(null);
             withdrawal.setWtime(null);
@@ -46,14 +46,18 @@ public class WithdrawalRouteChangeHandler implements WithdrawalEventHandler {
             withdrawal.setEventOccuredAt(TypeUtil.stringToLocalDateTime(change.getOccuredAt()));
             withdrawal.setEventType(WithdrawalEventType.WITHDRAWAL_ROUTE_CHANGED);
 
-            withdrawalDao.updateNotCurrent(event.getSourceId());
-            long id = withdrawalDao.save(withdrawal);
-
-            List<FistfulCashFlow> cashFlows = fistfulCashFlowDao.getByObjId(withdrawal.getId(), FistfulCashFlowChangeType.withdrawal);
-            fillCashFlows(cashFlows, event, WithdrawalEventType.WITHDRAWAL_ROUTE_CHANGED, id, change);
-
-            fistfulCashFlowDao.save(cashFlows);
-            log.info("Withdrawal provider id has been changed, eventId={}, walletId={}", event.getEventId(), event.getSourceId());
+            withdrawalDao.save(withdrawal).ifPresentOrElse(
+                    id -> {
+                        withdrawalDao.updateNotCurrent(oldId);
+                        List<FistfulCashFlow> cashFlows = fistfulCashFlowDao.getByObjId(withdrawal.getId(),
+                                FistfulCashFlowChangeType.withdrawal);
+                        fillCashFlows(cashFlows, event, WithdrawalEventType.WITHDRAWAL_ROUTE_CHANGED, id, change);
+                        fistfulCashFlowDao.save(cashFlows);
+                        log.info("Withdrawal provider id has been changed, eventId={}, walletId={}",
+                                event.getEventId(), event.getSourceId());
+                    },
+                    () -> log.info("Withdrawal provider id change bound duplicated, eventId={}, withdrawalId={}",
+                            event.getEventId(), event.getSourceId()));
         } catch (DaoException e) {
             throw new StorageException(e);
         }

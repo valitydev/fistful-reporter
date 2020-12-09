@@ -47,10 +47,10 @@ public class DaoTests extends AbstractDaoConfig {
     public void challengeDaoTest() {
         Challenge challenge = random(Challenge.class);
         challenge.setCurrent(true);
-        Long id = challengeDao.save(challenge);
+        Long id = challengeDao.save(challenge).get();
         challenge.setId(id);
         assertEquals(challenge, challengeDao.get(challenge.getIdentityId(), challenge.getChallengeId()));
-        challengeDao.updateNotCurrent(challenge.getIdentityId(), challenge.getChallengeId());
+        challengeDao.updateNotCurrent(challenge.getId());
         assertNull(challengeDao.get(challenge.getIdentityId(), challenge.getChallengeId()));
     }
 
@@ -58,10 +58,10 @@ public class DaoTests extends AbstractDaoConfig {
     public void depositDaoTest() {
         Deposit deposit = random(Deposit.class);
         deposit.setCurrent(true);
-        Long id = depositDao.save(deposit);
+        Long id = depositDao.save(deposit).get();
         deposit.setId(id);
         assertEquals(deposit, depositDao.get(deposit.getDepositId()));
-        depositDao.updateNotCurrent(deposit.getDepositId());
+        depositDao.updateNotCurrent(deposit.getId());
         assertNull(depositDao.get(deposit.getDepositId()));
     }
 
@@ -69,10 +69,10 @@ public class DaoTests extends AbstractDaoConfig {
     public void destinationDaoTest() {
         Destination destination = random(Destination.class);
         destination.setCurrent(true);
-        Long id = destinationDao.save(destination);
+        Long id = destinationDao.save(destination).get();
         destination.setId(id);
         assertEquals(destination, destinationDao.get(destination.getDestinationId()));
-        destinationDao.updateNotCurrent(destination.getDestinationId());
+        destinationDao.updateNotCurrent(destination.getId());
         assertNull(destinationDao.get(destination.getDestinationId()));
     }
 
@@ -109,10 +109,10 @@ public class DaoTests extends AbstractDaoConfig {
     public void identityDaoTest() {
         Identity identity = random(Identity.class);
         identity.setCurrent(true);
-        Long id = identityDao.save(identity);
+        Long id = identityDao.save(identity).get();
         identity.setId(id);
         assertEquals(identity, identityDao.get(identity.getIdentityId()));
-        identityDao.updateNotCurrent(identity.getIdentityId());
+        identityDao.updateNotCurrent(identity.getId());
         assertNull(identityDao.get(identity.getIdentityId()));
     }
 
@@ -145,10 +145,10 @@ public class DaoTests extends AbstractDaoConfig {
     public void sourceDaoTest() {
         Source source = random(Source.class);
         source.setCurrent(true);
-        Long id = sourceDao.save(source);
+        Long id = sourceDao.save(source).get();
         source.setId(id);
         assertEquals(source, sourceDao.get(source.getSourceId()));
-        sourceDao.updateNotCurrent(source.getSourceId());
+        sourceDao.updateNotCurrent(source.getId());
         assertNull(sourceDao.get(source.getSourceId()));
     }
 
@@ -156,10 +156,10 @@ public class DaoTests extends AbstractDaoConfig {
     public void walletDaoTest() {
         Wallet wallet = random(Wallet.class);
         wallet.setCurrent(true);
-        Long id = walletDao.save(wallet);
+        Long id = walletDao.save(wallet).get();
         wallet.setId(id);
         assertEquals(wallet, walletDao.get(wallet.getWalletId()));
-        walletDao.updateNotCurrent(wallet.getWalletId());
+        walletDao.updateNotCurrent(wallet.getId());
         assertNull(walletDao.get(wallet.getWalletId()));
     }
 
@@ -167,10 +167,10 @@ public class DaoTests extends AbstractDaoConfig {
     public void withdrawalDaoTest() {
         Withdrawal withdrawal = random(Withdrawal.class);
         withdrawal.setCurrent(true);
-        Long id = withdrawalDao.save(withdrawal);
+        Long id = withdrawalDao.save(withdrawal).get();
         withdrawal.setId(id);
         assertEquals(withdrawal, withdrawalDao.get(withdrawal.getWithdrawalId()));
-        withdrawalDao.updateNotCurrent(withdrawal.getWithdrawalId());
+        withdrawalDao.updateNotCurrent(withdrawal.getId());
         assertNull(withdrawalDao.get(withdrawal.getWithdrawalId()));
     }
 

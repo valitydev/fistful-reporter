@@ -60,9 +60,11 @@ public class DestinationCreatedHandler implements DestinationEventHandler {
             }
             destination.setResourceType(TBaseUtil.unionFieldToEnum(resource, DestinationResourceType.class));
 
-            destinationDao.updateNotCurrent(event.getSourceId());
-            destinationDao.save(destination);
-            log.info("Destination has been saved, eventId={}, destinationId={}", event.getEventId(), event.getSourceId());
+            destinationDao.save(destination).ifPresentOrElse(
+                    dbContractId -> log.info("Destination created has been saved, eventId={}, destinationId={}",
+                            event.getEventId(), event.getSourceId()),
+                    () -> log.info("Destination created bound duplicated, eventId={}, destinationId={}",
+                            event.getEventId(), event.getSourceId()));
         } catch (DaoException e) {
             throw new StorageException(e);
         }
