@@ -37,9 +37,11 @@ public class WalletCreatedHandler implements WalletEventHandler {
             wallet.setEventType(WalletEventType.WALLET_CREATED);
             wallet.setWalletName(change.getChange().getCreated().getName());
 
-            walletDao.updateNotCurrent(event.getSourceId());
-            walletDao.save(wallet);
-            log.info("Wallet has been saved, eventId={}, walletId={}", event.getEventId(), event.getSourceId());
+            walletDao.save(wallet).ifPresentOrElse(
+                    dbContractId -> log.info("Wallet created has been saved, eventId={}, walletId={}",
+                            event.getEventId(), event.getSourceId()),
+                    () -> log.info("Wallet created bound duplicated, eventId={}, walletId={}",
+                            event.getEventId(), event.getSourceId()));
         } catch (DaoException e) {
             throw new StorageException(e);
         }

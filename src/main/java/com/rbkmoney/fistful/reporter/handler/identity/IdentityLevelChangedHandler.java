@@ -40,9 +40,16 @@ public class IdentityLevelChangedHandler implements IdentityEventHandler {
             identity.setEventType(IdentityEventType.IDENTITY_LEVEL_CHANGED);
             identity.setIdentityLevelId(change.getChange().getLevelChanged());
 
-            identityDao.updateNotCurrent(event.getSourceId());
-            identityDao.save(identity);
-            log.info("Identity level has been changed, eventId={}, identityId={}, level={}", event.getEventId(), event.getSourceId(), change.getChange().getLevelChanged());
+            Long oldId = identity.getId();
+            identityDao.save(identity).ifPresentOrElse(
+                    id -> {
+                        identityDao.updateNotCurrent(oldId);
+                        log.info("Identity level has been changed, eventId={}, identityId={}, level={}",
+                                event.getEventId(), event.getSourceId(), change.getChange().getLevelChanged());
+                    },
+                    () -> log.info("Identity level bound duplicated, eventId={}, identityId={}, level={}",
+                            event.getEventId(), event.getSourceId(), change.getChange().getLevelChanged())
+            );
         } catch (DaoException e) {
             throw new StorageException(e);
         }

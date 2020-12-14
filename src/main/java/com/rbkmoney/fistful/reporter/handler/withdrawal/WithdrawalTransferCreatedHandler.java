@@ -40,8 +40,9 @@ public class WithdrawalTransferCreatedHandler implements WithdrawalEventHandler 
         try {
             List<FinalCashFlowPosting> postings = change.getChange().getTransfer().getPayload().getCreated().getTransfer().getCashflow().getPostings();
 
-            log.info("Start withdrawal transfer created handling, eventId={}, walletId={}, transferChange={}", event.getEventId(), event.getSourceId(), change.getChange().getTransfer());
+            log.info("Start withdrawal transfer created handling, eventId={}, withdrawalId={}, transferChange={}", event.getEventId(), event.getSourceId(), change.getChange().getTransfer());
             Withdrawal withdrawal = withdrawalDao.get(event.getSourceId());
+            Long oldId = withdrawal.getId();
 
             withdrawal.setId(null);
             withdrawal.setWtime(null);
@@ -56,23 +57,27 @@ public class WithdrawalTransferCreatedHandler implements WithdrawalEventHandler 
             withdrawal.setFee(CashFlowConverter.getFistfulFee(postings));
             withdrawal.setProviderFee(CashFlowConverter.getFistfulProviderFee(postings));
 
-            withdrawalDao.updateNotCurrent(event.getSourceId());
-            long id = withdrawalDao.save(withdrawal);
-
-            List<FistfulCashFlow> fistfulCashFlows = CashFlowConverter.convertFistfulCashFlows(
-                    new FistfulCashFlowSinkEvent(
-                            event.getEventId(),
-                            event.getCreatedAt(),
-                            event.getSourceId(),
-                            change.getOccuredAt(),
-                            WithdrawalEventType.WITHDRAWAL_TRANSFER_CREATED.toString(),
-                            id,
-                            FistfulCashFlowChangeType.withdrawal,
-                            postings
-                    )
-            );
-            fistfulCashFlowDao.save(fistfulCashFlows);
-            log.info("Withdrawal transfer has been saved, eventId={}, walletId={}, transferChange={}", event.getEventId(), event.getSourceId(), change.getChange().getTransfer());
+            withdrawalDao.save(withdrawal).ifPresentOrElse(
+                    id -> {
+                        withdrawalDao.updateNotCurrent(oldId);
+                        List<FistfulCashFlow> fistfulCashFlows = CashFlowConverter.convertFistfulCashFlows(
+                                new FistfulCashFlowSinkEvent(
+                                        event.getEventId(),
+                                        event.getCreatedAt(),
+                                        event.getSourceId(),
+                                        change.getOccuredAt(),
+                                        WithdrawalEventType.WITHDRAWAL_TRANSFER_CREATED.toString(),
+                                        id,
+                                        FistfulCashFlowChangeType.withdrawal,
+                                        postings
+                                )
+                        );
+                        fistfulCashFlowDao.save(fistfulCashFlows);
+                        log.info("Withdrawal transfer have been created, eventId={}, withdrawalId={}, transferChange={}",
+                                event.getEventId(), event.getSourceId(), change.getChange().getTransfer());
+                    },
+                    () -> log.info("Withdrawal transfer create bound duplicated, eventId={}, withdrawalId={}, transferChange={}",
+                            event.getEventId(), event.getSourceId(), change.getChange().getTransfer()));
         } catch (DaoException e) {
             throw new StorageException(e);
         }

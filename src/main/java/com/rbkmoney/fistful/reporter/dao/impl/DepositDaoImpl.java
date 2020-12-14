@@ -37,13 +37,18 @@ public class DepositDaoImpl extends AbstractGenericDao implements DepositDao {
     }
 
     @Override
-    public Long save(Deposit deposit) {
+    public Optional<Long> save(Deposit deposit) {
         DepositRecord record = getDslContext().newRecord(DEPOSIT, deposit);
-        Query query = getDslContext().insertInto(DEPOSIT).set(record).returning(DEPOSIT.ID);
+        Query query = getDslContext()
+                .insertInto(DEPOSIT)
+                .set(record)
+                .onConflict(DEPOSIT.DEPOSIT_ID, DEPOSIT.EVENT_ID)
+                .doNothing()
+                .returning(DEPOSIT.ID);
 
         GeneratedKeyHolder keyHolder = new GeneratedKeyHolder();
-        executeOne(query, keyHolder);
-        return keyHolder.getKey().longValue();
+        execute(query, keyHolder);
+        return Optional.ofNullable(keyHolder.getKey()).map(Number::longValue);
     }
 
     @Override
@@ -56,11 +61,12 @@ public class DepositDaoImpl extends AbstractGenericDao implements DepositDao {
     }
 
     @Override
-    public void updateNotCurrent(String depositId) {
-        Condition condition = DEPOSIT.DEPOSIT_ID.eq(depositId)
-                .and(DEPOSIT.CURRENT);
-        Query query = getDslContext().update(DEPOSIT).set(DEPOSIT.CURRENT, false).where(condition);
-
+    public void updateNotCurrent(Long depositId) {
+        Query query = getDslContext()
+                .update(DEPOSIT)
+                .set(DEPOSIT.CURRENT, false)
+                .where(DEPOSIT.ID.eq(depositId)
+                        .and(DEPOSIT.CURRENT));
         execute(query);
     }
 

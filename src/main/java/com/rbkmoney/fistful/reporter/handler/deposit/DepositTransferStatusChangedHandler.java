@@ -9,7 +9,9 @@ import com.rbkmoney.fistful.reporter.domain.enums.DepositTransferStatus;
 import com.rbkmoney.fistful.reporter.domain.enums.FistfulCashFlowChangeType;
 import com.rbkmoney.fistful.reporter.domain.tables.pojos.Deposit;
 import com.rbkmoney.fistful.reporter.domain.tables.pojos.FistfulCashFlow;
+import com.rbkmoney.fistful.reporter.dto.FistfulCashFlowSinkEvent;
 import com.rbkmoney.fistful.reporter.exception.StorageException;
+import com.rbkmoney.fistful.reporter.util.CashFlowConverter;
 import com.rbkmoney.fistful.transfer.Status;
 import com.rbkmoney.geck.common.util.TBaseUtil;
 import com.rbkmoney.geck.common.util.TypeUtil;
@@ -54,13 +56,19 @@ public class DepositTransferStatusChangedHandler implements DepositEventHandler 
             deposit.setEventType(DepositEventType.DEPOSIT_TRANSFER_STATUS_CHANGED);
             deposit.setDepositTransferStatus(TBaseUtil.unionFieldToEnum(status, DepositTransferStatus.class));
 
-            depositDao.updateNotCurrent(event.getSourceId());
-            long id = depositDao.save(deposit);
-
-            List<FistfulCashFlow> cashFlows = fistfulCashFlowDao.getByObjId(deposit.getId(), FistfulCashFlowChangeType.deposit);
-            fillCashFlows(cashFlows, event, DepositEventType.DEPOSIT_TRANSFER_STATUS_CHANGED, change, id);
-            fistfulCashFlowDao.save(cashFlows);
-            log.info("Withdrawal deposit status has been changed, eventId={}, depositId={}, transferChange={}", event.getEventId(), event.getSourceId(), change.getChange().getTransfer());
+            Long oldId = deposit.getId();
+            depositDao.save(deposit).ifPresentOrElse(
+                    id -> {
+                        depositDao.updateNotCurrent(oldId);
+                        List<FistfulCashFlow> cashFlows = fistfulCashFlowDao.getByObjId(deposit.getId(), FistfulCashFlowChangeType.deposit);
+                        fillCashFlows(cashFlows, event, DepositEventType.DEPOSIT_TRANSFER_STATUS_CHANGED, change, id);
+                        fistfulCashFlowDao.save(cashFlows);
+                        log.info("Deposit transfer status has been changed, eventId={}, depositId={}, transferChange={}",
+                                event.getEventId(), event.getSourceId(), change.getChange().getTransfer());
+                    },
+                    () -> log.info("Deposit transfer status change bound duplicated, eventId={}, depositId={}, transferChange={}",
+                            event.getEventId(), event.getSourceId(), change.getChange().getTransfer())
+            );
         } catch (DaoException e) {
             throw new StorageException(e);
         }

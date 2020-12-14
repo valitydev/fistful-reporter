@@ -64,8 +64,12 @@ public class IdentityChallengeCreatedHandler implements IdentityEventHandler {
         challenge.setChallengeClassId(challengePayload.getCreated().getCls());
         challenge.setChallengeStatus(ChallengeStatus.pending);
 
-        challengeDao.updateNotCurrent(event.getSourceId(), challengeChange.getId());
-        challengeDao.save(challenge);
+        challengeDao.save(challenge).ifPresentOrElse(
+                id -> log.info("Start identity challenge have been changed,  eventId={}, identityId={}",
+                        event.getEventId(), event.getSourceId()),
+                () -> log.info("Identity challenge have been saved, eventId={}, identityId={}",
+                        event.getEventId(), event.getSourceId())
+        );
         return challengeChange;
     }
 
@@ -81,7 +85,15 @@ public class IdentityChallengeCreatedHandler implements IdentityEventHandler {
         identity.setEventOccuredAt(TypeUtil.stringToLocalDateTime(change.getOccuredAt()));
         identity.setEventType(IdentityEventType.IDENTITY_CHALLENGE_CREATED);
 
-        identityDao.updateNotCurrent(event.getSourceId());
-        identityDao.save(identity);
+        Long oldId = identity.getId();
+        identityDao.save(identity).ifPresentOrElse(
+                id -> {
+                    identityDao.updateNotCurrent(oldId);
+                    log.info("Start identity challenge have been updated, eventId={}, identityId={}",
+                            event.getEventId(), event.getSourceId());
+                },
+                () -> log.info("Identity challenge bound duplicated, eventId={}, identityId={}",
+                        event.getEventId(), event.getSourceId())
+        );
     }
 }

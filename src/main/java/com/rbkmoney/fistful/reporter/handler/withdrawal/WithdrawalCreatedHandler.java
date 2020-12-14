@@ -35,7 +35,7 @@ public class WithdrawalCreatedHandler implements WithdrawalEventHandler {
         try {
             var withdrawalDamsel = change.getChange().getCreated().getWithdrawal();
 
-            log.info("Start withdrawal created handling, eventId={}, walletId={}", event.getEventId(), event.getSourceId());
+            log.info("Start withdrawal created handling, eventId={}, withdrawalId={}", event.getEventId(), event.getSourceId());
 
             Wallet wallet = getWallet(event, withdrawalDamsel.getWalletId());
 
@@ -58,9 +58,11 @@ public class WithdrawalCreatedHandler implements WithdrawalEventHandler {
             withdrawal.setAmount(cash.getAmount());
             withdrawal.setCurrencyCode(cash.getCurrency().getSymbolicCode());
 
-            withdrawalDao.updateNotCurrent(event.getSourceId());
-            withdrawalDao.save(withdrawal);
-            log.info("Withdrawal has been saved, eventId={}, walletId={}", event.getEventId(), event.getSourceId());
+            withdrawalDao.save(withdrawal).ifPresentOrElse(
+                    dbContractId -> log.info("Withdrawal has been created, eventId={}, withdrawalId={}",
+                            event.getEventId(), event.getSourceId()),
+                    () -> log.info("Withdrawal created bound duplicated, eventId={}, withdrawalId={}",
+                            event.getEventId(), event.getSourceId()));
         } catch (DaoException e) {
             throw new StorageException(e);
         }
@@ -69,7 +71,7 @@ public class WithdrawalCreatedHandler implements WithdrawalEventHandler {
     private Wallet getWallet(MachineEvent event, String walletId) {
         Wallet wallet = walletDao.get(walletId);
         if (wallet == null) {
-            throw new SinkEventNotFoundException(String.format("Wallet not found, destinationId='%s', walletId='%s'", event.getSourceId(), walletId));
+            throw new SinkEventNotFoundException(String.format("Wallet not found, withdrawalId='%s', walletId='%s'", event.getSourceId(), walletId));
         }
         return wallet;
     }

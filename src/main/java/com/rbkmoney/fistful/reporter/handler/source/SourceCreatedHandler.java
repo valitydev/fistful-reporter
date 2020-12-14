@@ -47,9 +47,11 @@ public class SourceCreatedHandler implements SourceEventHandler {
                 source.setResourceInternalDetails(internal.getDetails());
             }
 
-            sourceDao.updateNotCurrent(event.getSourceId());
-            sourceDao.save(source);
-            log.info("Source has been saved, eventId={}, sourceId={}", event.getEventId(), event.getSourceId());
+            sourceDao.save(source).ifPresentOrElse(
+                    dbContractId -> log.info("Source created has been saved, eventId={}, sourceId={}",
+                            event.getEventId(), event.getSourceId()),
+                    () -> log.info("Source created bound duplicated, eventId={}, sourceId={}",
+                            event.getEventId(), event.getSourceId()));
         } catch (DaoException e) {
             throw new StorageException(e);
         }

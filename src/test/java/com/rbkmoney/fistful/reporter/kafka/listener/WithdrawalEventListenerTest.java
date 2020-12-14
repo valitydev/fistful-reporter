@@ -33,7 +33,7 @@ import static org.mockito.Mockito.*;
         properties = {"kafka.state.cache.size=0"})
 public class WithdrawalEventListenerTest extends AbstractListenerTest {
 
-    private static final long MESSAGE_TIMEOUT = 4_000L;
+    private static final long MESSAGE_TIMEOUT = 10_000L;
 
     @MockBean
     private WithdrawalDao withdrawalDao;

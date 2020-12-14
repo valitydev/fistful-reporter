@@ -115,16 +115,18 @@ public abstract class AbstractListenerTest {
     }
 
     public void produce(SinkEvent event, String topic) {
-        try (Producer<String, SinkEvent> producer = producer()) {
-            ProducerRecord<String, SinkEvent> producerRecord = new ProducerRecord<>(
-                    topic,
-                    event.getEvent().getSourceId(),
-                    event);
+        Producer<String, SinkEvent> producer = producer();
+        ProducerRecord<String, SinkEvent> producerRecord = new ProducerRecord<>(
+                topic,
+                event.getEvent().getSourceId(),
+                event);
+        try {
             producer.send(producerRecord).get();
             log.info("produce to {}: {}", topic, event);
         } catch (Exception e) {
             log.error("Error while producing to {}", topic, e);
         }
+        producer.close();
     }
 
 

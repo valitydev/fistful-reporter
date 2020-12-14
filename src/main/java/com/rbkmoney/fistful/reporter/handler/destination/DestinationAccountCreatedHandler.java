@@ -54,9 +54,16 @@ public class DestinationAccountCreatedHandler implements DestinationEventHandler
             destination.setPartyContractId(identity.getPartyContractId());
             destination.setIdentityId(identity.getIdentityId());
 
-            destinationDao.updateNotCurrent(event.getSourceId());
-            destinationDao.save(destination);
-            log.info("Destination account has been saved, eventId={}, destinationId={}, identityId={}", event.getEventId(), event.getSourceId(), account.getIdentity());
+            Long oldId = destination.getId();
+            destinationDao.save(destination).ifPresentOrElse(
+                    id -> {
+                        destinationDao.updateNotCurrent(oldId);
+                        log.info("Destination account have been created, eventId={}, destinationId={}, identityId={}",
+                                event.getEventId(), event.getSourceId(), account.getIdentity());
+                    },
+                    () -> log.info("Destination account create bound duplicated, eventId={}, destinationId={}, identityId={}",
+                            event.getEventId(), event.getSourceId(), account.getIdentity())
+            );
         } catch (DaoException e) {
             throw new StorageException(e);
         }

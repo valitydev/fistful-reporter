@@ -29,7 +29,7 @@ import static org.mockito.Mockito.*;
         properties = {"kafka.state.cache.size=0"})
 public class WalletEventListenerTest extends AbstractListenerTest {
 
-    private static final long MESSAGE_TIMEOUT = 4_000L;
+    private static final long MESSAGE_TIMEOUT = 20_000L;
 
     @MockBean
     private WalletDao walletDao;

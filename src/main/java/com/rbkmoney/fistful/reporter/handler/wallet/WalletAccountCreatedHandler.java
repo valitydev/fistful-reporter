@@ -53,9 +53,15 @@ public class WalletAccountCreatedHandler implements WalletEventHandler {
             wallet.setPartyContractId(identity.getPartyContractId());
             wallet.setIdentityId(identity.getIdentityId());
 
-            walletDao.updateNotCurrent(event.getSourceId());
-            walletDao.save(wallet);
-            log.info("Wallet account has been saved, eventId={}, walletId={}, identityId={}", event.getEventId(), event.getSourceId(), account.getIdentity());
+            Long oldId = wallet.getId();
+            walletDao.save(wallet).ifPresentOrElse(
+                    id -> {
+                        walletDao.updateNotCurrent(oldId);
+                        log.info("Wallet account have been changed, eventId={}, walletId={}, identityId={}",
+                                event.getEventId(), event.getSourceId(), account.getIdentity());
+                    },
+                    () -> log.info("Wallet account bound duplicated, eventId={}, walletId={}, identityId={}",
+                            event.getEventId(), event.getSourceId(), account.getIdentity()));
         } catch (DaoException e) {
             throw new StorageException(e);
         }

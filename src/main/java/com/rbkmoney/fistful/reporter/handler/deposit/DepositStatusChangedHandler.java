@@ -41,6 +41,7 @@ public class DepositStatusChangedHandler implements DepositEventHandler {
             log.info("Start deposit status changed handling, eventId={}, depositId={}, status={}", event.getEventId(), event.getSourceId(), status);
 
             Deposit deposit = depositDao.get(event.getSourceId());
+            Long oldId = deposit.getId();
 
             deposit.setId(null);
             deposit.setWtime(null);
@@ -52,13 +53,18 @@ public class DepositStatusChangedHandler implements DepositEventHandler {
             deposit.setEventType(DepositEventType.DEPOSIT_STATUS_CHANGED);
             deposit.setDepositStatus(TBaseUtil.unionFieldToEnum(status, DepositStatus.class));
 
-            depositDao.updateNotCurrent(event.getSourceId());
-            long id = depositDao.save(deposit);
-
-            List<FistfulCashFlow> cashFlows = fistfulCashFlowDao.getByObjId(deposit.getId(), FistfulCashFlowChangeType.deposit);
-            fillCashFlows(cashFlows, event, DepositEventType.DEPOSIT_STATUS_CHANGED, change, id);
-            fistfulCashFlowDao.save(cashFlows);
-            log.info("Deposit status has been changed, eventId={}, depositId={}, status={}", event.getEventId(), event.getSourceId(), status);
+            depositDao.save(deposit).ifPresentOrElse(
+                    id -> {
+                        depositDao.updateNotCurrent(oldId);
+                        List<FistfulCashFlow> cashFlows = fistfulCashFlowDao.getByObjId(deposit.getId(), FistfulCashFlowChangeType.deposit);
+                        fillCashFlows(cashFlows, event, DepositEventType.DEPOSIT_STATUS_CHANGED, change, id);
+                        fistfulCashFlowDao.save(cashFlows);
+                        log.info("Deposit status has been changed, eventId={}, depositId={}, status={}",
+                                event.getEventId(), event.getSourceId(), status);
+                    },
+                    () -> log.info("Deposit status change bound duplicated,  eventId={}, depositId={}, status={}",
+                            event.getEventId(), event.getSourceId(), status)
+            );
         } catch (DaoException e) {
             throw new StorageException(e);
         }

@@ -37,13 +37,18 @@ public class DestinationDaoImpl extends AbstractGenericDao implements Destinatio
     }
 
     @Override
-    public Long save(Destination destination) {
+    public Optional<Long> save(Destination destination) {
         DestinationRecord record = getDslContext().newRecord(DESTINATION, destination);
-        Query query = getDslContext().insertInto(DESTINATION).set(record).returning(DESTINATION.ID);
+        Query query = getDslContext()
+                .insertInto(DESTINATION)
+                .set(record)
+                .onConflict(DESTINATION.DESTINATION_ID, DESTINATION.EVENT_ID)
+                .doNothing()
+                .returning(DESTINATION.ID);
 
         GeneratedKeyHolder keyHolder = new GeneratedKeyHolder();
-        executeOne(query, keyHolder);
-        return keyHolder.getKey().longValue();
+        execute(query, keyHolder);
+        return Optional.ofNullable(keyHolder.getKey()).map(Number::longValue);
     }
 
     @Override
@@ -56,11 +61,11 @@ public class DestinationDaoImpl extends AbstractGenericDao implements Destinatio
     }
 
     @Override
-    public void updateNotCurrent(String destinationId) {
-        Condition condition = DESTINATION.DESTINATION_ID.eq(destinationId)
-                .and(DESTINATION.CURRENT);
-        Query query = getDslContext().update(DESTINATION).set(DESTINATION.CURRENT, false).where(condition);
-
+    public void updateNotCurrent(Long destinationId) {
+        Query query = getDslContext().update(DESTINATION)
+                .set(DESTINATION.CURRENT, false)
+                .where(DESTINATION.ID.eq(destinationId)
+                        .and(DESTINATION.CURRENT));
         execute(query);
     }
 }
