@@ -29,6 +29,7 @@ public class IdentityEffectiveChallengeChangedHandler implements IdentityEventHa
         try {
             log.info("Start effective identity challenge changed handling, eventId={}, identityId={}, effectiveChallengeId={}", event.getEventId(), event.getSourceId(), change.getChange().getEffectiveChallengeChanged());
             Identity identity = identityDao.get(event.getSourceId());
+            Long oldId = identity.getId();
 
             identity.setId(null);
             identity.setWtime(null);
@@ -40,7 +41,6 @@ public class IdentityEffectiveChallengeChangedHandler implements IdentityEventHa
             identity.setEventType(IdentityEventType.IDENTITY_EFFECTIVE_CHALLENGE_CHANGED);
             identity.setIdentityEffectiveChalengeId(change.getChange().getEffectiveChallengeChanged());
 
-            Long oldId = identity.getId();
             identityDao.save(identity).ifPresentOrElse(
                     id -> {
                         identityDao.updateNotCurrent(oldId);

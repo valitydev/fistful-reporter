@@ -29,6 +29,7 @@ public class IdentityLevelChangedHandler implements IdentityEventHandler {
         try {
             log.info("Start identity level changed handling, eventId={}, identityId={}, level={}", event.getEventId(), event.getSourceId(), change.getChange().getLevelChanged());
             Identity identity = identityDao.get(event.getSourceId());
+            Long oldId = identity.getId();
 
             identity.setId(null);
             identity.setWtime(null);
@@ -40,7 +41,6 @@ public class IdentityLevelChangedHandler implements IdentityEventHandler {
             identity.setEventType(IdentityEventType.IDENTITY_LEVEL_CHANGED);
             identity.setIdentityLevelId(change.getChange().getLevelChanged());
 
-            Long oldId = identity.getId();
             identityDao.save(identity).ifPresentOrElse(
                     id -> {
                         identityDao.updateNotCurrent(oldId);

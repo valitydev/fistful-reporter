@@ -53,6 +53,7 @@ public class IdentityChallengeStatusChangedHandler implements IdentityEventHandl
 
     private void updateChallenge(MachineEvent event, ChallengeChange challengeChange, ChallengeStatus status, TimestampedChange change) {
         com.rbkmoney.fistful.reporter.domain.tables.pojos.Challenge challenge = challengeDao.get(event.getSourceId(), challengeChange.getId());
+        Long oldId = challenge.getId();
 
         challenge.setId(null);
         challenge.setWtime(null);
@@ -72,7 +73,6 @@ public class IdentityChallengeStatusChangedHandler implements IdentityEventHandl
             }
         }
 
-        Long oldId = challenge.getId();
         challengeDao.save(challenge).ifPresentOrElse(
                 id -> {
                     challengeDao.updateNotCurrent(oldId);
@@ -86,6 +86,7 @@ public class IdentityChallengeStatusChangedHandler implements IdentityEventHandl
 
     private void updateIdentity(MachineEvent event, TimestampedChange change) {
         Identity identity = identityDao.get(event.getSourceId());
+        Long oldId = identity.getId();
 
         identity.setId(null);
         identity.setWtime(null);
@@ -96,7 +97,6 @@ public class IdentityChallengeStatusChangedHandler implements IdentityEventHandl
         identity.setEventOccuredAt(TypeUtil.stringToLocalDateTime(change.getOccuredAt()));
         identity.setEventType(IdentityEventType.IDENTITY_CHALLENGE_STATUS_CHANGED);
 
-        Long oldId = identity.getId();
         identityDao.save(identity).ifPresentOrElse(
                 id -> {
                     identityDao.updateNotCurrent(oldId);

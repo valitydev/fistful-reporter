@@ -35,6 +35,7 @@ public class SourceStatusChangedHandler implements SourceEventHandler {
             log.info("Start source status changed handling, eventId={}, sourceId={}, status={}", event.getEventId(), event.getSourceId(), status);
 
             Source source = sourceDao.get(event.getSourceId());
+            Long oldId = source.getId();
 
             source.setId(null);
             source.setWtime(null);
@@ -46,7 +47,6 @@ public class SourceStatusChangedHandler implements SourceEventHandler {
             source.setEventType(SourceEventType.SOURCE_STATUS_CHANGED);
             source.setSourceStatus(TBaseUtil.unionFieldToEnum(status, SourceStatus.class));
 
-            Long oldId = source.getId();
             sourceDao.save(source).ifPresentOrElse(
                     id -> {
                         sourceDao.updateNotCurrent(oldId);

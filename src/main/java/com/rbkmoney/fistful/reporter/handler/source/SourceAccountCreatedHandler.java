@@ -35,6 +35,8 @@ public class SourceAccountCreatedHandler implements SourceEventHandler {
             Account account = change.getChange().getAccount().getCreated();
             log.info("Start source account created handling, eventId={}, sourceId={}, identityId={}", event.getEventId(), event.getSourceId(), account.getIdentity());
             Source source = getSource(event);
+            Long oldId = source.getId();
+
             Identity identity = getIdentity(event, account);
 
             source.setId(null);
@@ -53,7 +55,6 @@ public class SourceAccountCreatedHandler implements SourceEventHandler {
             source.setPartyContractId(identity.getPartyContractId());
             source.setIdentityId(identity.getIdentityId());
 
-            Long oldId = source.getId();
             sourceDao.save(source).ifPresentOrElse(
                     id -> {
                         sourceDao.updateNotCurrent(oldId);
