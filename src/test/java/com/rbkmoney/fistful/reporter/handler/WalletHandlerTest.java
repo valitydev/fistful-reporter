@@ -34,6 +34,7 @@ public class WalletHandlerTest extends AbstractHandlerConfig {
         wallet.setCurrent(true);
         walletDao.save(wallet);
         identity.setIdentityId(wallet.getIdentityId());
+        identity.setCurrent(true);
         identityDao.save(identity);
         account.setIdentity(wallet.getIdentityId());
         walletAccountCreatedHandler.handle(
