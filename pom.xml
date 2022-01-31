@@ -42,8 +42,9 @@
     <dependencies>
         <!--rbkmoney-->
         <dependency>
-            <groupId>com.rbkmoney</groupId>
+            <groupId>dev.vality</groupId>
             <artifactId>shared-resources</artifactId>
+            <version>1.0.0</version>
         </dependency>
         <dependency>
             <groupId>com.rbkmoney</groupId>
