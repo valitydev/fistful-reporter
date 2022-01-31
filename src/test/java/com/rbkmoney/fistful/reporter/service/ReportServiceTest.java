@@ -47,7 +47,7 @@ public class ReportServiceTest {
 
         Long reportId = reportIds.get(0);
         Report report = reportService.getReport(partyId, contractId, reportId);
-        assertEquals(getToTime(), report.getToTime());
+        assertEquals(getToTime().truncatedTo(ChronoUnit.MICROS), report.getToTime().truncatedTo(ChronoUnit.MICROS));
 
         reportService.cancelReport(partyId, contractId, reportId);
 
