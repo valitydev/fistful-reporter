@@ -39,7 +39,7 @@ public class ReportServiceImpl implements ReportService {
                 toTime,
                 reportType,
                 reportingProperties.getDefaultTimeZone(),
-                Instant.now());
+                Instant.now().truncatedTo(ChronoUnit.MICROS));
     }
 
     private long createReport(
