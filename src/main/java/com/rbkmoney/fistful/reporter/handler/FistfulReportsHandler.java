@@ -1,6 +1,5 @@
 package com.rbkmoney.fistful.reporter.handler;
 
-import com.rbkmoney.fistful.reporter.*;
 import com.rbkmoney.fistful.reporter.config.properties.ReportingProperties;
 import com.rbkmoney.fistful.reporter.dto.ReportType;
 import com.rbkmoney.fistful.reporter.exception.*;
@@ -11,6 +10,7 @@ import com.rbkmoney.fistful.reporter.util.ThriftUtils;
 import com.rbkmoney.geck.common.util.TypeUtil;
 import com.rbkmoney.woody.api.flow.error.WUnavailableResultException;
 import com.rbkmoney.woody.api.flow.error.WUndefinedResultException;
+import dev.vality.fistful.reporter.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.thrift.TException;

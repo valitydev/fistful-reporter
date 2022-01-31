@@ -1,7 +1,7 @@
 package com.rbkmoney.fistful.reporter.handler.identity;
 
 import com.rbkmoney.dao.DaoException;
-import com.rbkmoney.fistful.identity.TimestampedChange;
+import dev.vality.fistful.identity.TimestampedChange;
 import com.rbkmoney.fistful.reporter.dao.IdentityDao;
 import com.rbkmoney.fistful.reporter.domain.enums.IdentityEventType;
 import com.rbkmoney.fistful.reporter.domain.tables.pojos.Identity;
@@ -37,7 +37,6 @@ public class IdentityCreatedHandler implements IdentityEventHandler {
             identity.setEventType(IdentityEventType.IDENTITY_CREATED);
             identity.setPartyId(change.getChange().getCreated().getParty());
             identity.setIdentityProviderId(change.getChange().getCreated().getProvider());
-            identity.setIdentityClassId(change.getChange().getCreated().getCls());
             identity.setPartyContractId(change.getChange().getCreated().getContract());
 
             identityDao.save(identity).ifPresentOrElse(

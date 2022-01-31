@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.ZoneOffset;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 import static com.rbkmoney.fistful.reporter.data.TestData.contractId;
@@ -37,8 +38,8 @@ public class ReportServiceTest {
                 reportService.getReportsByRange(
                         partyId,
                         contractId,
-                        getFromTime().toInstant(ZoneOffset.UTC),
-                        getToTime().toInstant(ZoneOffset.UTC),
+                        getFromTime().toInstant(ZoneOffset.UTC).truncatedTo(ChronoUnit.MICROS),
+                        getToTime().toInstant(ZoneOffset.UTC).truncatedTo(ChronoUnit.MICROS),
                         singletonList("withdrawalRegistry")
                 )
                         .size()
@@ -46,7 +47,7 @@ public class ReportServiceTest {
 
         Long reportId = reportIds.get(0);
         Report report = reportService.getReport(partyId, contractId, reportId);
-        assertEquals(getToTime(), report.getToTime());
+        assertEquals(getToTime().truncatedTo(ChronoUnit.MICROS), report.getToTime().truncatedTo(ChronoUnit.MICROS));
 
         reportService.cancelReport(partyId, contractId, reportId);
 
@@ -55,8 +56,8 @@ public class ReportServiceTest {
                 reportService.getReportsByRangeNotCancelled(
                         partyId,
                         contractId,
-                        getFromTime().toInstant(ZoneOffset.UTC),
-                        getToTime().toInstant(ZoneOffset.UTC),
+                        getFromTime().toInstant(ZoneOffset.UTC).truncatedTo(ChronoUnit.MICROS),
+                        getToTime().toInstant(ZoneOffset.UTC).truncatedTo(ChronoUnit.MICROS),
                         singletonList("withdrawalRegistry")
                 )
                         .size()
@@ -69,8 +70,8 @@ public class ReportServiceTest {
                 reportService.getReportsByRangeNotCancelled(
                         partyId,
                         contractId,
-                        getFromTime().toInstant(ZoneOffset.UTC),
-                        getToTime().toInstant(ZoneOffset.UTC),
+                        getFromTime().toInstant(ZoneOffset.UTC).truncatedTo(ChronoUnit.MICROS),
+                        getToTime().toInstant(ZoneOffset.UTC).truncatedTo(ChronoUnit.MICROS),
                         singletonList("withdrawalRegistry")
                 )
                         .size()
@@ -83,8 +84,8 @@ public class ReportServiceTest {
         return reportService.createReport(
                 partyId,
                 contractId,
-                getFromTime().toInstant(ZoneOffset.UTC),
-                getToTime().toInstant(ZoneOffset.UTC),
+                getFromTime().toInstant(ZoneOffset.UTC).truncatedTo(ChronoUnit.MICROS),
+                getToTime().toInstant(ZoneOffset.UTC).truncatedTo(ChronoUnit.MICROS),
                 reportType
         );
     }

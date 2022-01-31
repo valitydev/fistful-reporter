@@ -1,11 +1,11 @@
 package com.rbkmoney.fistful.reporter.kafka.listener;
 
 import com.rbkmoney.dao.DaoException;
-import com.rbkmoney.fistful.deposit.Change;
-import com.rbkmoney.fistful.deposit.StatusChange;
-import com.rbkmoney.fistful.deposit.TimestampedChange;
-import com.rbkmoney.fistful.deposit.status.Status;
-import com.rbkmoney.fistful.deposit.status.Succeeded;
+import dev.vality.fistful.deposit.Change;
+import dev.vality.fistful.deposit.StatusChange;
+import dev.vality.fistful.deposit.TimestampedChange;
+import dev.vality.fistful.deposit.status.Status;
+import dev.vality.fistful.deposit.status.Succeeded;
 import com.rbkmoney.fistful.reporter.config.KafkaPostgresqlSpringBootITest;
 import com.rbkmoney.fistful.reporter.dao.DepositDao;
 import com.rbkmoney.fistful.reporter.domain.enums.DepositStatus;

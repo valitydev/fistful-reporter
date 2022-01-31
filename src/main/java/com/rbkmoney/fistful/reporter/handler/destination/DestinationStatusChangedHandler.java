@@ -1,8 +1,8 @@
 package com.rbkmoney.fistful.reporter.handler.destination;
 
 import com.rbkmoney.dao.DaoException;
-import com.rbkmoney.fistful.destination.Status;
-import com.rbkmoney.fistful.destination.TimestampedChange;
+import dev.vality.fistful.destination.Status;
+import dev.vality.fistful.destination.TimestampedChange;
 import com.rbkmoney.fistful.reporter.dao.DestinationDao;
 import com.rbkmoney.fistful.reporter.domain.enums.DestinationEventType;
 import com.rbkmoney.fistful.reporter.domain.enums.DestinationStatus;

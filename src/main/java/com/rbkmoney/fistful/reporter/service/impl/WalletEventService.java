@@ -1,7 +1,7 @@
 package com.rbkmoney.fistful.reporter.service.impl;
 
 import com.rbkmoney.fistful.reporter.handler.wallet.WalletEventHandler;
-import com.rbkmoney.fistful.wallet.TimestampedChange;
+import dev.vality.fistful.wallet.TimestampedChange;
 import com.rbkmoney.machinegun.eventsink.MachineEvent;
 import com.rbkmoney.sink.common.parser.impl.MachineEventParser;
 import lombok.RequiredArgsConstructor;

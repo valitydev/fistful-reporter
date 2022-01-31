@@ -1,7 +1,7 @@
 package com.rbkmoney.fistful.reporter.config;
 
 import com.rbkmoney.damsel.payment_processing.PartyManagementSrv;
-import com.rbkmoney.file.storage.FileStorageSrv;
+import dev.vality.file.storage.FileStorageSrv;
 import com.rbkmoney.fistful.reporter.config.properties.FileStorageProperties;
 import com.rbkmoney.fistful.reporter.config.properties.PartyManagementProperties;
 import com.rbkmoney.woody.thrift.impl.http.THSpawnClientBuilder;

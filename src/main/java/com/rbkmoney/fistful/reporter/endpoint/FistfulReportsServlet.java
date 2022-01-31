@@ -1,6 +1,6 @@
 package com.rbkmoney.fistful.reporter.endpoint;
 
-import com.rbkmoney.fistful.reporter.ReportingSrv;
+import dev.vality.fistful.reporter.ReportingSrv;
 import com.rbkmoney.woody.thrift.impl.http.THServiceBuilder;
 import lombok.RequiredArgsConstructor;
 

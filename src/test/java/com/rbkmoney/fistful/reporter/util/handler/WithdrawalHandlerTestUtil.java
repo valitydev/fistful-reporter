@@ -1,11 +1,11 @@
 package com.rbkmoney.fistful.reporter.util.handler;
 
-import com.rbkmoney.fistful.withdrawal.Change;
-import com.rbkmoney.fistful.withdrawal.StatusChange;
-import com.rbkmoney.fistful.withdrawal.TimestampedChange;
-import com.rbkmoney.fistful.withdrawal.TransferChange;
-import com.rbkmoney.fistful.withdrawal.status.Status;
-import com.rbkmoney.fistful.withdrawal.status.Succeeded;
+import dev.vality.fistful.withdrawal.Change;
+import dev.vality.fistful.withdrawal.StatusChange;
+import dev.vality.fistful.withdrawal.TimestampedChange;
+import dev.vality.fistful.withdrawal.TransferChange;
+import dev.vality.fistful.withdrawal.status.Status;
+import dev.vality.fistful.withdrawal.status.Succeeded;
 import com.rbkmoney.kafka.common.serialization.ThriftSerializer;
 import com.rbkmoney.machinegun.eventsink.MachineEvent;
 import com.rbkmoney.machinegun.msgpack.Value;

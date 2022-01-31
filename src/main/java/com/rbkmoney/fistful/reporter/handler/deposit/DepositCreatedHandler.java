@@ -1,8 +1,8 @@
 package com.rbkmoney.fistful.reporter.handler.deposit;
 
 import com.rbkmoney.dao.DaoException;
-import com.rbkmoney.fistful.base.Cash;
-import com.rbkmoney.fistful.deposit.TimestampedChange;
+import dev.vality.fistful.base.Cash;
+import dev.vality.fistful.deposit.TimestampedChange;
 import com.rbkmoney.fistful.reporter.dao.DepositDao;
 import com.rbkmoney.fistful.reporter.dao.WalletDao;
 import com.rbkmoney.fistful.reporter.domain.enums.DepositEventType;

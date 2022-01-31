@@ -1,8 +1,8 @@
 package com.rbkmoney.fistful.reporter.kafka.listener;
 
 import com.rbkmoney.dao.DaoException;
-import com.rbkmoney.fistful.identity.Change;
-import com.rbkmoney.fistful.identity.TimestampedChange;
+import dev.vality.fistful.identity.Change;
+import dev.vality.fistful.identity.TimestampedChange;
 import com.rbkmoney.fistful.reporter.config.KafkaPostgresqlSpringBootITest;
 import com.rbkmoney.fistful.reporter.dao.IdentityDao;
 import com.rbkmoney.fistful.reporter.domain.tables.pojos.Identity;

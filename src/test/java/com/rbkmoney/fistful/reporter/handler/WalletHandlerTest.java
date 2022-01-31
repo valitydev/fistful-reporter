@@ -1,6 +1,6 @@
 package com.rbkmoney.fistful.reporter.handler;
 
-import com.rbkmoney.fistful.account.Account;
+import dev.vality.fistful.account.Account;
 import com.rbkmoney.fistful.reporter.config.PostgresqlSpringBootITest;
 import com.rbkmoney.fistful.reporter.dao.IdentityDao;
 import com.rbkmoney.fistful.reporter.dao.WalletDao;

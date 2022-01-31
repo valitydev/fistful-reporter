@@ -18,6 +18,7 @@ import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZoneOffset;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -39,7 +40,7 @@ public class ReportServiceImpl implements ReportService {
                 toTime,
                 reportType,
                 reportingProperties.getDefaultTimeZone(),
-                Instant.now());
+                Instant.now().truncatedTo(ChronoUnit.MICROS));
     }
 
     private long createReport(

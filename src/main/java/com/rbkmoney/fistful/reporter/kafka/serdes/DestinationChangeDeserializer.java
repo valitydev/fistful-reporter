@@ -1,6 +1,6 @@
 package com.rbkmoney.fistful.reporter.kafka.serdes;
 
-import com.rbkmoney.fistful.destination.TimestampedChange;
+import dev.vality.fistful.destination.TimestampedChange;
 import com.rbkmoney.sink.common.serialization.impl.AbstractThriftBinaryDeserializer;
 import org.springframework.stereotype.Service;
 

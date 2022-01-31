@@ -1,7 +1,7 @@
 package com.rbkmoney.fistful.reporter.util.handler;
 
-import com.rbkmoney.fistful.base.*;
-import com.rbkmoney.fistful.destination.*;
+import dev.vality.fistful.base.*;
+import dev.vality.fistful.destination.*;
 import com.rbkmoney.kafka.common.serialization.ThriftSerializer;
 import com.rbkmoney.machinegun.eventsink.MachineEvent;
 import com.rbkmoney.machinegun.msgpack.Value;
@@ -47,23 +47,23 @@ public class DestinationHandlerTestUtil {
                 .setChange(Change.created(destination));
     }
 
-    public static com.rbkmoney.fistful.base.DigitalWallet createFistfulDigitalWallet() {
-        com.rbkmoney.fistful.base.DigitalWallet digitalWallet = new com.rbkmoney.fistful.base.DigitalWallet();
+    public static dev.vality.fistful.base.DigitalWallet createFistfulDigitalWallet() {
+        dev.vality.fistful.base.DigitalWallet digitalWallet = new dev.vality.fistful.base.DigitalWallet();
         digitalWallet.setId(DIGITAL_WALLET_ID);
-        digitalWallet.setData(DigitalData.webmoney(new DigitalDataWebmoney()));
+        digitalWallet.setPaymentService(new PaymentServiceRef("webmoney"));
         return digitalWallet;
     }
 
-    public static com.rbkmoney.fistful.base.CryptoWallet createFistfulCryptoWallet() {
-        com.rbkmoney.fistful.base.CryptoWallet cryptoWallet = new com.rbkmoney.fistful.base.CryptoWallet();
+    public static dev.vality.fistful.base.CryptoWallet createFistfulCryptoWallet() {
+        dev.vality.fistful.base.CryptoWallet cryptoWallet = new dev.vality.fistful.base.CryptoWallet();
         cryptoWallet.setId(CRYPTO_WALLET_ID);
         cryptoWallet.setData(CryptoData.bitcoin(new CryptoDataBitcoin()));
         cryptoWallet.setCurrency(CryptoCurrency.bitcoin);
         return cryptoWallet;
     }
 
-    public static com.rbkmoney.fistful.base.BankCard createFistfulBankCard() {
-        com.rbkmoney.fistful.base.BankCard bankCard = new com.rbkmoney.fistful.base.BankCard();
+    public static dev.vality.fistful.base.BankCard createFistfulBankCard() {
+        dev.vality.fistful.base.BankCard bankCard = new dev.vality.fistful.base.BankCard();
         bankCard.setToken(CARD_TOKEN_PROVIDER);
         bankCard.setBin(CARD_BIN);
         bankCard.setMaskedPan(CARD_MASKED_PAN);
@@ -88,9 +88,9 @@ public class DestinationHandlerTestUtil {
         return resourceBankCard;
     }
 
-    public static com.rbkmoney.fistful.destination.Destination createFistfulDestination(Resource fistfulResource) {
-        com.rbkmoney.fistful.destination.Destination fistfulDestination
-                = new com.rbkmoney.fistful.destination.Destination();
+    public static dev.vality.fistful.destination.Destination createFistfulDestination(Resource fistfulResource) {
+        dev.vality.fistful.destination.Destination fistfulDestination
+                = new dev.vality.fistful.destination.Destination();
         fistfulDestination.setResource(fistfulResource);
         fistfulDestination.setName(DESTINATION_NAME);
         return fistfulDestination;

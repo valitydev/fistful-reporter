@@ -1,7 +1,7 @@
 package com.rbkmoney.fistful.reporter.handler.identity;
 
 import com.rbkmoney.dao.DaoException;
-import com.rbkmoney.fistful.identity.TimestampedChange;
+import dev.vality.fistful.identity.TimestampedChange;
 import com.rbkmoney.fistful.reporter.dao.IdentityDao;
 import com.rbkmoney.fistful.reporter.domain.enums.IdentityEventType;
 import com.rbkmoney.fistful.reporter.domain.tables.pojos.Identity;

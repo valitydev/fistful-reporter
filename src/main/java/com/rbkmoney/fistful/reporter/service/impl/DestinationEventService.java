@@ -1,6 +1,6 @@
 package com.rbkmoney.fistful.reporter.service.impl;
 
-import com.rbkmoney.fistful.destination.TimestampedChange;
+import dev.vality.fistful.destination.TimestampedChange;
 import com.rbkmoney.fistful.reporter.handler.destination.DestinationEventHandler;
 import com.rbkmoney.machinegun.eventsink.MachineEvent;
 import com.rbkmoney.sink.common.parser.impl.MachineEventParser;

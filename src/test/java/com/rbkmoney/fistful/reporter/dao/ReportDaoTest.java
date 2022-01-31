@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 import static com.rbkmoney.fistful.reporter.data.TestData.contractId;
@@ -27,14 +28,14 @@ public class ReportDaoTest {
     @Test
     public void reportDaoTest() {
         Report report = random(Report.class);
-        configReport(report, getFromTime(), getToTime());
+        configReport(report, getFromTime().truncatedTo(ChronoUnit.MICROS), getToTime().truncatedTo(ChronoUnit.MICROS));
         long id = reportDao.save(report);
         Report expectedReport = reportDao.getReport(id, report.getPartyId(), report.getContractId());
         assertEquals(report, expectedReport);
 
         List<Report> reports = randomListOf(4, Report.class);
         for (Report r : reports) {
-            configReport(r, getFromTime(), getToTime());
+            configReport(r, getFromTime().truncatedTo(ChronoUnit.MICROS), getToTime().truncatedTo(ChronoUnit.MICROS));
             reportDao.save(r);
         }
         assertEquals(5, reportDao.getPendingReports().size());
@@ -45,15 +46,15 @@ public class ReportDaoTest {
         assertEquals(5, reportDao.getReportsByRange(
                 partyId,
                 contractId,
-                getFromTime(),
-                getToTime(),
+                getFromTime().truncatedTo(ChronoUnit.MICROS),
+                getToTime().truncatedTo(ChronoUnit.MICROS),
                 emptyList()).size());
 
         assertEquals(0, reportDao.getReportsByRange(
                 partyId,
                 contractId,
-                getFromTime().plusMinutes(1),
-                getToTime(),
+                getFromTime().plusMinutes(1).truncatedTo(ChronoUnit.MICROS),
+                getToTime().truncatedTo(ChronoUnit.MICROS),
                 emptyList()).size());
     }
 
