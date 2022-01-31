@@ -1,14 +1,14 @@
 package com.rbkmoney.fistful.reporter.handler.deposit;
 
 import com.rbkmoney.dao.DaoException;
-import com.rbkmoney.fistful.deposit.TimestampedChange;
+import dev.vality.fistful.deposit.TimestampedChange;
 import com.rbkmoney.fistful.reporter.dao.DepositDao;
 import com.rbkmoney.fistful.reporter.dao.FistfulCashFlowDao;
 import com.rbkmoney.fistful.reporter.domain.enums.*;
 import com.rbkmoney.fistful.reporter.domain.tables.pojos.Deposit;
 import com.rbkmoney.fistful.reporter.domain.tables.pojos.FistfulCashFlow;
 import com.rbkmoney.fistful.reporter.exception.StorageException;
-import com.rbkmoney.fistful.transfer.Status;
+import dev.vality.fistful.transfer.Status;
 import com.rbkmoney.geck.common.util.TBaseUtil;
 import com.rbkmoney.geck.common.util.TypeUtil;
 import com.rbkmoney.machinegun.eventsink.MachineEvent;

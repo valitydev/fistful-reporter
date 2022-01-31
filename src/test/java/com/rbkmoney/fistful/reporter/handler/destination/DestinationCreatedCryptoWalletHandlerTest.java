@@ -29,9 +29,9 @@ public class DestinationCreatedCryptoWalletHandlerTest {
         Destination destination = random(Destination.class);
         destination.setCurrent(true);
         String sqlStatement = "select * from fr.destination LIMIT 1;";
-        com.rbkmoney.fistful.base.Resource fistfulResource = new com.rbkmoney.fistful.base.Resource();
+        dev.vality.fistful.base.Resource fistfulResource = new dev.vality.fistful.base.Resource();
         fistfulResource.setCryptoWallet(DestinationHandlerTestUtil.createResourceCryptoWallet());
-        com.rbkmoney.fistful.destination.Destination fistfulDestination
+        dev.vality.fistful.destination.Destination fistfulDestination
                 = DestinationHandlerTestUtil.createFistfulDestination(fistfulResource);
 
         destinationCreatedHandler.handle(

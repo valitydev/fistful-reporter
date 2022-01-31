@@ -1,6 +1,6 @@
 package com.rbkmoney.fistful.reporter.dto;
 
-import com.rbkmoney.fistful.cashflow.FinalCashFlowPosting;
+import dev.vality.fistful.cashflow.FinalCashFlowPosting;
 import com.rbkmoney.fistful.reporter.domain.enums.FistfulCashFlowChangeType;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

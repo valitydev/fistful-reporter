@@ -1,7 +1,7 @@
 package com.rbkmoney.fistful.reporter.handler.withdrawal;
 
 import com.rbkmoney.dao.DaoException;
-import com.rbkmoney.fistful.cashflow.FinalCashFlowPosting;
+import dev.vality.fistful.cashflow.FinalCashFlowPosting;
 import com.rbkmoney.fistful.reporter.dao.FistfulCashFlowDao;
 import com.rbkmoney.fistful.reporter.dao.WithdrawalDao;
 import com.rbkmoney.fistful.reporter.domain.enums.*;
@@ -10,7 +10,7 @@ import com.rbkmoney.fistful.reporter.domain.tables.pojos.Withdrawal;
 import com.rbkmoney.fistful.reporter.dto.FistfulCashFlowSinkEvent;
 import com.rbkmoney.fistful.reporter.exception.StorageException;
 import com.rbkmoney.fistful.reporter.util.CashFlowConverter;
-import com.rbkmoney.fistful.withdrawal.TimestampedChange;
+import dev.vality.fistful.withdrawal.TimestampedChange;
 import com.rbkmoney.geck.common.util.TypeUtil;
 import com.rbkmoney.machinegun.eventsink.MachineEvent;
 import lombok.RequiredArgsConstructor;

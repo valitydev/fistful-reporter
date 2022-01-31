@@ -1,9 +1,9 @@
 package com.rbkmoney.fistful.reporter.util.handler;
 
-import com.rbkmoney.fistful.account.Account;
-import com.rbkmoney.fistful.wallet.AccountChange;
-import com.rbkmoney.fistful.wallet.Change;
-import com.rbkmoney.fistful.wallet.TimestampedChange;
+import dev.vality.fistful.account.Account;
+import dev.vality.fistful.wallet.AccountChange;
+import dev.vality.fistful.wallet.Change;
+import dev.vality.fistful.wallet.TimestampedChange;
 import com.rbkmoney.kafka.common.serialization.ThriftSerializer;
 import com.rbkmoney.machinegun.eventsink.MachineEvent;
 import com.rbkmoney.machinegun.msgpack.Value;

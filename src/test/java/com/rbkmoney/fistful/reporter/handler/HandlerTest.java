@@ -1,7 +1,7 @@
 package com.rbkmoney.fistful.reporter.handler;
 
 import com.rbkmoney.damsel.domain.Contract;
-import com.rbkmoney.fistful.reporter.*;
+import dev.vality.fistful.reporter.*;
 import com.rbkmoney.fistful.reporter.config.PostgresqlSpringBootITest;
 import com.rbkmoney.fistful.reporter.config.testconfiguration.WithdrawalTestDao;
 import com.rbkmoney.fistful.reporter.generator.ReportGenerator;

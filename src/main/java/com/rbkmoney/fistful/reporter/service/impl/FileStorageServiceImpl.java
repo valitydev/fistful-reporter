@@ -1,7 +1,7 @@
 package com.rbkmoney.fistful.reporter.service.impl;
 
-import com.rbkmoney.file.storage.FileStorageSrv;
-import com.rbkmoney.file.storage.NewFileResult;
+import dev.vality.file.storage.FileStorageSrv;
+import dev.vality.file.storage.NewFileResult;
 import com.rbkmoney.fistful.reporter.config.properties.FileStorageProperties;
 import com.rbkmoney.fistful.reporter.exception.FileStorageClientException;
 import com.rbkmoney.fistful.reporter.service.FileStorageService;

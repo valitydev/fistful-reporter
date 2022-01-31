@@ -4,9 +4,9 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>com.rbkmoney</groupId>
+        <groupId>dev.vality</groupId>
         <artifactId>service-parent-pom</artifactId>
-        <version>1.2.13</version>
+        <version>1.0.1</version>
     </parent>
 
     <artifactId>fistful-reporter</artifactId>
@@ -24,12 +24,13 @@
         <management.port>8023</management.port>
         <exposed.ports>${server.port} ${management.port}</exposed.ports>
         <dockerfile.registry>${env.REGISTRY}</dockerfile.registry>
-        <fistful-proto.version>1.128-d331fce</fistful-proto.version>
+        <fistful-proto.version>1.133-c484877</fistful-proto.version>
         <fistful-reporter-proto.version>1.7-8bec5e6</fistful-reporter-proto.version>
         <file-storage-proto.version>1.24-a77c0c4</file-storage-proto.version>
         <machinegun-proto.version>1.18-d814d69</machinegun-proto.version>
         <sink-common-lib.version>0.0.7</sink-common-lib.version>
         <checkstyle.config.suppressions.path>./src/main/resources/checkstyle/checkstyle-suppressions.xml</checkstyle.config.suppressions.path>
+        <!---->
         <db.name>fistful_reporter</db.name>
         <db.schema>fr</db.schema>
         <db.user>postgres</db.user>
@@ -56,26 +57,31 @@
         <dependency>
             <groupId>com.rbkmoney</groupId>
             <artifactId>sink-common-lib</artifactId>
-            <version>${sink-common-lib.version}</version>
+            <version>0.0.8</version>
         </dependency>
         <dependency>
-            <groupId>com.rbkmoney</groupId>
+            <groupId>dev.vality</groupId>
             <artifactId>fistful-proto</artifactId>
             <version>${fistful-proto.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>dev.vality</groupId>
+            <artifactId>payout-manager-proto</artifactId>
+            <version>1.25-cfe2120</version>
         </dependency>
         <dependency>
             <groupId>com.rbkmoney</groupId>
             <artifactId>custom-metrics-spring-boot-starter</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.rbkmoney</groupId>
+            <groupId>dev.vality</groupId>
             <artifactId>fistful-reporter-proto</artifactId>
-            <version>${fistful-reporter-proto.version}</version>
+            <version>1.15-5aee655</version>
         </dependency>
         <dependency>
-            <groupId>com.rbkmoney</groupId>
+            <groupId>dev.vality</groupId>
             <artifactId>file-storage-proto</artifactId>
-            <version>${file-storage-proto.version}</version>
+            <version>1.33-86bcf44</version>
         </dependency>
         <dependency>
             <groupId>com.rbkmoney</groupId>
@@ -175,6 +181,12 @@
             <artifactId>testcontainers-annotations</artifactId>
             <version>1.3.0</version>
             <scope>test</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>com.rbkmoney</groupId>
+                    <artifactId>payout-manager-proto</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
     </dependencies>
 

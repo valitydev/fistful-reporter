@@ -4,8 +4,8 @@ import com.rbkmoney.dao.DaoException;
 import com.rbkmoney.fistful.reporter.config.KafkaPostgresqlSpringBootITest;
 import com.rbkmoney.fistful.reporter.dao.WalletDao;
 import com.rbkmoney.fistful.reporter.domain.tables.pojos.Wallet;
-import com.rbkmoney.fistful.wallet.Change;
-import com.rbkmoney.fistful.wallet.TimestampedChange;
+import dev.vality.fistful.wallet.Change;
+import dev.vality.fistful.wallet.TimestampedChange;
 import com.rbkmoney.kafka.common.serialization.ThriftSerializer;
 import com.rbkmoney.machinegun.eventsink.SinkEvent;
 import com.rbkmoney.testcontainers.annotations.kafka.config.KafkaProducer;
@@ -42,7 +42,7 @@ public class WalletEventListenerTest {
         // Given
         TimestampedChange created = new TimestampedChange()
                 .setOccuredAt("2016-03-22T06:12:27Z")
-                .setChange(Change.created(new com.rbkmoney.fistful.wallet.Wallet()
+                .setChange(Change.created(new dev.vality.fistful.wallet.Wallet()
                         .setName("wallet")));
 
         SinkEvent sinkEvent = sinkEvent(

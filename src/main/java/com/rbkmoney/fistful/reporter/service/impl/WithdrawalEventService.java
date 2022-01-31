@@ -1,7 +1,7 @@
 package com.rbkmoney.fistful.reporter.service.impl;
 
 import com.rbkmoney.fistful.reporter.handler.withdrawal.WithdrawalEventHandler;
-import com.rbkmoney.fistful.withdrawal.TimestampedChange;
+import dev.vality.fistful.withdrawal.TimestampedChange;
 import com.rbkmoney.machinegun.eventsink.MachineEvent;
 import com.rbkmoney.sink.common.parser.impl.MachineEventParser;
 import lombok.RequiredArgsConstructor;

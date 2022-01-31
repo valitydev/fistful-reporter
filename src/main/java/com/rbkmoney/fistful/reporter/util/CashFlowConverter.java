@@ -1,6 +1,6 @@
 package com.rbkmoney.fistful.reporter.util;
 
-import com.rbkmoney.fistful.cashflow.FinalCashFlowPosting;
+import dev.vality.fistful.cashflow.FinalCashFlowPosting;
 import com.rbkmoney.fistful.reporter.domain.enums.DepositEventType;
 import com.rbkmoney.fistful.reporter.domain.enums.FistfulCashFlowAccount;
 import com.rbkmoney.fistful.reporter.domain.tables.pojos.FistfulCashFlow;
@@ -56,7 +56,7 @@ public class CashFlowConverter {
         );
     }
 
-    public static long getFistfulProviderFee(List<com.rbkmoney.fistful.cashflow.FinalCashFlowPosting> postings) {
+    public static long getFistfulProviderFee(List<dev.vality.fistful.cashflow.FinalCashFlowPosting> postings) {
         return getFistfulAmount(
                 postings,
                 posting -> posting.getSource().getAccountType().isSetSystem()
@@ -72,7 +72,7 @@ public class CashFlowConverter {
                 .reduce(0L, Long::sum);
     }
 
-    private static String getCashFlowAccountTypeValue(com.rbkmoney.fistful.cashflow.FinalCashFlowAccount cfa) {
+    private static String getCashFlowAccountTypeValue(dev.vality.fistful.cashflow.FinalCashFlowAccount cfa) {
         if (cfa.getAccountType().isSetMerchant()) {
             return cfa.getAccountType().getMerchant().name();
         } else if (cfa.getAccountType().isSetProvider()) {

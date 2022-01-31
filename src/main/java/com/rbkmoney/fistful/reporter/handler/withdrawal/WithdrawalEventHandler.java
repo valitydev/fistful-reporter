@@ -4,7 +4,7 @@ import com.rbkmoney.fistful.reporter.domain.enums.FistfulCashFlowChangeType;
 import com.rbkmoney.fistful.reporter.domain.enums.WithdrawalEventType;
 import com.rbkmoney.fistful.reporter.domain.tables.pojos.FistfulCashFlow;
 import com.rbkmoney.fistful.reporter.handler.EventHandler;
-import com.rbkmoney.fistful.withdrawal.TimestampedChange;
+import dev.vality.fistful.withdrawal.TimestampedChange;
 import com.rbkmoney.geck.common.util.TypeUtil;
 import com.rbkmoney.machinegun.eventsink.MachineEvent;
 

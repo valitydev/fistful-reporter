@@ -1,7 +1,7 @@
 package com.rbkmoney.fistful.reporter.handler.identity;
 
 import com.rbkmoney.dao.DaoException;
-import com.rbkmoney.fistful.identity.*;
+import dev.vality.fistful.identity.*;
 import com.rbkmoney.fistful.reporter.dao.ChallengeDao;
 import com.rbkmoney.fistful.reporter.dao.IdentityDao;
 import com.rbkmoney.fistful.reporter.domain.enums.ChallengeEventType;

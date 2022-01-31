@@ -1,7 +1,7 @@
 package com.rbkmoney.fistful.reporter.handler.source;
 
 import com.rbkmoney.dao.DaoException;
-import com.rbkmoney.fistful.account.Account;
+import dev.vality.fistful.account.Account;
 import com.rbkmoney.fistful.reporter.dao.IdentityDao;
 import com.rbkmoney.fistful.reporter.dao.SourceDao;
 import com.rbkmoney.fistful.reporter.domain.enums.SourceEventType;
@@ -9,7 +9,7 @@ import com.rbkmoney.fistful.reporter.domain.tables.pojos.Identity;
 import com.rbkmoney.fistful.reporter.domain.tables.pojos.Source;
 import com.rbkmoney.fistful.reporter.exception.SinkEventNotFoundException;
 import com.rbkmoney.fistful.reporter.exception.StorageException;
-import com.rbkmoney.fistful.source.TimestampedChange;
+import dev.vality.fistful.source.TimestampedChange;
 import com.rbkmoney.geck.common.util.TypeUtil;
 import com.rbkmoney.machinegun.eventsink.MachineEvent;
 import lombok.RequiredArgsConstructor;
