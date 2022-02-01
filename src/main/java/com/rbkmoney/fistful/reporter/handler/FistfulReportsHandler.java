@@ -7,7 +7,7 @@ import com.rbkmoney.fistful.reporter.service.FileInfoService;
 import com.rbkmoney.fistful.reporter.service.PartyManagementService;
 import com.rbkmoney.fistful.reporter.service.ReportService;
 import com.rbkmoney.fistful.reporter.util.ThriftUtils;
-import com.rbkmoney.geck.common.util.TypeUtil;
+import dev.vality.geck.common.util.TypeUtil;
 import com.rbkmoney.woody.api.flow.error.WUnavailableResultException;
 import com.rbkmoney.woody.api.flow.error.WUndefinedResultException;
 import dev.vality.fistful.reporter.*;

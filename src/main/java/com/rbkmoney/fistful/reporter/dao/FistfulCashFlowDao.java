@@ -1,6 +1,6 @@
 package com.rbkmoney.fistful.reporter.dao;
 
-import com.rbkmoney.dao.GenericDao;
+import dev.vality.dao.GenericDao;
 import com.rbkmoney.fistful.reporter.domain.enums.FistfulCashFlowChangeType;
 import com.rbkmoney.fistful.reporter.domain.tables.pojos.FistfulCashFlow;
 

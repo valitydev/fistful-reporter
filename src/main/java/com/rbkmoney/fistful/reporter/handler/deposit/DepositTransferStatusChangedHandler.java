@@ -1,6 +1,6 @@
 package com.rbkmoney.fistful.reporter.handler.deposit;
 
-import com.rbkmoney.dao.DaoException;
+import dev.vality.dao.DaoException;
 import dev.vality.fistful.deposit.TimestampedChange;
 import com.rbkmoney.fistful.reporter.dao.DepositDao;
 import com.rbkmoney.fistful.reporter.dao.FistfulCashFlowDao;
@@ -9,8 +9,8 @@ import com.rbkmoney.fistful.reporter.domain.tables.pojos.Deposit;
 import com.rbkmoney.fistful.reporter.domain.tables.pojos.FistfulCashFlow;
 import com.rbkmoney.fistful.reporter.exception.StorageException;
 import dev.vality.fistful.transfer.Status;
-import com.rbkmoney.geck.common.util.TBaseUtil;
-import com.rbkmoney.geck.common.util.TypeUtil;
+import dev.vality.geck.common.util.TBaseUtil;
+import dev.vality.geck.common.util.TypeUtil;
 import com.rbkmoney.machinegun.eventsink.MachineEvent;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

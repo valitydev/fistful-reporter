@@ -2,7 +2,7 @@ package com.rbkmoney.fistful.reporter.util.handler;
 
 import dev.vality.fistful.account.Account;
 import dev.vality.fistful.source.*;
-import com.rbkmoney.kafka.common.serialization.ThriftSerializer;
+import dev.vality.kafka.common.serialization.ThriftSerializer;
 import com.rbkmoney.machinegun.eventsink.MachineEvent;
 import com.rbkmoney.machinegun.msgpack.Value;
 

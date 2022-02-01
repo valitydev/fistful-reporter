@@ -5,8 +5,8 @@ import com.rbkmoney.fistful.reporter.domain.enums.DepositEventType;
 import com.rbkmoney.fistful.reporter.domain.enums.FistfulCashFlowAccount;
 import com.rbkmoney.fistful.reporter.domain.tables.pojos.FistfulCashFlow;
 import com.rbkmoney.fistful.reporter.dto.FistfulCashFlowSinkEvent;
-import com.rbkmoney.geck.common.util.TBaseUtil;
-import com.rbkmoney.geck.common.util.TypeUtil;
+import dev.vality.geck.common.util.TBaseUtil;
+import dev.vality.geck.common.util.TypeUtil;
 
 import java.util.List;
 import java.util.function.Predicate;

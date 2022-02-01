@@ -1,6 +1,6 @@
 package com.rbkmoney.fistful.reporter.service;
 
-import com.rbkmoney.dao.DaoException;
+import dev.vality.dao.DaoException;
 import com.rbkmoney.fistful.reporter.dao.WithdrawalDao;
 import com.rbkmoney.fistful.reporter.domain.tables.pojos.Report;
 import com.rbkmoney.fistful.reporter.domain.tables.pojos.Withdrawal;

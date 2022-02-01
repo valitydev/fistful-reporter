@@ -1,6 +1,6 @@
 package com.rbkmoney.fistful.reporter.config;
 
-import com.rbkmoney.damsel.payment_processing.PartyManagementSrv;
+import dev.vality.damsel.payment_processing.PartyManagementSrv;
 import dev.vality.file.storage.FileStorageSrv;
 import com.rbkmoney.fistful.reporter.config.properties.FileStorageProperties;
 import com.rbkmoney.fistful.reporter.config.properties.PartyManagementProperties;

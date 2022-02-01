@@ -1,8 +1,8 @@
 package com.rbkmoney.fistful.reporter.service.impl;
 
-import com.rbkmoney.damsel.domain.Contract;
-import com.rbkmoney.damsel.domain.Party;
-import com.rbkmoney.damsel.payment_processing.*;
+import dev.vality.damsel.domain.Contract;
+import dev.vality.damsel.domain.Party;
+import dev.vality.damsel.payment_processing.*;
 import com.rbkmoney.fistful.reporter.exception.ContractNotFoundException;
 import com.rbkmoney.fistful.reporter.exception.PartyManagementClientException;
 import com.rbkmoney.fistful.reporter.exception.PartyNotFoundException;

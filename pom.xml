@@ -6,7 +6,7 @@
     <parent>
         <groupId>dev.vality</groupId>
         <artifactId>service-parent-pom</artifactId>
-        <version>1.0.1</version>
+        <version>1.0.8</version>
     </parent>
 
     <artifactId>fistful-reporter</artifactId>
@@ -44,10 +44,9 @@
         <dependency>
             <groupId>dev.vality</groupId>
             <artifactId>shared-resources</artifactId>
-            <version>1.0.0</version>
         </dependency>
         <dependency>
-            <groupId>com.rbkmoney</groupId>
+            <groupId>dev.vality</groupId>
             <artifactId>kafka-common-lib</artifactId>
         </dependency>
         <dependency>
@@ -71,10 +70,6 @@
             <version>1.21-bdd9888</version>
         </dependency>
         <dependency>
-            <groupId>com.rbkmoney</groupId>
-            <artifactId>custom-metrics-spring-boot-starter</artifactId>
-        </dependency>
-        <dependency>
             <groupId>dev.vality</groupId>
             <artifactId>fistful-reporter-proto</artifactId>
             <version>1.15-5aee655</version>
@@ -85,23 +80,19 @@
             <version>1.33-86bcf44</version>
         </dependency>
         <dependency>
-            <groupId>com.rbkmoney</groupId>
+            <groupId>dev.vality</groupId>
             <artifactId>damsel</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.rbkmoney</groupId>
+            <groupId>dev.vality</groupId>
             <artifactId>mamsel</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.rbkmoney</groupId>
+            <groupId>dev.vality</groupId>
             <artifactId>db-common-lib</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.rbkmoney</groupId>
-            <artifactId>custom-actuator-endpoints</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.rbkmoney.geck</groupId>
+            <groupId>dev.vality.geck</groupId>
             <artifactId>serializer</artifactId>
         </dependency>
 
@@ -231,7 +222,7 @@
                 </dependencies>
                 <configuration>
                     <resourceBundles>
-                        <resourceBundle>com.rbkmoney:shared-resources:${shared-resources.version}</resourceBundle>
+                        <resourceBundle>dev.vality:shared-resources:${shared-resources.version}</resourceBundle>
                     </resourceBundles>
                     <attachToMain>false</attachToMain>
                     <attachToTest>false</attachToTest>

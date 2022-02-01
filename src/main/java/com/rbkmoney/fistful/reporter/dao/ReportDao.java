@@ -1,6 +1,6 @@
 package com.rbkmoney.fistful.reporter.dao;
 
-import com.rbkmoney.dao.GenericDao;
+import dev.vality.dao.GenericDao;
 import com.rbkmoney.fistful.reporter.domain.enums.ReportStatus;
 import com.rbkmoney.fistful.reporter.domain.tables.pojos.Report;
 

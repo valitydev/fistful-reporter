@@ -1,6 +1,6 @@
 package com.rbkmoney.fistful.reporter.handler.destination;
 
-import com.rbkmoney.dao.DaoException;
+import dev.vality.dao.DaoException;
 import dev.vality.fistful.base.BankCard;
 import dev.vality.fistful.base.CryptoWallet;
 import dev.vality.fistful.base.DigitalWallet;
@@ -12,8 +12,8 @@ import com.rbkmoney.fistful.reporter.domain.enums.DestinationResourceType;
 import com.rbkmoney.fistful.reporter.domain.enums.DestinationStatus;
 import com.rbkmoney.fistful.reporter.domain.tables.pojos.Destination;
 import com.rbkmoney.fistful.reporter.exception.StorageException;
-import com.rbkmoney.geck.common.util.TBaseUtil;
-import com.rbkmoney.geck.common.util.TypeUtil;
+import dev.vality.geck.common.util.TBaseUtil;
+import dev.vality.geck.common.util.TypeUtil;
 import com.rbkmoney.machinegun.eventsink.MachineEvent;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

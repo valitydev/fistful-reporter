@@ -1,6 +1,6 @@
 package com.rbkmoney.fistful.reporter.dao;
 
-import com.rbkmoney.dao.GenericDao;
+import dev.vality.dao.GenericDao;
 
 import java.util.Optional;
 

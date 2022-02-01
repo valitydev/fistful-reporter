@@ -1,6 +1,6 @@
 package com.rbkmoney.fistful.reporter.service.impl;
 
-import com.rbkmoney.dao.DaoException;
+import dev.vality.dao.DaoException;
 import com.rbkmoney.fistful.reporter.config.properties.ReportingProperties;
 import com.rbkmoney.fistful.reporter.dao.ReportDao;
 import com.rbkmoney.fistful.reporter.domain.enums.ReportStatus;

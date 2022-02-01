@@ -1,6 +1,6 @@
 package com.rbkmoney.fistful.reporter.service.impl;
 
-import com.rbkmoney.dao.DaoException;
+import dev.vality.dao.DaoException;
 import com.rbkmoney.fistful.reporter.dao.FileInfoDao;
 import com.rbkmoney.fistful.reporter.domain.tables.pojos.FileInfo;
 import com.rbkmoney.fistful.reporter.exception.StorageException;
