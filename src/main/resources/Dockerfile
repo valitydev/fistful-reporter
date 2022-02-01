@@ -6,7 +6,7 @@ RUN apt-get update \
       perl \
       fontconfig \
       libfreetype6 \
-      && rm -rf /var/lib/apt/lists/* \
+      && rm -rf /var/lib/apt/lists/*
 
 RUN useradd -s /bin/false -U -u 20000 vality
 
