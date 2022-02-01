@@ -1,6 +1,6 @@
 package com.rbkmoney.fistful.reporter.handler.source;
 
-import com.rbkmoney.dao.DaoException;
+import dev.vality.dao.DaoException;
 import com.rbkmoney.fistful.reporter.dao.SourceDao;
 import com.rbkmoney.fistful.reporter.domain.enums.SourceEventType;
 import com.rbkmoney.fistful.reporter.domain.enums.SourceStatus;
@@ -9,7 +9,7 @@ import com.rbkmoney.fistful.reporter.exception.StorageException;
 import dev.vality.fistful.source.Internal;
 import dev.vality.fistful.source.Resource;
 import dev.vality.fistful.source.TimestampedChange;
-import com.rbkmoney.geck.common.util.TypeUtil;
+import dev.vality.geck.common.util.TypeUtil;
 import com.rbkmoney.machinegun.eventsink.MachineEvent;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

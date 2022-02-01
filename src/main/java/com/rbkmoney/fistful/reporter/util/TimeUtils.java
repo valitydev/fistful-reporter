@@ -1,6 +1,6 @@
 package com.rbkmoney.fistful.reporter.util;
 
-import com.rbkmoney.geck.common.util.TypeUtil;
+import dev.vality.geck.common.util.TypeUtil;
 
 import java.time.Instant;
 import java.time.ZoneId;

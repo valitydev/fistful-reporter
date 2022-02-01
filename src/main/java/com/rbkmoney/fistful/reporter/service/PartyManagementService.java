@@ -1,8 +1,8 @@
 package com.rbkmoney.fistful.reporter.service;
 
-import com.rbkmoney.damsel.domain.Contract;
-import com.rbkmoney.damsel.domain.Party;
-import com.rbkmoney.damsel.payment_processing.PartyRevisionParam;
+import dev.vality.damsel.domain.Contract;
+import dev.vality.damsel.domain.Party;
+import dev.vality.damsel.payment_processing.PartyRevisionParam;
 
 public interface PartyManagementService {
 

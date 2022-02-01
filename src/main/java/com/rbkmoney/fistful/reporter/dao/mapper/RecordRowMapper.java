@@ -1,6 +1,6 @@
 package com.rbkmoney.fistful.reporter.dao.mapper;
 
-import com.rbkmoney.geck.common.util.TypeUtil;
+import dev.vality.geck.common.util.TypeUtil;
 import lombok.RequiredArgsConstructor;
 import org.jooq.Field;
 import org.jooq.Table;

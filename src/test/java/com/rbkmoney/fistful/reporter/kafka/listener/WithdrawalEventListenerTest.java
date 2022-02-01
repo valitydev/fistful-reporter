@@ -1,6 +1,6 @@
 package com.rbkmoney.fistful.reporter.kafka.listener;
 
-import com.rbkmoney.dao.DaoException;
+import dev.vality.dao.DaoException;
 import com.rbkmoney.fistful.reporter.config.KafkaPostgresqlSpringBootITest;
 import com.rbkmoney.fistful.reporter.dao.WithdrawalDao;
 import com.rbkmoney.fistful.reporter.domain.enums.WithdrawalStatus;
@@ -10,7 +10,7 @@ import dev.vality.fistful.withdrawal.StatusChange;
 import dev.vality.fistful.withdrawal.TimestampedChange;
 import dev.vality.fistful.withdrawal.status.Status;
 import dev.vality.fistful.withdrawal.status.Succeeded;
-import com.rbkmoney.kafka.common.serialization.ThriftSerializer;
+import dev.vality.kafka.common.serialization.ThriftSerializer;
 import com.rbkmoney.machinegun.eventsink.SinkEvent;
 import com.rbkmoney.testcontainers.annotations.kafka.config.KafkaProducer;
 import org.apache.thrift.TBase;

@@ -3,7 +3,7 @@ package com.rbkmoney.fistful.reporter.util;
 import dev.vality.fistful.reporter.Report;
 import dev.vality.fistful.reporter.ReportStatus;
 import dev.vality.fistful.reporter.ReportTimeRange;
-import com.rbkmoney.geck.common.util.TypeUtil;
+import dev.vality.geck.common.util.TypeUtil;
 
 import java.util.List;
 

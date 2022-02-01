@@ -1,6 +1,6 @@
 package com.rbkmoney.fistful.reporter.handler;
 
-import com.rbkmoney.damsel.domain.Contract;
+import dev.vality.damsel.domain.Contract;
 import dev.vality.fistful.reporter.*;
 import com.rbkmoney.fistful.reporter.config.PostgresqlSpringBootITest;
 import com.rbkmoney.fistful.reporter.config.testconfiguration.WithdrawalTestDao;
@@ -19,7 +19,7 @@ import java.util.UUID;
 
 import static com.rbkmoney.fistful.reporter.data.TestData.contractId;
 import static com.rbkmoney.fistful.reporter.data.TestData.partyId;
-import static com.rbkmoney.geck.common.util.TypeUtil.temporalToString;
+import static dev.vality.geck.common.util.TypeUtil.temporalToString;
 import static com.rbkmoney.testcontainers.annotations.util.ValuesGenerator.getFromTime;
 import static com.rbkmoney.testcontainers.annotations.util.ValuesGenerator.getToTime;
 import static org.junit.jupiter.api.Assertions.assertEquals;

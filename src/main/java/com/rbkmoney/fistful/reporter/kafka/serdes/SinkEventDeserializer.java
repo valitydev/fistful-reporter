@@ -1,6 +1,6 @@
 package com.rbkmoney.fistful.reporter.kafka.serdes;
 
-import com.rbkmoney.kafka.common.serialization.AbstractThriftDeserializer;
+import dev.vality.kafka.common.serialization.AbstractThriftDeserializer;
 import com.rbkmoney.machinegun.eventsink.SinkEvent;
 
 public class SinkEventDeserializer extends AbstractThriftDeserializer<SinkEvent> {

@@ -1,12 +1,12 @@
 package com.rbkmoney.fistful.reporter.kafka.listener;
 
-import com.rbkmoney.dao.DaoException;
+import dev.vality.dao.DaoException;
 import dev.vality.fistful.identity.Change;
 import dev.vality.fistful.identity.TimestampedChange;
 import com.rbkmoney.fistful.reporter.config.KafkaPostgresqlSpringBootITest;
 import com.rbkmoney.fistful.reporter.dao.IdentityDao;
 import com.rbkmoney.fistful.reporter.domain.tables.pojos.Identity;
-import com.rbkmoney.kafka.common.serialization.ThriftSerializer;
+import dev.vality.kafka.common.serialization.ThriftSerializer;
 import com.rbkmoney.machinegun.eventsink.SinkEvent;
 import com.rbkmoney.testcontainers.annotations.kafka.config.KafkaProducer;
 import org.apache.thrift.TBase;
