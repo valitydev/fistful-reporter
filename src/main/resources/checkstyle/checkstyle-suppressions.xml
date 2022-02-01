@@ -7,5 +7,5 @@
 <suppressions>
     <!--    we need to suppress modules by reason of 3DS domain specific -->
     <suppress checks="VariableDeclarationUsageDistance"
-              files="com[\\/]rbkmoney[\\/]fistful[\\/]reporter[\\/]handler[\\/].*.java"/>
+              files="dev[\\/]vality[\\/]fistful[\\/]reporter[\\/]handler[\\/].*.java"/>
 </suppressions>
