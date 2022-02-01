@@ -3,6 +3,7 @@ FROM openjdk:15-jdk-slim
 
 RUN apt-get update \
       && apt-get install -y \
+      perl \
       fontconfig \
       libfreetype6 \
       && rm -rf /var/lib/apt/lists/* \
