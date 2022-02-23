@@ -72,7 +72,7 @@
         <dependency>
             <groupId>dev.vality</groupId>
             <artifactId>fistful-reporter-proto</artifactId>
-            <version>1.16-c34eb88</version>
+            <version>1.18-de6ae67</version>
         </dependency>
         <dependency>
             <groupId>dev.vality</groupId>
