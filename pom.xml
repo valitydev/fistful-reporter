@@ -67,7 +67,7 @@
         <dependency>
             <groupId>dev.vality</groupId>
             <artifactId>payout-manager-proto</artifactId>
-            <version>1.29-3d7e1c5</version>
+            <version>1.30-cc9875f</version>
         </dependency>
         <dependency>
             <groupId>dev.vality</groupId>
