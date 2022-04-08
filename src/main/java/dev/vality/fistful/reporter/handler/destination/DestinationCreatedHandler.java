@@ -57,7 +57,7 @@ public class DestinationCreatedHandler implements DestinationEventHandler {
             } else if (resource.isSetCryptoWallet()) {
                 CryptoWallet cryptoWallet = resource.getCryptoWallet().getCryptoWallet();
                 destination.setCryptoWalletId(cryptoWallet.getId());
-                destination.setCryptoWalletCurrency(cryptoWallet.getData().getSetField().getFieldName());
+                destination.setCryptoWalletCurrency(cryptoWallet.getCurrency().getId());
             } else if (resource.isSetDigitalWallet()) {
                 DigitalWallet digitalWallet = resource.getDigitalWallet().getDigitalWallet();
                 destination.setDigitalWalletId(digitalWallet.getId());
