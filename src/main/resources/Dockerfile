@@ -1,5 +1,5 @@
 # @dockerfile.Template@
-FROM openjdk:15-jdk-slim
+FROM openjdk:19-jdk-slim
 
 RUN apt-get update \
       && apt-get install -y \
