@@ -57,8 +57,7 @@ public class DestinationHandlerTestUtil {
     public static dev.vality.fistful.base.CryptoWallet createFistfulCryptoWallet() {
         dev.vality.fistful.base.CryptoWallet cryptoWallet = new dev.vality.fistful.base.CryptoWallet();
         cryptoWallet.setId(CRYPTO_WALLET_ID);
-        cryptoWallet.setData(CryptoData.bitcoin(new CryptoDataBitcoin()));
-        cryptoWallet.setCurrency(CryptoCurrency.bitcoin);
+        cryptoWallet.setCurrency(new CryptoCurrencyRef("bitcoin"));
         return cryptoWallet;
     }
 
