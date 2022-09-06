@@ -2,7 +2,8 @@ package dev.vality.fistful.reporter.service;
 
 import dev.vality.damsel.domain.Contract;
 import dev.vality.damsel.domain.Party;
-import dev.vality.damsel.payment_processing.*;
+import dev.vality.damsel.payment_processing.PartyManagementSrv;
+import dev.vality.damsel.payment_processing.PartyRevisionParam;
 import dev.vality.fistful.reporter.config.PostgresqlSpringBootITest;
 import org.apache.thrift.TException;
 import org.junit.jupiter.api.Test;
@@ -31,12 +32,11 @@ public class PartyManagementServiceTest {
         party.setId("0");
 
         party.setContracts(Map.of(contract.getId(), contract));
-        UserInfo userInfo = new UserInfo("fistful-reporter", UserType.internal_user(new InternalUser()));
         PartyRevisionParam revision = PartyRevisionParam.revision(0L);
 
-        Mockito.when(partyManagementClient.getContract(userInfo, party.getId(), contract.getId()))
+        Mockito.when(partyManagementClient.getContract(party.getId(), contract.getId()))
                 .thenReturn(contract);
-        Mockito.when(partyManagementClient.checkout(userInfo, party.getId(), revision))
+        Mockito.when(partyManagementClient.checkout(party.getId(), revision))
                 .thenReturn(party);
 
         Contract c = partyManagementService.getContract(party.getId(), contract.getId());
