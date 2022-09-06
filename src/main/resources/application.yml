@@ -43,6 +43,13 @@ spring:
   output:
     ansi:
       enabled: always
+  kafka:
+    bootstrap-servers: kafka:9092
+    consumer:
+      group-id: fistful-reporter
+      properties:
+        max.poll.interval.ms: 60000
+        session.timeout.ms: 60000
 
 partymanagement:
   url: http://hellgate:8022/v1/processing/partymgmt
@@ -61,22 +68,10 @@ reporting:
   pollingDelay: 3000
 
 kafka:
-  bootstrap-servers: changeit:9092
   consumer:
-    group-id: fistful-reporter
     concurrency: 7
   max-poll-records: 100
-  max-poll-interval-ms: 60000
-  max-session-timeout-ms: 60000
   retry-delay-ms: 1000
-  ssl:
-    enabled: false
-    key-store-type: changeit
-    key-store-location: changeit
-    key-password: changeit
-    trust-store-type: changeit
-    trust-store-location: changeit
-    trust-store-password: changeit
   topic:
     deposit:
       name: deposit
