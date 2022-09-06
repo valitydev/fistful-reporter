@@ -55,6 +55,8 @@ spring:
       properties:
         max.poll.interval.ms: 60000
         session.timeout.ms: 60000
+        reconnect.backoff.ms: 2000
+        retry.backoff.ms: 2000
 
 partymanagement:
   url: http://hellgate:8022/v1/processing/partymgmt
@@ -75,7 +77,6 @@ reporting:
 kafka:
   consumer:
     concurrency: 7
-  retry-delay-ms: 1000
   topic:
     deposit:
       name: deposit

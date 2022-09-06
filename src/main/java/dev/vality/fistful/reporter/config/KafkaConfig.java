@@ -1,5 +1,6 @@
 package dev.vality.fistful.reporter.config;
 
+import dev.vality.kafka.common.util.ExponentialBackOffDefaultErrorHandlerFactory;
 import dev.vality.machinegun.eventsink.MachineEvent;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -11,7 +12,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory;
 import org.springframework.kafka.core.DefaultKafkaConsumerFactory;
 import org.springframework.kafka.listener.ContainerProperties;
-import org.springframework.kafka.listener.SeekToCurrentBatchErrorHandler;
 
 @Slf4j
 @Configuration
@@ -58,7 +58,7 @@ public class KafkaConfig {
         var factory = new ConcurrentKafkaListenerContainerFactory<String, MachineEvent>();
         factory.setConsumerFactory(new DefaultKafkaConsumerFactory<>(kafkaProperties.buildConsumerProperties()));
         factory.setConcurrency(consumerConcurrency);
-        factory.setBatchErrorHandler(new SeekToCurrentBatchErrorHandler());
+        factory.setCommonErrorHandler(ExponentialBackOffDefaultErrorHandlerFactory.create());
         factory.setBatchListener(true);
         factory.getContainerProperties().setAckMode(ContainerProperties.AckMode.MANUAL);
         return factory;

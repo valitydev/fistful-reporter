@@ -1,11 +1,9 @@
 package dev.vality.fistful.reporter.listener;
 
-import dev.vality.fistful.reporter.exception.NotFoundException;
 import dev.vality.fistful.reporter.service.impl.WithdrawalEventService;
 import dev.vality.machinegun.eventsink.SinkEvent;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.support.Acknowledgment;
 import org.springframework.kafka.support.KafkaHeaders;
@@ -13,7 +11,6 @@ import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 import static java.util.stream.Collectors.toList;
 
@@ -21,9 +18,6 @@ import static java.util.stream.Collectors.toList;
 @Service
 @RequiredArgsConstructor
 public class WithdrawalEventListener {
-
-    @Value("${kafka.retry-delay-ms}")
-    private int retryDelayMs;
 
     private final WithdrawalEventService withdrawalEventService;
 
@@ -35,15 +29,9 @@ public class WithdrawalEventListener {
             List<SinkEvent> batch,
             @Header(KafkaHeaders.RECEIVED_PARTITION_ID) int partition,
             @Header(KafkaHeaders.OFFSET) int offset,
-            Acknowledgment ack) throws InterruptedException {
+            Acknowledgment ack) {
         log.info("Listening Withdrawal: partition={}, offset={}, batch.size()={}", partition, offset, batch.size());
-        try {
-            withdrawalEventService.handleEvents(batch.stream().map(SinkEvent::getEvent).collect(toList()));
-        } catch (NotFoundException e) {
-            log.info("Delayed retry caused by an exception", e);
-            TimeUnit.MILLISECONDS.sleep(retryDelayMs);
-            throw e;
-        }
+        withdrawalEventService.handleEvents(batch.stream().map(SinkEvent::getEvent).collect(toList()));
         ack.acknowledge();
         log.info("Ack Withdrawal: partition={}, offset={}", partition, offset);
     }
