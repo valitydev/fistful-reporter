@@ -17,15 +17,13 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class PartyManagementServiceImpl implements PartyManagementService {
 
-    private final UserInfo userInfo = new UserInfo("fistful-reporter", UserType.internal_user(new InternalUser()));
-
     private final PartyManagementSrv.Iface partyManagementClient;
 
     @Override
     public Party getParty(String partyId, PartyRevisionParam partyRevisionParam) {
         log.info("Trying to get party, partyId='{}', partyRevisionParam='{}'", partyId, partyRevisionParam);
         try {
-            Party party = partyManagementClient.checkout(userInfo, partyId, partyRevisionParam);
+            Party party = partyManagementClient.checkout(partyId, partyRevisionParam);
             log.info("Party has been found, partyId='{}', partyRevisionParam='{}'", partyId, partyRevisionParam);
             return party;
         } catch (PartyNotFound ex) {
@@ -50,7 +48,7 @@ public class PartyManagementServiceImpl implements PartyManagementService {
     public Contract getContract(String partyId, String contractId) {
         log.info("Trying to get contract, partyId='{}', contractId='{}'", partyId, contractId);
         try {
-            Contract contract = partyManagementClient.getContract(userInfo, partyId, contractId);
+            Contract contract = partyManagementClient.getContract(partyId, contractId);
             log.info("Contract has been found, partyId='{}', contractId='{}'", partyId, contractId);
             return contract;
         } catch (PartyNotFound ex) {

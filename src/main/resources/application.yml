@@ -1,15 +1,15 @@
 info:
-  version: @project.version@
+  version: '@project.version@'
   stage: dev
 
 server:
-  port: @server.port@
+  port: '@server.port@'
 
 management:
   security:
     flag: false
   server:
-    port: @management.port@
+    port: '@management.port@'
   metrics:
     export:
       prometheus:
@@ -28,21 +28,33 @@ management:
 
 spring:
   application:
-    name: @project.name@
+    name: '@project.name@'
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
     driver-class-name: org.postgresql.Driver
-    url: @db.url@
-    username: @db.user@
-    password: @db.password@
+    url: '@db.url@'
+    username: '@db.user@'
+    password: '@db.password@'
     hikari:
       idle-timeout: 30000
       maximum-pool-size: 20
   flyway:
-    schemas: @db.schema@
+    schemas: '@db.schema@'
   output:
     ansi:
       enabled: always
+  kafka:
+    bootstrap-servers: kafka:9092
+    consumer:
+      group-id: fistful-reporter
+      enable-auto-commit: false
+      auto-offset-reset: earliest
+      max-poll-records: 20
+      properties:
+        max.poll.interval.ms: 60000
+        session.timeout.ms: 60000
+        reconnect.backoff.ms: 2000
+        retry.backoff.ms: 2000
 
 partymanagement:
   url: http://hellgate:8022/v1/processing/partymgmt
@@ -61,22 +73,8 @@ reporting:
   pollingDelay: 3000
 
 kafka:
-  bootstrap-servers: changeit:9092
   consumer:
-    group-id: fistful-reporter
     concurrency: 7
-  max-poll-records: 100
-  max-poll-interval-ms: 60000
-  max-session-timeout-ms: 60000
-  retry-delay-ms: 1000
-  ssl:
-    enabled: false
-    key-store-type: changeit
-    key-store-location: changeit
-    key-password: changeit
-    trust-store-type: changeit
-    trust-store-location: changeit
-    trust-store-password: changeit
   topic:
     deposit:
       name: deposit
