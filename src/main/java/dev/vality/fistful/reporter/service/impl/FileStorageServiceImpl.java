@@ -46,6 +46,7 @@ public class FileStorageServiceImpl implements FileStorageService {
 
             HttpPut requestPut = httpPut(file, fileName, result);
 
+            // todo: try-with-resources + EntityUtils.consume(entity) + BasicHttpClientResponseHandler
             HttpResponse response = httpClient.execute(requestPut);
 
             checkResponse(result.getFileDataId(), response);
