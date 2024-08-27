@@ -7,12 +7,11 @@ import dev.vality.fistful.reporter.exception.FileStorageClientException;
 import dev.vality.fistful.reporter.service.FileStorageService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.http.HttpResponse;
-import org.apache.http.HttpStatus;
 import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPut;
 import org.apache.http.entity.FileEntity;
+import org.apache.http.impl.client.BasicResponseHandler;
+import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.thrift.TException;
 import org.springframework.stereotype.Service;
 
@@ -33,27 +32,21 @@ public class FileStorageServiceImpl implements FileStorageService {
 
     private final FileStorageProperties fileStorageProperties;
     private final FileStorageSrv.Iface fileStorageClient;
-    private final HttpClient httpClient;
+    private final CloseableHttpClient httpClient;
 
     @Override
     public String saveFile(Path file) {
-        String fileName = file.getFileName().toString();
-
+        var fileName = file.getFileName().toString();
         try {
             log.info("Trying to upload report file");
-
-            NewFileResult result = createNewFile(fileName);
-
-            HttpPut requestPut = httpPut(file, fileName, result);
-
-            // todo: try-with-resources + EntityUtils.consume(entity) + BasicHttpClientResponseHandler
-            HttpResponse response = httpClient.execute(requestPut);
-
-            checkResponse(result.getFileDataId(), response);
-
-            log.info("Report file has been successfully uploaded, fileDataId={}", result.getFileDataId());
-
-            return result.getFileDataId();
+            var fileResult = createNewFile(fileName);
+            var requestPut = new HttpPut(fileResult.getUploadUrl());
+            var encode = URLEncoder.encode(fileName, StandardCharsets.UTF_8);
+            requestPut.setHeader("Content-Disposition", "attachment;filename=" + encode);
+            requestPut.setEntity(new FileEntity(file.toFile()));
+            httpClient.execute(requestPut, new BasicResponseHandler());
+            log.info("Report file has been successfully uploaded, fileDataId={}", fileResult.getFileDataId());
+            return fileResult.getFileDataId();
         } catch (UnsupportedEncodingException ex) {
             throw new FileStorageClientException(String.format("Error with encoding fileName=%s", fileName), ex);
         } catch (ClientProtocolException ex) {
@@ -75,26 +68,6 @@ public class FileStorageServiceImpl implements FileStorageService {
                     e
             );
         }
-    }
-
-    private void checkResponse(String fileDataId, HttpResponse response) {
-        if (response.getStatusLine().getStatusCode() != HttpStatus.SC_OK) {
-            throw new FileStorageClientException(
-                    String.format(
-                            "Failed to upload report file, fileDataId='%s', response='%s'",
-                            fileDataId,
-                            response.toString()
-                    )
-            );
-        }
-    }
-
-    private HttpPut httpPut(Path file, String fileName, NewFileResult result) throws UnsupportedEncodingException {
-        HttpPut requestPut = new HttpPut(result.getUploadUrl());
-        requestPut.setHeader("Content-Disposition",
-                "attachment;filename=" + URLEncoder.encode(fileName, StandardCharsets.UTF_8.name()));
-        requestPut.setEntity(new FileEntity(file.toFile()));
-        return requestPut;
     }
 
     private Instant getTime() {
