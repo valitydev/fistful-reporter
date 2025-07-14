@@ -7,11 +7,13 @@ import dev.vality.fistful.reporter.exception.FileStorageClientException;
 import dev.vality.fistful.reporter.service.FileStorageService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.methods.HttpPut;
-import org.apache.http.entity.FileEntity;
-import org.apache.http.impl.client.BasicResponseHandler;
-import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.hc.client5.http.ClientProtocolException;
+import org.apache.hc.client5.http.classic.methods.HttpPut;
+import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
+import org.apache.hc.core5.http.ContentType;
+import org.apache.hc.core5.http.io.HttpClientResponseHandler;
+import org.apache.hc.core5.http.io.entity.EntityUtils;
+import org.apache.hc.core5.http.io.entity.FileEntity;
 import org.apache.thrift.TException;
 import org.springframework.stereotype.Service;
 
@@ -43,8 +45,9 @@ public class FileStorageServiceImpl implements FileStorageService {
             var requestPut = new HttpPut(fileResult.getUploadUrl());
             var encode = URLEncoder.encode(fileName, StandardCharsets.UTF_8);
             requestPut.setHeader("Content-Disposition", "attachment;filename=" + encode);
-            requestPut.setEntity(new FileEntity(file.toFile()));
-            httpClient.execute(requestPut, new BasicResponseHandler());
+            requestPut.setEntity(new FileEntity(file.toFile(), ContentType.APPLICATION_OCTET_STREAM));
+            HttpClientResponseHandler<String> handler = response -> EntityUtils.toString(response.getEntity());
+            httpClient.execute(requestPut, handler);
             log.info("Report file has been successfully uploaded, fileDataId={}", fileResult.getFileDataId());
             return fileResult.getFileDataId();
         } catch (UnsupportedEncodingException ex) {

@@ -1,1 +1,0 @@
-alter table fr.identity drop column identity_class_id;

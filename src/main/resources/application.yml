@@ -3,13 +3,13 @@ info:
   stage: dev
 
 server:
-  port: '@server.port@'
+  port: ${server.port}
 
 management:
   security:
     flag: false
   server:
-    port: '@management.port@'
+    port: ${management.port}
   metrics:
     export:
       prometheus:
@@ -37,7 +37,7 @@ spring:
     password: '@db.password@'
     hikari:
       idle-timeout: 30000
-      maximum-pool-size: 20
+      maximum-pool-size: 5
   flyway:
     schemas: '@db.schema@'
   output:
@@ -103,6 +103,6 @@ kafka:
 
 testcontainers:
   postgresql:
-    tag: '11.4'
+    tag: '17.4'
   kafka:
     tag: '6.2.0'

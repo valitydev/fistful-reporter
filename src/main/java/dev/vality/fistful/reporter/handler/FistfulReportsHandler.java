@@ -42,7 +42,6 @@ public class FistfulReportsHandler implements ReportingSrv.Iface {
 
             var reportsByRange = reportService.getReportsByRangeNotCancelled(
                     reportRequest.getPartyId(),
-                    reportRequest.getContractId(),
                     fromTime,
                     toTime,
                     reportTypes
@@ -84,11 +83,10 @@ public class FistfulReportsHandler implements ReportingSrv.Iface {
             Instant fromTime = TypeUtil.stringToInstant(reportRequest.getTimeRange().getFromTime());
 
             // проверка на существование в хелгейте
-            partyManagementService.getContract(reportRequest.getPartyId(), reportRequest.getContractId());
+            partyManagementService.getParty(reportRequest.getPartyId());
 
             return reportService.createReport(
                     reportRequest.getPartyId(),
-                    reportRequest.getContractId(),
                     fromTime,
                     toTime,
                     reportType
@@ -99,9 +97,6 @@ public class FistfulReportsHandler implements ReportingSrv.Iface {
         } catch (PartyNotFoundException ex) {
             log.warn("Party not found", ex);
             throw new PartyNotFound();
-        } catch (ContractNotFoundException ex) {
-            log.warn("Contract not found", ex);
-            throw new ContractNotFound();
         } catch (StorageException ex) {
             throw unavailableResultException(ex);
         } catch (Exception ex) {
@@ -110,10 +105,10 @@ public class FistfulReportsHandler implements ReportingSrv.Iface {
     }
 
     @Override
-    public Report getReport(String partyId, String contractId, long reportId) throws TException {
+    public Report getReport(String partyId, long reportId) throws TException {
         try {
             return ThriftUtils.map(
-                    reportService.getReport(partyId, contractId, reportId),
+                    reportService.getReport(partyId, reportId),
                     fileService.getFileDataIds(reportId)
             );
         } catch (ReportNotFoundException ex) {
@@ -126,9 +121,9 @@ public class FistfulReportsHandler implements ReportingSrv.Iface {
     }
 
     @Override
-    public void cancelReport(String partyId, String contractId, long reportId) throws TException {
+    public void cancelReport(String partyId, long reportId) throws TException {
         try {
-            reportService.cancelReport(partyId, contractId, reportId);
+            reportService.cancelReport(partyId, reportId);
         } catch (ReportNotFoundException ex) {
             throw reportNotFound(ex);
         } catch (StorageException ex) {

@@ -78,14 +78,12 @@ public class WithdrawalDaoImpl extends AbstractGenericDao implements WithdrawalD
     @Override
     public List<Withdrawal> getSucceededWithdrawals(Report report, Long fromId, int limit) {
         String partyId = report.getPartyId();
-        String contractId = report.getContractId();
         LocalDateTime fromTime = report.getFromTime();
         LocalDateTime toTime = report.getToTime();
 
         Query query = getDslContext().select().from(WITHDRAWAL)
                 .where(
                         WITHDRAWAL.PARTY_ID.eq(partyId)
-                                .and(WITHDRAWAL.PARTY_CONTRACT_ID.eq(contractId))
                                 .and(WITHDRAWAL.EVENT_TYPE.eq(WithdrawalEventType.WITHDRAWAL_STATUS_CHANGED))
                                 .and(WITHDRAWAL.WITHDRAWAL_STATUS.eq(WithdrawalStatus.succeeded))
                                 .and(WITHDRAWAL.EVENT_CREATED_AT.ge(fromTime))

@@ -26,14 +26,14 @@ public class WithdrawalService {
     public List<Withdrawal> getSucceededLimitWithdrawals(Report report, long fromId) {
         try {
             log.info("Trying to get succeeded withdrawals, " +
-                            "reportId={}, partyId={}, contractId={}, fromId={}",
-                    report.getId(), report.getPartyId(), report.getContractId(), fromId);
+                            "reportId={}, partyId={}, fromId={}",
+                    report.getId(), report.getPartyId(), fromId);
 
             List<Withdrawal> withdrawals = withdrawalDao.getSucceededWithdrawals(report, fromId, WITHDRAWAL_LIMIT);
 
             log.info("{} succeeded withdrawals has been found, " +
-                            "reportId={}, partyId={}, contractId={}, fromId={}",
-                    withdrawals.size(), report.getId(), report.getPartyId(), report.getContractId(), fromId);
+                            "reportId={}, partyId={}, fromId={}",
+                    withdrawals.size(), report.getId(), report.getPartyId(), fromId);
 
             return withdrawals;
         } catch (DaoException ex) {

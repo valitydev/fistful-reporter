@@ -4,12 +4,9 @@ import dev.vality.dao.DaoException;
 import dev.vality.fistful.base.Cash;
 import dev.vality.fistful.deposit.TimestampedChange;
 import dev.vality.fistful.reporter.dao.DepositDao;
-import dev.vality.fistful.reporter.dao.WalletDao;
 import dev.vality.fistful.reporter.domain.enums.DepositEventType;
 import dev.vality.fistful.reporter.domain.enums.DepositStatus;
 import dev.vality.fistful.reporter.domain.tables.pojos.Deposit;
-import dev.vality.fistful.reporter.domain.tables.pojos.Wallet;
-import dev.vality.fistful.reporter.exception.SinkEventNotFoundException;
 import dev.vality.fistful.reporter.exception.StorageException;
 import dev.vality.geck.common.util.TypeUtil;
 import dev.vality.machinegun.eventsink.MachineEvent;
@@ -23,7 +20,6 @@ import org.springframework.stereotype.Service;
 public class DepositCreatedHandler implements DepositEventHandler {
 
     private final DepositDao depositDao;
-    private final WalletDao walletDao;
 
     @Override
     public boolean accept(TimestampedChange change) {
@@ -47,12 +43,7 @@ public class DepositCreatedHandler implements DepositEventHandler {
             deposit.setWalletId(depositDamsel.getWalletId());
             deposit.setSourceId(depositDamsel.getSourceId());
             deposit.setDepositStatus(DepositStatus.pending);
-
-            Wallet wallet = getWallet(event, depositDamsel.getWalletId());
-            deposit.setPartyId(wallet.getPartyId());
-            deposit.setPartyContractId(wallet.getPartyContractId());
-            deposit.setIdentityId(wallet.getIdentityId());
-
+            deposit.setPartyId(deposit.getPartyId());
             Cash cash = depositDamsel.getBody();
             deposit.setAmount(cash.getAmount());
             deposit.setCurrencyCode(cash.getCurrency().getSymbolicCode());
@@ -65,14 +56,5 @@ public class DepositCreatedHandler implements DepositEventHandler {
         } catch (DaoException e) {
             throw new StorageException(e);
         }
-    }
-
-    private Wallet getWallet(MachineEvent event, String walletId) {
-        Wallet wallet = walletDao.get(walletId);
-        if (wallet == null) {
-            throw new SinkEventNotFoundException(String.format("Wallet not found, " +
-                    "destinationId='%s', walletId='%s'", event.getEventId(), walletId));
-        }
-        return wallet;
     }
 }

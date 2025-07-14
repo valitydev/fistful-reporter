@@ -10,7 +10,6 @@ import java.time.ZoneOffset;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 
-import static dev.vality.fistful.reporter.data.TestData.contractId;
 import static dev.vality.fistful.reporter.data.TestData.partyId;
 import static dev.vality.testcontainers.annotations.util.ValuesGenerator.getFromTime;
 import static dev.vality.testcontainers.annotations.util.ValuesGenerator.getToTime;
@@ -36,30 +35,28 @@ public class ReportServiceTest {
         assertEquals(
                 5,
                 reportService.getReportsByRange(
-                        partyId,
-                        contractId,
-                        getFromTime().toInstant(ZoneOffset.UTC).truncatedTo(ChronoUnit.MICROS),
-                        getToTime().toInstant(ZoneOffset.UTC).truncatedTo(ChronoUnit.MICROS),
-                        singletonList("withdrawalRegistry")
-                )
+                                partyId,
+                                getFromTime().toInstant(ZoneOffset.UTC).truncatedTo(ChronoUnit.MICROS),
+                                getToTime().toInstant(ZoneOffset.UTC).truncatedTo(ChronoUnit.MICROS),
+                                singletonList("withdrawalRegistry")
+                        )
                         .size()
         );
 
         Long reportId = reportIds.get(0);
-        Report report = reportService.getReport(partyId, contractId, reportId);
+        Report report = reportService.getReport(partyId, reportId);
         assertEquals(getToTime().truncatedTo(ChronoUnit.MICROS), report.getToTime().truncatedTo(ChronoUnit.MICROS));
 
-        reportService.cancelReport(partyId, contractId, reportId);
+        reportService.cancelReport(partyId, reportId);
 
         assertEquals(
                 4,
                 reportService.getReportsByRangeNotCancelled(
-                        partyId,
-                        contractId,
-                        getFromTime().toInstant(ZoneOffset.UTC).truncatedTo(ChronoUnit.MICROS),
-                        getToTime().toInstant(ZoneOffset.UTC).truncatedTo(ChronoUnit.MICROS),
-                        singletonList("withdrawalRegistry")
-                )
+                                partyId,
+                                getFromTime().toInstant(ZoneOffset.UTC).truncatedTo(ChronoUnit.MICROS),
+                                getToTime().toInstant(ZoneOffset.UTC).truncatedTo(ChronoUnit.MICROS),
+                                singletonList("withdrawalRegistry")
+                        )
                         .size()
         );
 
@@ -68,12 +65,11 @@ public class ReportServiceTest {
         assertEquals(
                 5,
                 reportService.getReportsByRangeNotCancelled(
-                        partyId,
-                        contractId,
-                        getFromTime().toInstant(ZoneOffset.UTC).truncatedTo(ChronoUnit.MICROS),
-                        getToTime().toInstant(ZoneOffset.UTC).truncatedTo(ChronoUnit.MICROS),
-                        singletonList("withdrawalRegistry")
-                )
+                                partyId,
+                                getFromTime().toInstant(ZoneOffset.UTC).truncatedTo(ChronoUnit.MICROS),
+                                getToTime().toInstant(ZoneOffset.UTC).truncatedTo(ChronoUnit.MICROS),
+                                singletonList("withdrawalRegistry")
+                        )
                         .size()
         );
 
@@ -83,7 +79,6 @@ public class ReportServiceTest {
     private long createReport(String reportType) {
         return reportService.createReport(
                 partyId,
-                contractId,
                 getFromTime().toInstant(ZoneOffset.UTC).truncatedTo(ChronoUnit.MICROS),
                 getToTime().toInstant(ZoneOffset.UTC).truncatedTo(ChronoUnit.MICROS),
                 reportType

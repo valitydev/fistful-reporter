@@ -19,7 +19,7 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 
 import static dev.vality.fistful.reporter.data.TestData.machineEvent;
 import static dev.vality.fistful.reporter.data.TestData.sinkEvent;
@@ -35,7 +35,7 @@ public class WithdrawalEventListenerTest {
     @Autowired
     private KafkaProducer<TBase<?, ?>> testThriftKafkaProducer;
 
-    @MockBean
+    @MockitoBean
     private WithdrawalDao withdrawalDao;
 
     @Captor

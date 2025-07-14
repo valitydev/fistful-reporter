@@ -4,10 +4,8 @@ import dev.vality.dao.DaoException;
 import dev.vality.fistful.account.Account;
 import dev.vality.fistful.destination.TimestampedChange;
 import dev.vality.fistful.reporter.dao.DestinationDao;
-import dev.vality.fistful.reporter.dao.IdentityDao;
 import dev.vality.fistful.reporter.domain.enums.DestinationEventType;
 import dev.vality.fistful.reporter.domain.tables.pojos.Destination;
-import dev.vality.fistful.reporter.domain.tables.pojos.Identity;
 import dev.vality.fistful.reporter.exception.SinkEventNotFoundException;
 import dev.vality.fistful.reporter.exception.StorageException;
 import dev.vality.geck.common.util.TypeUtil;
@@ -22,7 +20,6 @@ import org.springframework.stereotype.Service;
 public class DestinationAccountCreatedHandler implements DestinationEventHandler {
 
     private final DestinationDao destinationDao;
-    private final IdentityDao identityDao;
 
     @Override
     public boolean accept(TimestampedChange change) {
@@ -40,12 +37,12 @@ public class DestinationAccountCreatedHandler implements DestinationEventHandler
             destinationDao.save(updatedDestination).ifPresentOrElse(
                     id -> {
                         destinationDao.updateNotCurrent(oldDestination.getId());
-                        log.info("Destination account have been created, eventId={}, destinationId={}, identityId={}",
-                                event.getEventId(), event.getSourceId(), account.getIdentity());
+                        log.info("Destination account have been created, eventId={}, destinationId={}, partyId={}",
+                                event.getEventId(), event.getSourceId(), account.getPartyId());
                     },
                     () -> log.info("Destination account create bound duplicated, " +
                                     "eventId={}, destinationId={}, identityId={}",
-                            event.getEventId(), event.getSourceId(), account.getIdentity()));
+                            event.getEventId(), event.getSourceId(), account.getPartyId()));
         } catch (DaoException e) {
             throw new StorageException(e);
         }
@@ -64,13 +61,9 @@ public class DestinationAccountCreatedHandler implements DestinationEventHandler
         destination.setDestinationId(event.getSourceId());
         destination.setEventOccuredAt(TypeUtil.stringToLocalDateTime(change.getOccuredAt()));
         destination.setEventType(DestinationEventType.DESTINATION_ACCOUNT_CREATED);
-        destination.setAccountId(account.getId());
+        destination.setAccountId(String.valueOf(account.getAccountId()));
         destination.setCurrencyCode(account.getCurrency().getSymbolicCode());
-        destination.setAccounterAccountId(account.getAccounterAccountId());
-        Identity identity = getIdentity(event, account);
-        destination.setPartyId(identity.getPartyId());
-        destination.setPartyContractId(identity.getPartyContractId());
-        destination.setIdentityId(identity.getIdentityId());
+        destination.setPartyId(account.getPartyId());
         return destination;
     }
 
@@ -81,15 +74,5 @@ public class DestinationAccountCreatedHandler implements DestinationEventHandler
                     String.format("Destination not found, destinationId='%s'", event.getSourceId()));
         }
         return destination;
-    }
-
-    private Identity getIdentity(MachineEvent event, Account account) {
-        Identity identity = identityDao.get(account.getIdentity());
-        if (identity == null) {
-            throw new SinkEventNotFoundException(
-                    String.format("Identity not found, destinationId='%s', identityId='%s'",
-                            event.getSourceId(), account.getIdentity()));
-        }
-        return identity;
     }
 }

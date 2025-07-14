@@ -1,149 +1,30 @@
 CREATE SCHEMA IF NOT EXISTS fr;
 
--- identity
-
-CREATE TYPE fr.identity_event_type AS ENUM (
-  'IDENTITY_CREATED', 'IDENTITY_LEVEL_CHANGED', 'IDENTITY_CHALLENGE_CREATED',
-  'IDENTITY_CHALLENGE_STATUS_CHANGED', 'IDENTITY_EFFECTIVE_CHALLENGE_CHANGED'
-);
-
-CREATE TABLE fr.identity (
-  id                             BIGSERIAL                   NOT NULL,
-  event_id                       BIGINT                      NOT NULL,
-  event_created_at               TIMESTAMP WITHOUT TIME ZONE NOT NULL,
-  identity_id                    CHARACTER VARYING           NOT NULL,
-  sequence_id                    INT                         NOT NULL,
-  event_occured_at               TIMESTAMP WITHOUT TIME ZONE NOT NULL,
-  event_type                     fr.identity_event_type      NOT NULL,
-  party_id                       CHARACTER VARYING           NOT NULL,
-  identity_provider_id           CHARACTER VARYING           NOT NULL,
-  identity_class_id              CHARACTER VARYING           NOT NULL,
-  party_contract_id              CHARACTER VARYING,
-  identity_level_id              CHARACTER VARYING,
-  identity_challenge_id          CHARACTER VARYING,
-  identity_effective_chalenge_id CHARACTER VARYING,
-  wtime                          TIMESTAMP WITHOUT TIME ZONE NOT NULL DEFAULT (now() at time zone 'utc'),
-  current                        BOOLEAN                     NOT NULL DEFAULT TRUE,
-  CONSTRAINT identity_pkey PRIMARY KEY (id)
-);
-
-CREATE INDEX identity_event_id_idx
-  on fr.identity (event_id);
-CREATE INDEX identity_event_created_at_idx
-  on fr.identity (event_created_at);
-CREATE INDEX identity_id_idx
-  on fr.identity (identity_id);
-CREATE INDEX identity_event_occured_at_idx
-  on fr.identity (event_occured_at);
-CREATE INDEX identity_party_id_idx
-  on fr.identity (party_id);
-CREATE INDEX identity_party_contract_id_idx
-  on fr.identity (party_contract_id);
-
--- identity's challenge
-
-CREATE TYPE fr.challenge_event_type AS ENUM ('CHALLENGE_CREATED', 'CHALLENGE_STATUS_CHANGED');
-
-CREATE TYPE fr.challenge_status AS ENUM ('pending', 'cancelled', 'completed', 'failed');
-
-CREATE TYPE fr.challenge_resolution AS ENUM ('approved', 'denied');
-
-CREATE TABLE fr.challenge (
-  id                    BIGSERIAL                   NOT NULL,
-  event_id              BIGINT                      NOT NULL,
-  event_created_at      TIMESTAMP WITHOUT TIME ZONE NOT NULL,
-  identity_id           CHARACTER VARYING           NOT NULL,
-  sequence_id           INT                         NOT NULL,
-  event_occured_at      TIMESTAMP WITHOUT TIME ZONE NOT NULL,
-  event_type            fr.challenge_event_type     NOT NULL,
-  challenge_id          CHARACTER VARYING           NOT NULL,
-  challenge_class_id    CHARACTER VARYING           NOT NULL,
-  challenge_status      fr.challenge_status         NOT NULL,
-  challenge_resolution  fr.challenge_resolution,
-  challenge_valid_until TIMESTAMP WITHOUT TIME ZONE,
-  wtime                 TIMESTAMP WITHOUT TIME ZONE NOT NULL DEFAULT (now() at time zone 'utc'),
-  current               BOOLEAN                     NOT NULL DEFAULT TRUE,
-  CONSTRAINT challenge_pkey PRIMARY KEY (id)
-);
-
-CREATE INDEX challenge_event_id_idx
-  on fr.challenge (event_id);
-CREATE INDEX challenge_event_created_at_idx
-  on fr.challenge (event_created_at);
-CREATE INDEX challenge_identity_id_idx
-  on fr.identity (identity_id);
-CREATE INDEX challenge_event_occured_at_idx
-  on fr.challenge (event_occured_at);
-CREATE INDEX challenge_id_idx
-  on fr.challenge (challenge_id);
-
--- wallet
-
-CREATE TYPE fr.wallet_event_type AS ENUM ('WALLET_CREATED', 'WALLET_ACCOUNT_CREATED');
-
-CREATE TABLE fr.wallet (
-  id                   BIGSERIAL                   NOT NULL,
-  event_id             BIGINT                      NOT NULL,
-  event_created_at     TIMESTAMP WITHOUT TIME ZONE NOT NULL,
-  wallet_id            CHARACTER VARYING           NOT NULL,
-  sequence_id          INT                         NOT NULL,
-  event_occured_at     TIMESTAMP WITHOUT TIME ZONE NOT NULL,
-  event_type           fr.wallet_event_type        NOT NULL,
-  wallet_name          CHARACTER VARYING           NOT NULL,
-  account_id           CHARACTER VARYING,
-  accounter_account_id BIGINT,
-  currency_code        CHARACTER VARYING,
-  party_id             CHARACTER VARYING,
-  party_contract_id    CHARACTER VARYING,
-  identity_id          CHARACTER VARYING,
-  wtime                TIMESTAMP WITHOUT TIME ZONE NOT NULL DEFAULT (now() at time zone 'utc'),
-  current              BOOLEAN                     NOT NULL DEFAULT TRUE,
-  CONSTRAINT wallet_pkey PRIMARY KEY (id)
-);
-
-CREATE INDEX wallet_event_id_idx
-  on fr.wallet (event_id);
-CREATE INDEX wallet_event_created_at_idx
-  on fr.wallet (event_created_at);
-CREATE INDEX wallet_id_idx
-  on fr.wallet (wallet_id);
-CREATE INDEX wallet_event_occured_at_idx
-  on fr.wallet (event_occured_at);
-CREATE INDEX wallet_party_id_idx
-  on fr.wallet (party_id);
-CREATE INDEX wallet_party_contract_id_idx
-  on fr.wallet (party_contract_id);
-CREATE INDEX wallet_identity_id_idx
-  on fr.wallet (identity_id);
-
 -- source
 
 CREATE TYPE fr.source_event_type AS ENUM (
   'SOURCE_CREATED', 'SOURCE_ACCOUNT_CREATED', 'SOURCE_STATUS_CHANGED'
 );
 
-CREATE TYPE fr.source_status AS ENUM ('authorized', 'unauthorized');
+CREATE TYPE fr.source_realm AS ENUM ('test', 'live');
 
 CREATE TABLE fr.source (
   id                        BIGSERIAL                   NOT NULL,
   event_id                  BIGINT                      NOT NULL,
   event_created_at          TIMESTAMP WITHOUT TIME ZONE NOT NULL,
   source_id                 CHARACTER VARYING           NOT NULL,
-  sequence_id               INT                         NOT NULL,
   event_occured_at          TIMESTAMP WITHOUT TIME ZONE NOT NULL,
   event_type                fr.source_event_type        NOT NULL,
   source_name               CHARACTER VARYING           NOT NULL,
   resource_internal_details CHARACTER VARYING,
   account_id                CHARACTER VARYING,
-  accounter_account_id      BIGINT,
   currency_code             CHARACTER VARYING,
   party_id                  CHARACTER VARYING,
-  party_contract_id         CHARACTER VARYING,
-  identity_id               CHARACTER VARYING,
-  source_status             fr.source_status            NOT NULL,
+  source_realm              fr.source_realm                    NOT NULL,
   wtime                     TIMESTAMP WITHOUT TIME ZONE NOT NULL DEFAULT (now() at time zone 'utc'),
   current                   BOOLEAN                     NOT NULL DEFAULT TRUE,
-  CONSTRAINT source_pkey PRIMARY KEY (id)
+  CONSTRAINT source_pkey PRIMARY KEY (id),
+  CONSTRAINT source_uniq UNIQUE(source_id, event_id)
 );
 
 CREATE INDEX source_event_id_idx
@@ -156,10 +37,6 @@ CREATE INDEX source_event_occured_at_idx
   on fr.source (event_occured_at);
 CREATE INDEX source_party_id_idx
   on fr.source (party_id);
-CREATE INDEX source_party_contract_id_idx
-  on fr.source (party_contract_id);
-CREATE INDEX source_identity_id_idx
-  on fr.source (identity_id);
 
 -- destination
 
@@ -167,14 +44,15 @@ CREATE TYPE fr.destination_event_type AS ENUM (
   'DESTINATION_CREATED', 'DESTINATION_ACCOUNT_CREATED', 'DESTINATION_STATUS_CHANGED'
 );
 
-CREATE TYPE fr.destination_status AS ENUM ('authorized', 'unauthorized');
+CREATE TYPE fr.destination_realm AS ENUM ('test', 'live');
+
+CREATE TYPE fr.destination_resource_type AS ENUM ('bank_card', 'crypto_wallet', 'digital_wallet', 'generic');
 
 CREATE TABLE fr.destination (
   id                                BIGSERIAL                   NOT NULL,
   event_id                          BIGINT                      NOT NULL,
   event_created_at                  TIMESTAMP WITHOUT TIME ZONE NOT NULL,
   destination_id                    CHARACTER VARYING           NOT NULL,
-  sequence_id                       INT                         NOT NULL,
   event_occured_at                  TIMESTAMP WITHOUT TIME ZONE NOT NULL,
   event_type                        fr.destination_event_type   NOT NULL,
   destination_name                  CHARACTER VARYING           NOT NULL,
@@ -183,15 +61,18 @@ CREATE TABLE fr.destination (
   resource_bank_card_bin            CHARACTER VARYING,
   resource_bank_card_masked_pan     CHARACTER VARYING,
   account_id                        CHARACTER VARYING,
-  accounter_account_id              BIGINT,
   currency_code                     CHARACTER VARYING,
   party_id                          CHARACTER VARYING,
-  party_contract_id                 CHARACTER VARYING,
-  identity_id                       CHARACTER VARYING,
-  destination_status                fr.destination_status       NOT NULL,
+  destination_realm                 fr.destination_realm        NOT NULL,
   wtime                             TIMESTAMP WITHOUT TIME ZONE NOT NULL DEFAULT (now() at time zone 'utc'),
   current                           BOOLEAN                     NOT NULL DEFAULT TRUE,
-  CONSTRAINT destination_pkey PRIMARY KEY (id)
+  resource_type                     fr.destination_resource_type,
+  crypto_wallet_id                  CHARACTER VARYING,
+  crypto_wallet_currency            CHARACTER VARYING,
+  digital_wallet_id                 CHARACTER VARYING,
+  digital_wallet_provider           CHARACTER VARYING,
+  CONSTRAINT destination_pkey PRIMARY KEY (id),
+  CONSTRAINT destination_uniq UNIQUE(destination_id, event_id)
 );
 
 CREATE INDEX destination_event_id_idx
@@ -204,10 +85,6 @@ CREATE INDEX destination_event_occured_at_idx
   on fr.destination (event_occured_at);
 CREATE INDEX destination_party_id_idx
   on fr.destination (party_id);
-CREATE INDEX destination_party_contract_id_idx
-  on fr.destination (party_contract_id);
-CREATE INDEX destination_identity_id_idx
-  on fr.destination (identity_id);
 
 -- withdrawal
 
@@ -226,7 +103,7 @@ CREATE TABLE fr.withdrawal (
   event_id                   BIGINT                      NOT NULL,
   event_created_at           TIMESTAMP WITHOUT TIME ZONE NOT NULL,
   withdrawal_id              CHARACTER VARYING           NOT NULL,
-  sequence_id                INT                         NOT NULL,
+  external_id                CHARACTER VARYING,
   event_occured_at           TIMESTAMP WITHOUT TIME ZONE NOT NULL,
   event_type                 fr.withdrawal_event_type    NOT NULL,
   wallet_id                  CHARACTER VARYING           NOT NULL,
@@ -240,11 +117,10 @@ CREATE TABLE fr.withdrawal (
   fee                        BIGINT,
   provider_fee               BIGINT,
   party_id                   CHARACTER VARYING,
-  party_contract_id          CHARACTER VARYING,
-  identity_id                CHARACTER VARYING,
   wtime                      TIMESTAMP WITHOUT TIME ZONE NOT NULL DEFAULT (now() at time zone 'utc'),
   current                    BOOLEAN                     NOT NULL DEFAULT TRUE,
-  CONSTRAINT withdrawal_pkey PRIMARY KEY (id)
+  CONSTRAINT withdrawal_pkey PRIMARY KEY (id),
+  CONSTRAINT withdrawal_uniq UNIQUE(withdrawal_id, event_id)
 );
 
 CREATE INDEX withdrawal_event_id_idx
@@ -259,10 +135,6 @@ CREATE INDEX withdrawal_wallet_id_idx
   on fr.withdrawal (wallet_id);
 CREATE INDEX withdrawal_party_id_idx
   on fr.withdrawal (party_id);
-CREATE INDEX withdrawal_party_contract_id_idx
-  on fr.withdrawal (party_contract_id);
-CREATE INDEX withdrawal_identity_id_idx
-  on fr.withdrawal (identity_id);
 
 -- deposit
 
@@ -280,7 +152,6 @@ CREATE TABLE fr.deposit (
   event_id                BIGINT                      NOT NULL,
   event_created_at        TIMESTAMP WITHOUT TIME ZONE NOT NULL,
   deposit_id              CHARACTER VARYING           NOT NULL,
-  sequence_id             INT                         NOT NULL,
   event_occured_at        TIMESTAMP WITHOUT TIME ZONE NOT NULL,
   event_type              fr.deposit_event_type       NOT NULL,
   wallet_id               CHARACTER VARYING           NOT NULL,
@@ -292,11 +163,10 @@ CREATE TABLE fr.deposit (
   fee                     BIGINT,
   provider_fee            BIGINT,
   party_id                CHARACTER VARYING,
-  party_contract_id       CHARACTER VARYING,
-  identity_id             CHARACTER VARYING,
   wtime                   TIMESTAMP WITHOUT TIME ZONE NOT NULL DEFAULT (now() at time zone 'utc'),
   current                 BOOLEAN                     NOT NULL DEFAULT TRUE,
-  CONSTRAINT deposit_pkey PRIMARY KEY (id)
+  CONSTRAINT deposit_pkey PRIMARY KEY (id),
+  CONSTRAINT deposit_uniq UNIQUE(deposit_id, event_id)
 );
 
 CREATE INDEX deposit_event_id_idx
@@ -311,10 +181,6 @@ CREATE INDEX deposit_wallet_id_idx
   on fr.deposit (wallet_id);
 CREATE INDEX deposit_party_id_idx
   on fr.deposit (party_id);
-CREATE INDEX deposit_party_contract_id_idx
-  on fr.deposit (party_contract_id);
-CREATE INDEX deposit_identity_id_idx
-  on fr.deposit (identity_id);
 
 -- deposit/withdrawal's cash flow
 
@@ -327,16 +193,13 @@ CREATE TABLE fr.fistful_cash_flow (
   event_id                       BIGINT                           NOT NULL,
   event_created_at               TIMESTAMP WITHOUT TIME ZONE      NOT NULL,
   source_id                      CHARACTER VARYING                NOT NULL,
-  sequence_id                    INT                              NOT NULL,
   event_occured_at               TIMESTAMP WITHOUT TIME ZONE      NOT NULL,
   event_type                     CHARACTER VARYING                NOT NULL,
   obj_id                         BIGINT                           NOT NULL,
   source_account_type            fr.fistful_cash_flow_account     NOT NULL,
   source_account_type_value      CHARACTER VARYING                NOT NULL,
-  source_account_id              CHARACTER VARYING                NOT NULL,
   destination_account_type       fr.fistful_cash_flow_account     NOT NULL,
   destination_account_type_value CHARACTER VARYING                NOT NULL,
-  destination_account_id         CHARACTER VARYING                NOT NULL,
   amount                         BIGINT                           NOT NULL,
   currency_code                  CHARACTER VARYING                NOT NULL,
   details                        CHARACTER VARYING,
@@ -364,7 +227,6 @@ CREATE TYPE fr.REPORT_STATUS AS ENUM ('pending', 'created', 'cancelled');
 CREATE TABLE fr.report (
   id          BIGSERIAL                   NOT NULL,
   party_id    CHARACTER VARYING           NOT NULL,
-  contract_id CHARACTER VARYING           NOT NULL,
   from_time   TIMESTAMP WITHOUT TIME ZONE NOT NULL,
   to_time     TIMESTAMP WITHOUT TIME ZONE NOT NULL,
   created_at  TIMESTAMP WITHOUT TIME ZONE NOT NULL,

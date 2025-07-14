@@ -2,10 +2,10 @@ package dev.vality.fistful.reporter.endpoint;
 
 import dev.vality.fistful.reporter.ReportingSrv;
 import dev.vality.woody.thrift.impl.http.THServiceBuilder;
+import jakarta.servlet.*;
+import jakarta.servlet.annotation.WebServlet;
 import lombok.RequiredArgsConstructor;
 
-import javax.servlet.*;
-import javax.servlet.annotation.WebServlet;
 import java.io.IOException;
 
 @WebServlet("/fistful/reports")

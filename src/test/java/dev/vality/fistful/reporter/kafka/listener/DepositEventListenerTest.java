@@ -19,11 +19,11 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 
 import static dev.vality.fistful.reporter.data.TestData.machineEvent;
 import static dev.vality.fistful.reporter.data.TestData.sinkEvent;
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.mockito.Mockito.*;
 
 @KafkaPostgresqlSpringBootITest
@@ -35,7 +35,7 @@ public class DepositEventListenerTest {
     @Autowired
     private KafkaProducer<TBase<?, ?>> testThriftKafkaProducer;
 
-    @MockBean
+    @MockitoBean
     private DepositDao depositDao;
 
     @Captor

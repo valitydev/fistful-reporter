@@ -3,7 +3,7 @@ package dev.vality.fistful.reporter.handler.source;
 import dev.vality.dao.DaoException;
 import dev.vality.fistful.reporter.dao.SourceDao;
 import dev.vality.fistful.reporter.domain.enums.SourceEventType;
-import dev.vality.fistful.reporter.domain.enums.SourceStatus;
+import dev.vality.fistful.reporter.domain.enums.SourceRealm;
 import dev.vality.fistful.reporter.domain.tables.pojos.Source;
 import dev.vality.fistful.reporter.exception.StorageException;
 import dev.vality.fistful.source.Internal;
@@ -39,7 +39,7 @@ public class SourceCreatedHandler implements SourceEventHandler {
             source.setEventOccuredAt(TypeUtil.stringToLocalDateTime(change.getOccuredAt()));
             source.setEventType(SourceEventType.SOURCE_CREATED);
             source.setSourceName(change.getChange().getCreated().getName());
-            source.setSourceStatus(SourceStatus.unauthorized);
+            source.setSourceRealm(SourceRealm.valueOf(change.getChange().getCreated().getRealm().name()));
 
             Resource resource = change.getChange().getCreated().getResource();
             if (resource.isSetInternal()) {
