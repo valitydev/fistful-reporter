@@ -4,9 +4,9 @@ FROM ghcr.io/valitydev/temurin-jemalloc:sha-14c0b34
 RUN apt-get update \
       && apt-get install -y \
       --no-install-recommends \
-      perl=5.32.* \
-      fontconfig=2.13.* \
-      libfreetype6=2.10.* \
+      perl \
+      fontconfig=2.15.* \
+      libfreetype6 \
       && rm -rf /var/lib/apt/lists/*
 
 RUN useradd -s /bin/false -U -u 20000 vality
