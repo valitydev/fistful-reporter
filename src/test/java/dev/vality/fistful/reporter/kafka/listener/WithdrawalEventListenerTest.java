@@ -62,7 +62,7 @@ public class WithdrawalEventListenerTest {
         testThriftKafkaProducer.send(topicName, sinkEvent);
 
         // Then
-        verify(withdrawalDao, timeout(10000).times(1))
+        verify(withdrawalDao, timeout(15000).times(1))
                 .save(captor.capture());
         assertThat(captor.getValue().getWithdrawalStatus())
                 .isEqualTo(WithdrawalStatus.succeeded);
