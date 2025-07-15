@@ -10,7 +10,7 @@
     </parent>
 
     <artifactId>fistful-reporter</artifactId>
-    <version>1.3.0-SNAPSHOT</version>
+    <version>1.3.1-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <name>fistful-reporter</name>
@@ -169,7 +169,7 @@
         <dependency>
             <groupId>dev.vality</groupId>
             <artifactId>msgpack-proto</artifactId>
-            <version>1.14-7e44749</version>
+            <version>1.17-7481bb4</version>
         </dependency>
 
         <!--test-->
