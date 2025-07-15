@@ -3,7 +3,7 @@ CREATE SCHEMA IF NOT EXISTS fr;
 -- source
 
 CREATE TYPE fr.source_event_type AS ENUM (
-  'SOURCE_CREATED', 'SOURCE_ACCOUNT_CREATED', 'SOURCE_STATUS_CHANGED'
+  'SOURCE_CREATED', 'SOURCE_ACCOUNT_CREATED'
 );
 
 CREATE TYPE fr.source_realm AS ENUM ('test', 'live');
@@ -41,7 +41,7 @@ CREATE INDEX source_party_id_idx
 -- destination
 
 CREATE TYPE fr.destination_event_type AS ENUM (
-  'DESTINATION_CREATED', 'DESTINATION_ACCOUNT_CREATED', 'DESTINATION_STATUS_CHANGED'
+  'DESTINATION_CREATED', 'DESTINATION_ACCOUNT_CREATED',
 );
 
 CREATE TYPE fr.destination_realm AS ENUM ('test', 'live');
