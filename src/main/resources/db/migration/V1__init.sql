@@ -41,7 +41,7 @@ CREATE INDEX source_party_id_idx
 -- destination
 
 CREATE TYPE fr.destination_event_type AS ENUM (
-  'DESTINATION_CREATED', 'DESTINATION_ACCOUNT_CREATED',
+  'DESTINATION_CREATED', 'DESTINATION_ACCOUNT_CREATED'
 );
 
 CREATE TYPE fr.destination_realm AS ENUM ('test', 'live');
