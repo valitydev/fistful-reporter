@@ -2,7 +2,6 @@ package dev.vality.fistful.reporter.config;
 
 import dev.vality.testcontainers.annotations.KafkaConfig;
 import dev.vality.testcontainers.annotations.kafka.KafkaTestcontainer;
-import dev.vality.testcontainers.annotations.kafka.KafkaTestcontainerSingleton;
 import dev.vality.testcontainers.annotations.postgresql.PostgresqlTestcontainerSingleton;
 import org.springframework.boot.test.context.SpringBootTest;
 
