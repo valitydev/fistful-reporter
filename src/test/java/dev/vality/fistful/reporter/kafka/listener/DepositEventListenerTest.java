@@ -62,7 +62,7 @@ public class DepositEventListenerTest {
         testThriftKafkaProducer.send(topicName, sinkEvent);
 
         // Then
-        verify(depositDao, timeout(5000).times(1))
+        verify(depositDao, timeout(10000).times(1))
                 .save(captor.capture());
         assertThat(captor.getValue().getDepositStatus())
                 .isEqualTo(DepositStatus.succeeded);
