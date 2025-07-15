@@ -41,7 +41,7 @@ public class DestinationAccountCreatedHandler implements DestinationEventHandler
                                 event.getEventId(), event.getSourceId(), account.getPartyId());
                     },
                     () -> log.info("Destination account create bound duplicated, " +
-                                    "eventId={}, destinationId={}, identityId={}",
+                                    "eventId={}, destinationId={}, partyId={}",
                             event.getEventId(), event.getSourceId(), account.getPartyId()));
         } catch (DaoException e) {
             throw new StorageException(e);

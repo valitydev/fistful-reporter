@@ -84,14 +84,6 @@ kafka:
       name: destination
       listener:
         enabled: false
-    identity:
-      name: identity
-      listener:
-        enabled: false
-    wallet:
-      name: wallet
-      listener:
-        enabled: false
     withdrawal:
       name: withdrawal
       listener:

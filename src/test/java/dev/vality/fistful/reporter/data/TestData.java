@@ -20,9 +20,7 @@ import static dev.vality.testcontainers.annotations.util.ValuesGenerator.*;
 
 public class TestData {
 
-    public static final String identityId = generateString();
     public static final String partyId = generateString();
-    public static final String contractId = generateString();
     public static final String walletId = generateString();
 
     public static List<Withdrawal> createWithdrawals(
