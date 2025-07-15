@@ -8,25 +8,23 @@ import java.util.List;
 
 public interface ReportService {
 
-    long createReport(String partyId, String contractId, Instant fromTime, Instant toTime, String reportType);
+    long createReport(String partyId, Instant fromTime, Instant toTime, String reportType);
 
     List<Report> getReportsByRange(
             String partyId,
-            String contractId,
             Instant fromTime,
             Instant toTime,
             List<String> reportTypes);
 
     List<Report> getReportsByRangeNotCancelled(
             String partyId,
-            String contractId,
             Instant fromTime,
             Instant toTime,
             List<String> reportTypes);
 
-    Report getReport(String partyId, String contractId, long reportId);
+    Report getReport(String partyId, long reportId);
 
-    void cancelReport(String partyId, String shopId, long reportId);
+    void cancelReport(String partyId, long reportId);
 
     void changeReportStatus(Report report, ReportStatus reportStatus);
 

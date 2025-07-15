@@ -2,9 +2,7 @@ package dev.vality.fistful.reporter.data;
 
 import dev.vality.fistful.reporter.domain.enums.WithdrawalEventType;
 import dev.vality.fistful.reporter.domain.enums.WithdrawalStatus;
-import dev.vality.fistful.reporter.domain.tables.pojos.Identity;
 import dev.vality.fistful.reporter.domain.tables.pojos.Report;
-import dev.vality.fistful.reporter.domain.tables.pojos.Wallet;
 import dev.vality.fistful.reporter.domain.tables.pojos.Withdrawal;
 import dev.vality.kafka.common.serialization.ThriftSerializer;
 import dev.vality.machinegun.eventsink.MachineEvent;
@@ -22,54 +20,21 @@ import static dev.vality.testcontainers.annotations.util.ValuesGenerator.*;
 
 public class TestData {
 
-    public static final String identityId = generateString();
     public static final String partyId = generateString();
-    public static final String contractId = generateString();
     public static final String walletId = generateString();
 
-    public static List<Identity> createIdentities(String identityId, String partyId, String contractId) {
-        List<Identity> identities = new ArrayList<>();
-        for (Identity identity : randomListOf(2, Identity.class)) {
-            identity.setPartyId(partyId);
-            identity.setPartyContractId(contractId);
-            identity.setIdentityId(identityId);
-            identities.add(identity);
-        }
-        for (Identity identity : randomListOf(4, Identity.class)) {
-            identity.setIdentityId(identityId);
-            identities.add(identity);
-        }
-        identities.addAll(randomListOf(4, Identity.class));
-        return identities;
-    }
-
-    public static List<Wallet> createWallets(String identityId, String partyId, String contractId, String walletId) {
-        List<Wallet> wallets = new ArrayList<>();
-        for (Wallet wallet : randomListOf(2, Wallet.class)) {
-            wallet.setWalletId(walletId);
-            wallet.setPartyId(partyId);
-            wallet.setPartyContractId(contractId);
-            wallet.setIdentityId(identityId);
-            wallets.add(wallet);
-        }
-        wallets.addAll(randomListOf(4, Wallet.class));
-        return wallets;
-    }
-
     public static List<Withdrawal> createWithdrawals(
-            String identityId,
             String partyId,
-            String contractId,
             String walletId,
             LocalDateTime eventCreatedAtTime,
             int expectedSize) {
         List<Withdrawal> withdrawals = new ArrayList<>();
         for (Withdrawal withdrawal : randomListOf(expectedSize, Withdrawal.class)) {
-            fillAsReportWithdrawal(identityId, partyId, contractId, walletId, eventCreatedAtTime, withdrawal);
+            fillAsReportWithdrawal(partyId, walletId, eventCreatedAtTime, withdrawal);
             withdrawals.add(withdrawal);
         }
         Withdrawal filtered = random(Withdrawal.class);
-        fillAsReportWithdrawal(identityId, partyId, contractId, walletId, eventCreatedAtTime, filtered);
+        fillAsReportWithdrawal(partyId, walletId, eventCreatedAtTime, filtered);
         filtered.setCurrent(false);
         withdrawals.add(filtered);
         for (Withdrawal withdrawal : randomListOf(4, Withdrawal.class)) {
@@ -84,8 +49,6 @@ public class TestData {
             withdrawal.setEventType(WithdrawalEventType.WITHDRAWAL_STATUS_CHANGED);
             withdrawal.setEventCreatedAt(eventCreatedAtTime);
             withdrawal.setPartyId(partyId);
-            withdrawal.setPartyContractId(contractId);
-            withdrawal.setIdentityId(identityId);
             withdrawal.setCurrencyCode("RUB");
             withdrawals.add(withdrawal);
             withdrawal.setCurrent(true);
@@ -103,9 +66,7 @@ public class TestData {
         //filtered by time
         for (Withdrawal withdrawal : randomListOf(4, Withdrawal.class)) {
             fillAsReportWithdrawal(
-                    identityId,
                     partyId,
-                    contractId,
                     walletId,
                     eventCreatedAtTime.minusDays(21),
                     withdrawal);
@@ -115,17 +76,15 @@ public class TestData {
     }
 
     public static Report createReport() {
-        return createReport(partyId, contractId, getToTime(), getFromTime());
+        return createReport(partyId, getToTime(), getFromTime());
     }
 
     private static dev.vality.fistful.reporter.domain.tables.pojos.Report createReport(
             String partyId,
-            String contractId,
             LocalDateTime toTime,
             LocalDateTime fromTime) {
         Report report = new Report();
         report.setPartyId(partyId);
-        report.setContractId(contractId);
         report.setToTime(toTime);
         report.setFromTime(fromTime);
         return report;
@@ -149,9 +108,7 @@ public class TestData {
     }
 
     private static void fillAsReportWithdrawal(
-            String identityId,
             String partyId,
-            String contractId,
             String walletId,
             LocalDateTime eventCreatedAtTime,
             Withdrawal withdrawal) {
@@ -161,8 +118,6 @@ public class TestData {
         withdrawal.setEventType(WithdrawalEventType.WITHDRAWAL_STATUS_CHANGED);
         withdrawal.setEventCreatedAt(eventCreatedAtTime);
         withdrawal.setPartyId(partyId);
-        withdrawal.setPartyContractId(contractId);
-        withdrawal.setIdentityId(identityId);
         withdrawal.setCurrencyCode("RUB");
         withdrawal.setCurrent(true);
     }

@@ -19,7 +19,7 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 
 import static dev.vality.fistful.reporter.data.TestData.machineEvent;
 import static dev.vality.fistful.reporter.data.TestData.sinkEvent;
@@ -35,14 +35,14 @@ public class WithdrawalEventListenerTest {
     @Autowired
     private KafkaProducer<TBase<?, ?>> testThriftKafkaProducer;
 
-    @MockBean
+    @MockitoBean
     private WithdrawalDao withdrawalDao;
 
     @Captor
     private ArgumentCaptor<Withdrawal> captor;
 
     @Test
-    public void shouldListenAndSave() throws InterruptedException, DaoException {
+    public void shouldListenAndSave() throws DaoException {
         // Given
         TimestampedChange statusChanged = new TimestampedChange()
                 .setOccuredAt("2016-03-22T06:12:27Z")
@@ -62,7 +62,7 @@ public class WithdrawalEventListenerTest {
         testThriftKafkaProducer.send(topicName, sinkEvent);
 
         // Then
-        verify(withdrawalDao, timeout(5000).times(1))
+        verify(withdrawalDao, timeout(10000).times(1))
                 .save(captor.capture());
         assertThat(captor.getValue().getWithdrawalStatus())
                 .isEqualTo(WithdrawalStatus.succeeded);

@@ -40,12 +40,10 @@ public class ReportDaoImpl extends AbstractGenericDao implements ReportDao {
     @Override
     public List<Report> getReportsByRange(
             String partyId,
-            String contractId,
             LocalDateTime fromTime,
             LocalDateTime toTime,
             List<String> reportTypes) {
         Condition condition = REPORT.PARTY_ID.eq(partyId)
-                .and(REPORT.CONTRACT_ID.eq(contractId))
                 .and(REPORT.FROM_TIME.ge(fromTime))
                 .and(REPORT.TO_TIME.le(toTime));
 
@@ -59,10 +57,9 @@ public class ReportDaoImpl extends AbstractGenericDao implements ReportDao {
     }
 
     @Override
-    public Report getReport(long reportId, String partyId, String contractId) {
+    public Report getReport(long reportId, String partyId) {
         Condition condition = REPORT.ID.eq(reportId)
-                .and(REPORT.PARTY_ID.eq(partyId))
-                .and(REPORT.CONTRACT_ID.eq(contractId));
+                .and(REPORT.PARTY_ID.eq(partyId));
         Query query = getDslContext().selectFrom(REPORT).where(condition);
 
         return fetchOne(query, reportRowMapper);

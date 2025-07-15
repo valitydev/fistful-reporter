@@ -7,8 +7,7 @@ import dev.vality.fistful.transfer.Committed;
 import dev.vality.fistful.transfer.CreatedChange;
 import dev.vality.fistful.transfer.Transfer;
 
-import static dev.vality.testcontainers.annotations.util.ValuesGenerator.generateString;
-import static io.github.benas.randombeans.api.EnhancedRandom.random;
+import static dev.vality.testcontainers.annotations.util.RandomBeans.random;
 import static java.util.Collections.singletonList;
 
 public class TransferTestUtil {
@@ -39,12 +38,10 @@ public class TransferTestUtil {
                 singletonList(
                         new FinalCashFlowPosting(
                                 new FinalCashFlowAccount(
-                                        CashFlowAccount.merchant(MerchantCashFlowAccount.payout),
-                                        generateString()
+                                        CashFlowAccount.merchant(MerchantCashFlowAccount.payout)
                                 ),
                                 new FinalCashFlowAccount(
-                                        CashFlowAccount.provider(ProviderCashFlowAccount.settlement),
-                                        generateString()
+                                        CashFlowAccount.provider(ProviderCashFlowAccount.settlement)
                                 ),
                                 random(Cash.class)
                         )

@@ -32,7 +32,7 @@ public class DestinationCreatedBankCardHandlerTest {
         dev.vality.fistful.base.Resource fistfulResource = new dev.vality.fistful.base.Resource();
         fistfulResource.setBankCard(DestinationHandlerTestUtil.createResourceBankCard());
         dev.vality.fistful.destination.Destination fistfulDestination
-                = DestinationHandlerTestUtil.createFistfulDestination(fistfulResource);
+                = DestinationHandlerTestUtil.createFistfulDestination(fistfulResource, destination);
 
         destinationCreatedHandler.handle(
                 createCreated(fistfulDestination),

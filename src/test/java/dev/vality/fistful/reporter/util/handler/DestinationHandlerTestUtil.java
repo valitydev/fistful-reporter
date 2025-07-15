@@ -1,7 +1,9 @@
 package dev.vality.fistful.reporter.util.handler;
 
 import dev.vality.fistful.base.*;
-import dev.vality.fistful.destination.*;
+import dev.vality.fistful.destination.Change;
+import dev.vality.fistful.destination.Destination;
+import dev.vality.fistful.destination.TimestampedChange;
 import dev.vality.kafka.common.serialization.ThriftSerializer;
 import dev.vality.machinegun.eventsink.MachineEvent;
 import dev.vality.machinegun.msgpack.Value;
@@ -17,22 +19,9 @@ public class DestinationHandlerTestUtil {
     public static final String CARD_MASKED_PAN = "1232132";
     public static final String CARD_TOKEN_PROVIDER = "cardToken";
 
-    public static MachineEvent createMachineEvent(String id) {
-        return new MachineEvent()
-                .setEventId(2L)
-                .setSourceId(id)
-                .setSourceNs("2")
-                .setCreatedAt("2021-05-31T06:12:27Z")
-                .setData(Value.bin(new ThriftSerializer<>().serialize("", createStatusChanged())));
-    }
-
-    public static TimestampedChange createStatusChanged() {
-        return new TimestampedChange()
-                .setOccuredAt("2021-05-31T06:12:27Z")
-                .setChange(Change.status(StatusChange.changed(Status.authorized(new Authorized()))));
-    }
-
     public static MachineEvent createCreatedMachineEvent(String id, Destination destination) {
+        System.out.println(id);
+        System.out.println(destination);
         return new MachineEvent()
                 .setEventId(2L)
                 .setSourceId(id)
@@ -87,11 +76,17 @@ public class DestinationHandlerTestUtil {
         return resourceBankCard;
     }
 
-    public static dev.vality.fistful.destination.Destination createFistfulDestination(Resource fistfulResource) {
+    public static dev.vality.fistful.destination.Destination createFistfulDestination(
+            Resource fistfulResource,
+            dev.vality.fistful.reporter.domain.tables.pojos.Destination destination) {
         dev.vality.fistful.destination.Destination fistfulDestination
                 = new dev.vality.fistful.destination.Destination();
+        fistfulDestination.setId(destination.getDestinationId());
         fistfulDestination.setResource(fistfulResource);
         fistfulDestination.setName(DESTINATION_NAME);
+        fistfulDestination.setRealm(Realm.test);
+        fistfulDestination.setPartyId(destination.getPartyId());
+        fistfulDestination.setCreatedAt(destination.getEventCreatedAt().toString());
         return fistfulDestination;
     }
 }

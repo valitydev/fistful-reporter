@@ -1,11 +1,12 @@
 # @dockerfile.Template@
-FROM openjdk:15-jdk-slim
+FROM ghcr.io/valitydev/temurin-jemalloc:sha-14c0b34
 
 RUN apt-get update \
       && apt-get install -y \
-      perl \
-      fontconfig \
-      libfreetype6 \
+      --no-install-recommends \
+      perl=5.32.* \
+      fontconfig=2.13.* \
+      libfreetype6=2.10.* \
       && rm -rf /var/lib/apt/lists/*
 
 RUN useradd -s /bin/false -U -u 20000 vality

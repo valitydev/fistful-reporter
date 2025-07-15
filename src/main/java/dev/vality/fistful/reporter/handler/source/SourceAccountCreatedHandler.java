@@ -2,10 +2,8 @@ package dev.vality.fistful.reporter.handler.source;
 
 import dev.vality.dao.DaoException;
 import dev.vality.fistful.account.Account;
-import dev.vality.fistful.reporter.dao.IdentityDao;
 import dev.vality.fistful.reporter.dao.SourceDao;
 import dev.vality.fistful.reporter.domain.enums.SourceEventType;
-import dev.vality.fistful.reporter.domain.tables.pojos.Identity;
 import dev.vality.fistful.reporter.domain.tables.pojos.Source;
 import dev.vality.fistful.reporter.exception.SinkEventNotFoundException;
 import dev.vality.fistful.reporter.exception.StorageException;
@@ -22,7 +20,6 @@ import org.springframework.stereotype.Service;
 public class SourceAccountCreatedHandler implements SourceEventHandler {
 
     private final SourceDao sourceDao;
-    private final IdentityDao identityDao;
 
     @Override
     public boolean accept(TimestampedChange change) {
@@ -33,18 +30,18 @@ public class SourceAccountCreatedHandler implements SourceEventHandler {
     public void handle(TimestampedChange change, MachineEvent event) {
         try {
             Account account = change.getChange().getAccount().getCreated();
-            log.info("Start source account created handling, eventId={}, sourceId={}, identityId={}",
-                    event.getEventId(), event.getSourceId(), account.getIdentity());
+            log.info("Start source account created handling, eventId={}, sourceId={}, partyId={}",
+                    event.getEventId(), event.getSourceId(), account.getPartyId());
             Source oldSource = getSource(event);
             Source updatedSource = update(oldSource, change, event, account);
             sourceDao.save(updatedSource).ifPresentOrElse(
                     id -> {
                         sourceDao.updateNotCurrent(oldSource.getId());
-                        log.info("Source account have been changed, eventId={}, sourceId={}, identityId={}",
-                                event.getEventId(), event.getSourceId(), account.getIdentity());
+                        log.info("Source account have been changed, eventId={}, sourceId={}, partyId={}",
+                                event.getEventId(), event.getSourceId(), account.getPartyId());
                     },
-                    () -> log.info("Source account bound duplicated, eventId={}, sourceId={}, identityId={}",
-                            event.getEventId(), event.getSourceId(), account.getIdentity()));
+                    () -> log.info("Source account bound duplicated, eventId={}, sourceId={}, partyId={}",
+                            event.getEventId(), event.getSourceId(), account.getPartyId()));
         } catch (DaoException e) {
             throw new StorageException(e);
         }
@@ -63,13 +60,9 @@ public class SourceAccountCreatedHandler implements SourceEventHandler {
         source.setSourceId(event.getSourceId());
         source.setEventOccuredAt(TypeUtil.stringToLocalDateTime(change.getOccuredAt()));
         source.setEventType(SourceEventType.SOURCE_ACCOUNT_CREATED);
-        source.setAccountId(account.getId());
-        source.setAccounterAccountId(account.getAccounterAccountId());
+        source.setAccountId(String.valueOf(account.getAccountId()));
         source.setCurrencyCode(account.getCurrency().getSymbolicCode());
-        Identity identity = getIdentity(event, account);
-        source.setPartyId(identity.getPartyId());
-        source.setPartyContractId(identity.getPartyContractId());
-        source.setIdentityId(identity.getIdentityId());
+        source.setPartyId(account.getPartyId());
         return source;
     }
 
@@ -79,15 +72,5 @@ public class SourceAccountCreatedHandler implements SourceEventHandler {
             throw new SinkEventNotFoundException(String.format("Source not found, sourceId='%s'", event.getSourceId()));
         }
         return source;
-    }
-
-    private Identity getIdentity(MachineEvent event, Account account) {
-        Identity identity = identityDao.get(account.getIdentity());
-        if (identity == null) {
-            throw new SinkEventNotFoundException(
-                    String.format("Identity not found, sourceId='%s', identityId='%s'",
-                            event.getSourceId(), account.getIdentity()));
-        }
-        return identity;
     }
 }

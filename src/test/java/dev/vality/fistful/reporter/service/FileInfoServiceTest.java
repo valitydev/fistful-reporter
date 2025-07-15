@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.ZoneOffset;
 
-import static dev.vality.fistful.reporter.data.TestData.contractId;
 import static dev.vality.fistful.reporter.data.TestData.partyId;
 import static dev.vality.testcontainers.annotations.util.ValuesGenerator.getFromTime;
 import static dev.vality.testcontainers.annotations.util.ValuesGenerator.getToTime;
@@ -26,7 +25,6 @@ public class FileInfoServiceTest {
     public void fileInfoServiceTest() {
         long reportId = reportService.createReport(
                 partyId,
-                contractId,
                 getFromTime().toInstant(ZoneOffset.UTC),
                 getToTime().toInstant(ZoneOffset.UTC),
                 "withdrawalRegistry"

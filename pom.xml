@@ -6,7 +6,7 @@
     <parent>
         <groupId>dev.vality</groupId>
         <artifactId>service-parent-pom</artifactId>
-        <version>1.0.18</version>
+        <version>3.1.2</version>
     </parent>
 
     <artifactId>fistful-reporter</artifactId>
@@ -75,6 +75,10 @@
             <artifactId>flyway-core</artifactId>
         </dependency>
         <dependency>
+            <groupId>org.flywaydb</groupId>
+            <artifactId>flyway-database-postgresql</artifactId>
+        </dependency>
+        <dependency>
             <groupId>org.jooq</groupId>
             <artifactId>jooq</artifactId>
         </dependency>
@@ -111,16 +115,12 @@
             <artifactId>aws-msk-iam-auth</artifactId>
         </dependency>
         <dependency>
-            <groupId>javax.servlet</groupId>
-            <artifactId>javax.servlet-api</artifactId>
+            <groupId>jakarta.servlet</groupId>
+            <artifactId>jakarta.servlet-api</artifactId>
             <scope>provided</scope>
         </dependency>
 
         <!--dev.vality-->
-        <dependency>
-            <groupId>dev.vality</groupId>
-            <artifactId>shared-resources</artifactId>
-        </dependency>
         <dependency>
             <groupId>dev.vality</groupId>
             <artifactId>kafka-common-lib</artifactId>
@@ -128,7 +128,7 @@
         <dependency>
             <groupId>dev.vality</groupId>
             <artifactId>machinegun-proto</artifactId>
-            <version>1.41-96f7f11</version>
+            <version>1.43-3decc8f</version>
         </dependency>
         <dependency>
             <groupId>dev.vality</groupId>
@@ -138,22 +138,17 @@
         <dependency>
             <groupId>dev.vality</groupId>
             <artifactId>fistful-proto</artifactId>
-            <version>1.151-9c78e89</version>
-        </dependency>
-        <dependency>
-            <groupId>dev.vality</groupId>
-            <artifactId>payout-manager-proto</artifactId>
-            <version>1.38-635dc24</version>
+            <version>1.181-f478436</version>
         </dependency>
         <dependency>
             <groupId>dev.vality</groupId>
             <artifactId>fistful-reporter-proto</artifactId>
-            <version>1.19-69565e4</version>
+            <version>1.23-533e959</version>
         </dependency>
         <dependency>
             <groupId>dev.vality</groupId>
             <artifactId>file-storage-proto</artifactId>
-            <version>1.44-1dbc006</version>
+            <version>1.49-f01d2d9</version>
         </dependency>
         <dependency>
             <groupId>dev.vality</groupId>
@@ -166,10 +161,6 @@
         <dependency>
             <groupId>dev.vality.geck</groupId>
             <artifactId>serializer</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>dev.vality.woody</groupId>
-            <artifactId>woody-thrift</artifactId>
         </dependency>
         <dependency>
             <groupId>dev.vality.geck</groupId>
@@ -190,7 +181,7 @@
         <dependency>
             <groupId>dev.vality</groupId>
             <artifactId>testcontainers-annotations</artifactId>
-            <version>1.4.3</version>
+            <version>3.2.0</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
@@ -225,12 +216,12 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-remote-resources-plugin</artifactId>
-                <version>1.7.0</version>
+                <version>3.2.0</version>
                 <dependencies>
                     <dependency>
                         <groupId>org.apache.maven.shared</groupId>
                         <artifactId>maven-filtering</artifactId>
-                        <version>3.2.0</version>
+                        <version>3.3.2</version>
                     </dependency>
                 </dependencies>
                 <configuration>

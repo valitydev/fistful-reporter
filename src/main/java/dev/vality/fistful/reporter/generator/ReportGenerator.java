@@ -36,7 +36,7 @@ public class ReportGenerator {
 
         List<TemplateService> templates = templateServices.stream()
                 .filter(templateService -> templateService.accept(report.getType()))
-                .collect(Collectors.toList());
+                .toList();
 
         for (TemplateService templateService : templates) {
             try {
@@ -90,7 +90,6 @@ public class ReportGenerator {
                 message +
                         ", reportId=%s, " +
                         "partyId=%s, " +
-                        "contractId=%s, " +
                         "fromTime=%s, " +
                         "toTime=%s, " +
                         "createdAt=%s, " +
@@ -98,7 +97,6 @@ public class ReportGenerator {
                         "status=%s",
                 report.getId(),
                 report.getPartyId(),
-                report.getContractId(),
                 report.getFromTime().toString(),
                 report.getToTime().toString(),
                 report.getCreatedAt().toString(),

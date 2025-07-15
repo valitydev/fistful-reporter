@@ -32,10 +32,9 @@ public class ReportServiceImpl implements ReportService {
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
-    public long createReport(String partyId, String contractId, Instant fromTime, Instant toTime, String reportType) {
+    public long createReport(String partyId, Instant fromTime, Instant toTime, String reportType) {
         return createReport(
                 partyId,
-                contractId,
                 fromTime,
                 toTime,
                 reportType,
@@ -45,7 +44,6 @@ public class ReportServiceImpl implements ReportService {
 
     private long createReport(
             String partyId,
-            String contractId,
             Instant fromTime,
             Instant toTime,
             String reportType,
@@ -53,12 +51,11 @@ public class ReportServiceImpl implements ReportService {
             Instant createdAt) {
         try {
             log.info(
-                    "Trying to create report, partyId={}, contractId={}, reportType={}, fromTime={}, toTime={}",
-                    partyId, contractId, reportType, fromTime, toTime
+                    "Trying to create report, partyId={}, reportType={}, fromTime={}, toTime={}",
+                    partyId, reportType, fromTime, toTime
             );
             Report report = new Report();
             report.setPartyId(partyId);
-            report.setContractId(contractId);
             report.setFromTime(LocalDateTime.ofInstant(fromTime, ZoneOffset.UTC));
             report.setToTime(LocalDateTime.ofInstant(toTime, ZoneOffset.UTC));
             report.setType(reportType);
@@ -67,16 +64,16 @@ public class ReportServiceImpl implements ReportService {
             long reportId = reportDao.save(report);
             log.info(
                     "Report has been successfully created, " +
-                            "reportId={}, contractId={}, shopId={}, reportType={}, fromTime={}, toTime={}",
-                    reportId, partyId, contractId, reportType, fromTime, toTime
+                            "reportId={}, shopId={}, reportType={}, fromTime={}, toTime={}",
+                    reportId, partyId, reportType, fromTime, toTime
             );
             return reportId;
         } catch (DaoException ex) {
             throw new StorageException(
                     String.format(
                             "Failed to save report in storage, " +
-                                    "partyId=%s, contractId=%s, fromTime=%s, toTime=%s, reportType=%s",
-                            partyId, contractId, fromTime, toTime, reportType
+                                    "partyId=%s, fromTime=%s, toTime=%s, reportType=%s",
+                            partyId, fromTime, toTime, reportType
                     ),
                     ex
             );
@@ -87,27 +84,25 @@ public class ReportServiceImpl implements ReportService {
     @Transactional(propagation = Propagation.REQUIRED)
     public List<Report> getReportsByRange(
             String partyId,
-            String contractId,
             Instant fromTime,
             Instant toTime,
             List<String> reportTypes) {
         try {
-            log.info("Trying to get reports by range, partyId={}, contractId={}", partyId, contractId);
+            log.info("Trying to get reports by range, partyId={}", partyId);
             List<Report> reportsByRange = reportDao.getReportsByRange(
                     partyId,
-                    contractId,
                     LocalDateTime.ofInstant(fromTime, ZoneOffset.UTC),
                     LocalDateTime.ofInstant(toTime, ZoneOffset.UTC),
                     reportTypes
             );
-            log.info("Reports by range has been found, partyId={}, contractId={}", partyId, contractId);
+            log.info("Reports by range has been found, partyId={}", partyId);
             return reportsByRange;
         } catch (DaoException ex) {
             throw new StorageException(
                     String.format(
                             "Failed to get reports by range, " +
-                                    "partyId=%s, contractId=%s, fromTime=%s, toTime=%s, reportTypes=%s",
-                            partyId, contractId, fromTime, toTime, reportTypes
+                                    "partyId=%s, fromTime=%s, toTime=%s, reportTypes=%s",
+                            partyId, fromTime, toTime, reportTypes
                     ),
                     ex
             );
@@ -118,31 +113,30 @@ public class ReportServiceImpl implements ReportService {
     @Transactional(propagation = Propagation.REQUIRED)
     public List<Report> getReportsByRangeNotCancelled(
             String partyId,
-            String contractId,
             Instant fromTime, Instant toTime,
             List<String> reportTypes) {
-        return getReportsByRange(partyId, contractId, fromTime, toTime, reportTypes).stream()
+        return getReportsByRange(partyId, fromTime, toTime, reportTypes).stream()
                 .filter(report -> report.getStatus() != ReportStatus.cancelled)
                 .collect(Collectors.toList());
     }
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
-    public Report getReport(String partyId, String contractId, long reportId) {
+    public Report getReport(String partyId, long reportId) {
         try {
-            log.info("Trying to get report, reportId={}, partyId={}, contractId={}", reportId, partyId, contractId);
-            Report report = reportDao.getReport(reportId, partyId, contractId);
+            log.info("Trying to get report, reportId={}, partyId={}", reportId, partyId);
+            Report report = reportDao.getReport(reportId, partyId);
             if (report == null) {
                 throw new ReportNotFoundException(String.format("Report not found, " +
-                        "partyId=%s, contractId=%s, reportId=%d", partyId, contractId, reportId));
+                        "partyId=%s, reportId=%d", partyId, reportId));
             }
-            log.info("Report has been found, reportId={}, partyId={}, contractId={}", reportId, partyId, contractId);
+            log.info("Report has been found, reportId={}, partyId={}", reportId, partyId);
             return report;
         } catch (DaoException ex) {
             throw new StorageException(
                     String.format(
-                            "Failed to get report from storage, partyId=%s, contractId=%s, reportId=%d",
-                            partyId, contractId, reportId
+                            "Failed to get report from storage, partyId=%s, reportId=%d",
+                            partyId, reportId
                     ),
                     ex
             );
@@ -151,9 +145,9 @@ public class ReportServiceImpl implements ReportService {
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
-    public void cancelReport(String partyId, String shopId, long reportId) {
+    public void cancelReport(String partyId, long reportId) {
         log.info("Trying to cancel report, reportId={}", reportId);
-        Report report = getReport(partyId, shopId, reportId);
+        Report report = getReport(partyId, reportId);
         changeReportStatus(report, ReportStatus.cancelled);
         log.info("Report has been cancelled, reportId={}", reportId);
     }

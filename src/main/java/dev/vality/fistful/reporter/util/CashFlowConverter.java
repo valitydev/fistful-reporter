@@ -32,13 +32,11 @@ public class CashFlowConverter {
                                             cf.getSource().getAccountType(),
                                             FistfulCashFlowAccount.class));
                             fcf.setSourceAccountTypeValue(getCashFlowAccountTypeValue(cf.getSource()));
-                            fcf.setSourceAccountId(cf.getSource().getAccountId());
                             fcf.setDestinationAccountType(
                                     TBaseUtil.unionFieldToEnum(
                                             cf.getDestination().getAccountType(),
                                             FistfulCashFlowAccount.class));
                             fcf.setDestinationAccountTypeValue(getCashFlowAccountTypeValue(cf.getDestination()));
-                            fcf.setDestinationAccountId(cf.getDestination().getAccountId());
                             fcf.setAmount(cf.getVolume().getAmount());
                             fcf.setCurrencyCode(cf.getVolume().getCurrency().getSymbolicCode());
                             fcf.setDetails(cf.getDetails());

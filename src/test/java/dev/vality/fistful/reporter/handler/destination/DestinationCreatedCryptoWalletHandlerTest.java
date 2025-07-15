@@ -12,7 +12,7 @@ import static dev.vality.fistful.reporter.domain.tables.Destination.DESTINATION;
 import static dev.vality.fistful.reporter.util.handler.DestinationHandlerTestUtil.createCreated;
 import static dev.vality.fistful.reporter.util.handler.DestinationHandlerTestUtil.createCreatedMachineEvent;
 import static dev.vality.testcontainers.annotations.util.RandomBeans.random;
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @PostgresqlSpringBootITest
@@ -28,11 +28,12 @@ public class DestinationCreatedCryptoWalletHandlerTest {
     public void destinationCreatedHandlerTest() {
         Destination destination = random(Destination.class);
         destination.setCurrent(true);
+        System.out.println(destination);
         String sqlStatement = "select * from fr.destination LIMIT 1;";
         dev.vality.fistful.base.Resource fistfulResource = new dev.vality.fistful.base.Resource();
         fistfulResource.setCryptoWallet(DestinationHandlerTestUtil.createResourceCryptoWallet());
         dev.vality.fistful.destination.Destination fistfulDestination
-                = DestinationHandlerTestUtil.createFistfulDestination(fistfulResource);
+                = DestinationHandlerTestUtil.createFistfulDestination(fistfulResource, destination);
 
         destinationCreatedHandler.handle(
                 createCreated(fistfulDestination),

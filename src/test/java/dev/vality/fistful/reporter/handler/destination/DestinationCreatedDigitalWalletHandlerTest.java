@@ -32,7 +32,7 @@ public class DestinationCreatedDigitalWalletHandlerTest {
         dev.vality.fistful.base.Resource fistfulResource = new dev.vality.fistful.base.Resource();
         fistfulResource.setDigitalWallet(DestinationHandlerTestUtil.createResourceDigitalWallet());
         dev.vality.fistful.destination.Destination fistfulDestination
-                = DestinationHandlerTestUtil.createFistfulDestination(fistfulResource);
+                = DestinationHandlerTestUtil.createFistfulDestination(fistfulResource, destination);
 
         destinationCreatedHandler.handle(
                 createCreated(fistfulDestination),

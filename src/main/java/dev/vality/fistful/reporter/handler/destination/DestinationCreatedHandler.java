@@ -8,8 +8,8 @@ import dev.vality.fistful.base.Resource;
 import dev.vality.fistful.destination.TimestampedChange;
 import dev.vality.fistful.reporter.dao.DestinationDao;
 import dev.vality.fistful.reporter.domain.enums.DestinationEventType;
+import dev.vality.fistful.reporter.domain.enums.DestinationRealm;
 import dev.vality.fistful.reporter.domain.enums.DestinationResourceType;
-import dev.vality.fistful.reporter.domain.enums.DestinationStatus;
 import dev.vality.fistful.reporter.domain.tables.pojos.Destination;
 import dev.vality.fistful.reporter.exception.StorageException;
 import dev.vality.geck.common.util.TBaseUtil;
@@ -43,7 +43,8 @@ public class DestinationCreatedHandler implements DestinationEventHandler {
             destination.setEventOccuredAt(TypeUtil.stringToLocalDateTime(change.getOccuredAt()));
             destination.setEventType(DestinationEventType.DESTINATION_CREATED);
             destination.setDestinationName(change.getChange().getCreated().getName());
-            destination.setDestinationStatus(DestinationStatus.unauthorized);
+            destination.setDestinationRealm(DestinationRealm.valueOf(
+                    change.getChange().getCreated().getRealm().name()));
 
             Resource resource = change.getChange().getCreated().getResource();
             if (resource.isSetBankCard()) {

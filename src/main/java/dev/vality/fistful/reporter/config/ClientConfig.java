@@ -5,8 +5,8 @@ import dev.vality.file.storage.FileStorageSrv;
 import dev.vality.fistful.reporter.config.properties.FileStorageProperties;
 import dev.vality.fistful.reporter.config.properties.PartyManagementProperties;
 import dev.vality.woody.thrift.impl.http.THSpawnClientBuilder;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClients;
+import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
+import org.apache.hc.client5.http.impl.classic.HttpClients;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
