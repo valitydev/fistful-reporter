@@ -101,7 +101,7 @@ public class ReportServiceImpl implements ReportService {
             throw new StorageException(
                     String.format(
                             "Failed to get reports by range, " +
-                                    "partyId=%s, contractId=%s, fromTime=%s, toTime=%s, reportTypes=%s",
+                                    "partyId=%s, fromTime=%s, toTime=%s, reportTypes=%s",
                             partyId, fromTime, toTime, reportTypes
                     ),
                     ex

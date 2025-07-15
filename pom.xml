@@ -6,7 +6,7 @@
     <parent>
         <groupId>dev.vality</groupId>
         <artifactId>service-parent-pom</artifactId>
-        <version>3.1.1</version>
+        <version>3.1.2</version>
     </parent>
 
     <artifactId>fistful-reporter</artifactId>
@@ -165,7 +165,6 @@
         <dependency>
             <groupId>dev.vality.woody</groupId>
             <artifactId>woody-thrift</artifactId>
-            <version>${woody.version}</version>
         </dependency>
         <dependency>
             <groupId>dev.vality.geck</groupId>
