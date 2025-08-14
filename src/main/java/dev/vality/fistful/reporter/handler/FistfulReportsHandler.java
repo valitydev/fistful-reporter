@@ -5,7 +5,6 @@ import dev.vality.fistful.reporter.config.properties.ReportingProperties;
 import dev.vality.fistful.reporter.dto.ReportType;
 import dev.vality.fistful.reporter.exception.*;
 import dev.vality.fistful.reporter.service.FileInfoService;
-import dev.vality.fistful.reporter.service.PartyManagementService;
 import dev.vality.fistful.reporter.service.ReportService;
 import dev.vality.fistful.reporter.util.ThriftUtils;
 import dev.vality.geck.common.util.TypeUtil;
@@ -30,7 +29,6 @@ public class FistfulReportsHandler implements ReportingSrv.Iface {
     private final ReportingProperties reportingProperties;
     private final ReportService reportService;
     private final FileInfoService fileService;
-    private final PartyManagementService partyManagementService;
 
     @Override
     public List<Report> getReports(ReportRequest reportRequest, List<String> reportTypes) throws TException {
@@ -81,9 +79,6 @@ public class FistfulReportsHandler implements ReportingSrv.Iface {
 
             Instant toTime = TypeUtil.stringToInstant(reportRequest.getTimeRange().getToTime());
             Instant fromTime = TypeUtil.stringToInstant(reportRequest.getTimeRange().getFromTime());
-
-            // проверка на существование в хелгейте
-            partyManagementService.getParty(reportRequest.getPartyId());
 
             return reportService.createReport(
                     reportRequest.getPartyId(),

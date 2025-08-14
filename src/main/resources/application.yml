@@ -1,7 +1,3 @@
-info:
-  version: '@project.version@'
-  stage: dev
-
 server:
   port: ${server.port}
 
@@ -28,18 +24,18 @@ management:
 
 spring:
   application:
-    name: '@project.name@'
+    name: ${project.name}
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
     driver-class-name: org.postgresql.Driver
-    url: '@db.url@'
-    username: '@db.user@'
-    password: '@db.password@'
+    url: ${db.url}
+    username: ${db.user}
+    password: ${db.password}
     hikari:
       idle-timeout: 30000
       maximum-pool-size: 5
   flyway:
-    schemas: '@db.schema@'
+    schemas: ${db.schema}
   output:
     ansi:
       enabled: always
@@ -92,9 +88,3 @@ kafka:
       name: source
       listener:
         enabled: false
-
-testcontainers:
-  postgresql:
-    tag: '17.4'
-  kafka:
-    tag: '6.2.0'

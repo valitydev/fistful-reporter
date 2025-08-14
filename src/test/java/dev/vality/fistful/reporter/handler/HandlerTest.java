@@ -1,12 +1,10 @@
 package dev.vality.fistful.reporter.handler;
 
-import dev.vality.damsel.domain.Party;
 import dev.vality.fistful.reporter.*;
 import dev.vality.fistful.reporter.config.PostgresqlSpringBootITest;
 import dev.vality.fistful.reporter.config.testconfiguration.WithdrawalTestDao;
 import dev.vality.fistful.reporter.generator.ReportGenerator;
 import dev.vality.fistful.reporter.service.FileStorageService;
-import dev.vality.fistful.reporter.service.PartyManagementService;
 import dev.vality.fistful.reporter.service.ReportService;
 import org.apache.thrift.TException;
 import org.junit.jupiter.api.BeforeEach;
@@ -23,14 +21,10 @@ import static dev.vality.testcontainers.annotations.util.ValuesGenerator.getToTi
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
 
 @PostgresqlSpringBootITest
 public class HandlerTest {
-
-    @MockitoBean
-    private PartyManagementService partyManagementService;
 
     @MockitoBean
     private FileStorageService fileStorageService;
@@ -67,7 +61,6 @@ public class HandlerTest {
 
     @Test
     public void fistfulReporterTest() throws TException {
-        when(partyManagementService.getParty(anyString())).thenReturn(new Party());
         when(fileStorageService.saveFile(any())).thenReturn(UUID.randomUUID().toString());
 
         withdrawalTestDao.saveWithdrawalsDependencies(5);
