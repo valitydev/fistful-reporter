@@ -77,7 +77,7 @@ public class ReportGenerator {
     }
 
     private String getReportName(TemplateService templateService) {
-        return templateService.getReportPrefixName() + "_report_for_a_period_of_time_" + LocalDateTime.now().toString();
+        return templateService.getReportPrefixName() + "_report_for_a_period_of_time_" + LocalDateTime.now();
     }
 
     private void logInfo(String message, Report report) {
