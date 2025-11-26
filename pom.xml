@@ -10,7 +10,7 @@
     </parent>
 
     <artifactId>fistful-reporter</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.1</version>
     <packaging>jar</packaging>
 
     <name>fistful-reporter</name>
@@ -130,7 +130,7 @@
         <dependency>
             <groupId>dev.vality</groupId>
             <artifactId>fistful-proto</artifactId>
-            <version>1.181-f478436</version>
+            <version>1.188-f7ce08e</version>
         </dependency>
         <dependency>
             <groupId>dev.vality</groupId>
