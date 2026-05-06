@@ -43,7 +43,7 @@ public class DepositCreatedHandler implements DepositEventHandler {
             deposit.setWalletId(depositDamsel.getWalletId());
             deposit.setSourceId(depositDamsel.getSourceId());
             deposit.setDepositStatus(DepositStatus.pending);
-            deposit.setPartyId(deposit.getPartyId());
+            deposit.setPartyId(depositDamsel.getPartyId());
             Cash cash = depositDamsel.getBody();
             deposit.setAmount(cash.getAmount());
             deposit.setCurrencyCode(cash.getCurrency().getSymbolicCode());
