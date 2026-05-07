@@ -45,7 +45,7 @@ public class WithdrawalCreatedHandler implements WithdrawalEventHandler {
             withdrawal.setDestinationId(withdrawalDamsel.getDestinationId());
             withdrawal.setWithdrawalStatus(WithdrawalStatus.pending);
 
-            withdrawal.setPartyId(withdrawal.getPartyId());
+            withdrawal.setPartyId(withdrawalDamsel.getPartyId());
 
             Cash cash = withdrawalDamsel.getBody();
             withdrawal.setAmount(cash.getAmount());
