@@ -9,7 +9,7 @@ import dev.vality.fistful.reporter.domain.tables.records.DepositRecord;
 import org.jooq.Condition;
 import org.jooq.Query;
 import org.jooq.impl.DSL;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.sql.init.dependency.DependsOnDatabaseInitialization;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.stereotype.Component;
@@ -19,11 +19,11 @@ import java.util.Optional;
 import static dev.vality.fistful.reporter.domain.tables.Deposit.DEPOSIT;
 
 @Component
+@DependsOnDatabaseInitialization
 public class DepositDaoImpl extends AbstractGenericDao implements DepositDao {
 
     private final RowMapper<Deposit> depositRowMapper;
 
-    @Autowired
     public DepositDaoImpl(HikariDataSource dataSource) {
         super(dataSource);
         depositRowMapper = new RecordRowMapper<>(DEPOSIT, Deposit.class);

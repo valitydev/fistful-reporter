@@ -9,6 +9,7 @@ import dev.vality.fistful.reporter.domain.tables.pojos.FistfulCashFlow;
 import dev.vality.fistful.reporter.domain.tables.records.FistfulCashFlowRecord;
 import org.jooq.Condition;
 import org.jooq.Query;
+import org.springframework.boot.sql.init.dependency.DependsOnDatabaseInitialization;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
 
@@ -17,6 +18,7 @@ import java.util.List;
 import static dev.vality.fistful.reporter.domain.tables.FistfulCashFlow.FISTFUL_CASH_FLOW;
 
 @Component
+@DependsOnDatabaseInitialization
 public class FistfulCashFlowDaoImpl extends AbstractGenericDao implements FistfulCashFlowDao {
 
     private final RowMapper<FistfulCashFlow> cashFlowRowMapper;

@@ -11,7 +11,7 @@ import dev.vality.fistful.reporter.domain.tables.pojos.Withdrawal;
 import dev.vality.fistful.reporter.domain.tables.records.WithdrawalRecord;
 import org.jooq.Condition;
 import org.jooq.Query;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.sql.init.dependency.DependsOnDatabaseInitialization;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.stereotype.Component;
@@ -24,11 +24,11 @@ import static dev.vality.fistful.reporter.domain.tables.Withdrawal.WITHDRAWAL;
 import static org.jooq.impl.DSL.max;
 
 @Component
+@DependsOnDatabaseInitialization
 public class WithdrawalDaoImpl extends AbstractGenericDao implements WithdrawalDao {
 
     private final RowMapper<Withdrawal> withdrawalRowMapper;
 
-    @Autowired
     public WithdrawalDaoImpl(HikariDataSource dataSource) {
         super(dataSource);
         withdrawalRowMapper = new RecordRowMapper<>(WITHDRAWAL, Withdrawal.class);

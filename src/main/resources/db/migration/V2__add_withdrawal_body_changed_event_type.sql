@@ -1,0 +1,1 @@
+ALTER TYPE fr.withdrawal_event_type ADD VALUE 'WITHDRAWAL_BODY_CHANGED';
