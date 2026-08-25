@@ -9,7 +9,7 @@ import dev.vality.fistful.reporter.domain.tables.records.SourceRecord;
 import org.jooq.Condition;
 import org.jooq.Query;
 import org.jooq.impl.DSL;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.sql.init.dependency.DependsOnDatabaseInitialization;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.stereotype.Component;
@@ -19,11 +19,11 @@ import java.util.Optional;
 import static dev.vality.fistful.reporter.domain.tables.Source.SOURCE;
 
 @Component
+@DependsOnDatabaseInitialization
 public class SourceDaoImpl extends AbstractGenericDao implements SourceDao {
 
     private final RowMapper<Source> sourceRowMapper;
 
-    @Autowired
     public SourceDaoImpl(HikariDataSource dataSource) {
         super(dataSource);
         sourceRowMapper = new RecordRowMapper<>(SOURCE, Source.class);

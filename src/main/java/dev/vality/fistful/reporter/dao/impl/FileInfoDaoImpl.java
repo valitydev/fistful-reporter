@@ -8,6 +8,7 @@ import dev.vality.fistful.reporter.domain.tables.pojos.FileInfo;
 import dev.vality.fistful.reporter.domain.tables.records.FileInfoRecord;
 import org.jooq.Condition;
 import org.jooq.Query;
+import org.springframework.boot.sql.init.dependency.DependsOnDatabaseInitialization;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.stereotype.Component;
 
@@ -16,6 +17,7 @@ import java.util.List;
 import static dev.vality.fistful.reporter.domain.tables.FileInfo.FILE_INFO;
 
 @Component
+@DependsOnDatabaseInitialization
 public class FileInfoDaoImpl extends AbstractGenericDao implements FileInfoDao {
 
     private final RecordRowMapper<FileInfo> fileInfoRecordRowMapper;

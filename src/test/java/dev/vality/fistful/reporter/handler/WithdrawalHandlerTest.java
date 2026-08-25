@@ -4,6 +4,7 @@ import dev.vality.fistful.reporter.config.PostgresqlSpringBootITest;
 import dev.vality.fistful.reporter.dao.WithdrawalDao;
 import dev.vality.fistful.reporter.dao.mapper.RecordRowMapper;
 import dev.vality.fistful.reporter.domain.tables.pojos.Withdrawal;
+import dev.vality.fistful.reporter.handler.withdrawal.WithdrawalBodyChangedHandler;
 import dev.vality.fistful.reporter.handler.withdrawal.WithdrawalRouteChangeHandler;
 import dev.vality.fistful.reporter.handler.withdrawal.WithdrawalStatusChangedHandler;
 import dev.vality.fistful.reporter.handler.withdrawal.WithdrawalTransferCreatedHandler;
@@ -20,6 +21,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @PostgresqlSpringBootITest
 public class WithdrawalHandlerTest {
+
+    @Autowired
+    private WithdrawalBodyChangedHandler withdrawalBodyChangedHandler;
 
     @Autowired
     private WithdrawalStatusChangedHandler withdrawalStatusChangedHandler;
@@ -89,6 +93,23 @@ public class WithdrawalHandlerTest {
     public void withdrawalRouteChangeHandlerTest() {
         withdrawalRouteChangeHandler.handle(createTransferCreated(), createMachineEvent(withdrawal.getWithdrawalId()));
         assertEquals(2L, withdrawalDao.get(withdrawal.getWithdrawalId()).getEventId().longValue());
+        assertEquals(
+                false,
+                jdbcTemplate.queryForObject(
+                        sqlStatement, new RecordRowMapper<>(WITHDRAWAL, Withdrawal.class)).getCurrent()
+        );
+    }
+
+    @Test
+    public void withdrawalBodyChangedHandlerTest() {
+        withdrawalBodyChangedHandler.handle(
+                createBodyChanged(),
+                createMachineEvent(withdrawal.getWithdrawalId()));
+
+        Withdrawal updatedWithdrawal = withdrawalDao.get(withdrawal.getWithdrawalId());
+        assertEquals(2L, updatedWithdrawal.getEventId().longValue());
+        assertEquals(75L, updatedWithdrawal.getAmount().longValue());
+        assertEquals("USD", updatedWithdrawal.getCurrencyCode());
         assertEquals(
                 false,
                 jdbcTemplate.queryForObject(

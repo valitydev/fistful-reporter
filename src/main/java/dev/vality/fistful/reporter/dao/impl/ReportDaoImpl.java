@@ -9,6 +9,7 @@ import dev.vality.fistful.reporter.domain.tables.pojos.Report;
 import dev.vality.fistful.reporter.domain.tables.records.ReportRecord;
 import org.jooq.Condition;
 import org.jooq.Query;
+import org.springframework.boot.sql.init.dependency.DependsOnDatabaseInitialization;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.stereotype.Component;
 
@@ -18,6 +19,7 @@ import java.util.List;
 import static dev.vality.fistful.reporter.domain.tables.Report.REPORT;
 
 @Component
+@DependsOnDatabaseInitialization
 public class ReportDaoImpl extends AbstractGenericDao implements ReportDao {
 
     private final RecordRowMapper<Report> reportRowMapper;

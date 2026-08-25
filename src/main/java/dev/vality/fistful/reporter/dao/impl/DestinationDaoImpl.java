@@ -9,7 +9,7 @@ import dev.vality.fistful.reporter.domain.tables.records.DestinationRecord;
 import org.jooq.Condition;
 import org.jooq.Query;
 import org.jooq.impl.DSL;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.sql.init.dependency.DependsOnDatabaseInitialization;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.stereotype.Component;
@@ -19,11 +19,11 @@ import java.util.Optional;
 import static dev.vality.fistful.reporter.domain.tables.Destination.DESTINATION;
 
 @Component
+@DependsOnDatabaseInitialization
 public class DestinationDaoImpl extends AbstractGenericDao implements DestinationDao {
 
     private final RowMapper<Destination> destinationRowMapper;
 
-    @Autowired
     public DestinationDaoImpl(HikariDataSource dataSource) {
         super(dataSource);
         destinationRowMapper = new RecordRowMapper<>(DESTINATION, Destination.class);

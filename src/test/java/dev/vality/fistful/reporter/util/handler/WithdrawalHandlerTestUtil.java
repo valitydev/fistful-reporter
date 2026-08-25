@@ -1,5 +1,8 @@
 package dev.vality.fistful.reporter.util.handler;
 
+import dev.vality.fistful.base.Cash;
+import dev.vality.fistful.base.CurrencyRef;
+import dev.vality.fistful.withdrawal.BodyChange;
 import dev.vality.fistful.withdrawal.Change;
 import dev.vality.fistful.withdrawal.StatusChange;
 import dev.vality.fistful.withdrawal.TimestampedChange;
@@ -42,5 +45,13 @@ public class WithdrawalHandlerTestUtil {
         return new TimestampedChange()
                 .setOccuredAt("2021-05-31T06:12:27Z")
                 .setChange(Change.transfer(new TransferChange(getCashFlowPayload())));
+    }
+
+    public static TimestampedChange createBodyChanged() {
+        Cash oldBody = new Cash(100L, new CurrencyRef("RUB"));
+        Cash newBody = new Cash(75L, new CurrencyRef("USD"));
+        return new TimestampedChange()
+                .setOccuredAt("2021-05-31T06:12:27Z")
+                .setChange(Change.body_changed(new BodyChange(oldBody, newBody)));
     }
 }
