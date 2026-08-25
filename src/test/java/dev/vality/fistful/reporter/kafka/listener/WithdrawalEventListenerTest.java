@@ -16,7 +16,6 @@ import dev.vality.testcontainers.annotations.kafka.config.KafkaProducer;
 import org.apache.thrift.TBase;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
-import org.mockito.Captor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
@@ -37,9 +36,6 @@ public class WithdrawalEventListenerTest {
 
     @MockitoBean
     private WithdrawalDao withdrawalDao;
-
-    @Captor
-    private ArgumentCaptor<Withdrawal> captor;
 
     @Test
     public void shouldListenAndSave() throws DaoException {
@@ -62,6 +58,7 @@ public class WithdrawalEventListenerTest {
         testThriftKafkaProducer.send(topicName, sinkEvent);
 
         // Then
+        ArgumentCaptor<Withdrawal> captor = ArgumentCaptor.forClass(Withdrawal.class);
         verify(withdrawalDao, timeout(10000).times(1))
                 .save(captor.capture());
         assertThat(captor.getValue().getWithdrawalStatus())
