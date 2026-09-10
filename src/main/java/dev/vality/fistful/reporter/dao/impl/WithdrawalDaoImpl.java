@@ -4,7 +4,6 @@ import com.zaxxer.hikari.HikariDataSource;
 import dev.vality.dao.impl.AbstractGenericDao;
 import dev.vality.fistful.reporter.dao.WithdrawalDao;
 import dev.vality.fistful.reporter.dao.mapper.RecordRowMapper;
-import dev.vality.fistful.reporter.domain.enums.WithdrawalEventType;
 import dev.vality.fistful.reporter.domain.enums.WithdrawalStatus;
 import dev.vality.fistful.reporter.domain.tables.pojos.Report;
 import dev.vality.fistful.reporter.domain.tables.pojos.Withdrawal;
@@ -84,7 +83,6 @@ public class WithdrawalDaoImpl extends AbstractGenericDao implements WithdrawalD
         Query query = getDslContext().select().from(WITHDRAWAL)
                 .where(
                         WITHDRAWAL.PARTY_ID.eq(partyId)
-                                .and(WITHDRAWAL.EVENT_TYPE.eq(WithdrawalEventType.WITHDRAWAL_STATUS_CHANGED))
                                 .and(WITHDRAWAL.WITHDRAWAL_STATUS.eq(WithdrawalStatus.succeeded))
                                 .and(WITHDRAWAL.EVENT_CREATED_AT.ge(fromTime))
                                 .and(WITHDRAWAL.EVENT_CREATED_AT.le(toTime))
