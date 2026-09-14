@@ -4,6 +4,8 @@ import dev.vality.fistful.reporter.config.PostgresqlSpringBootITest;
 import dev.vality.fistful.reporter.dao.WithdrawalDao;
 import dev.vality.fistful.reporter.dao.mapper.RecordRowMapper;
 import dev.vality.fistful.reporter.domain.tables.pojos.Withdrawal;
+import dev.vality.fistful.reporter.handler.withdrawal.WithdrawalAdjustmentCreatedHandler;
+import dev.vality.fistful.reporter.handler.withdrawal.WithdrawalAdjustmentSucceededHandler;
 import dev.vality.fistful.reporter.handler.withdrawal.WithdrawalBodyChangedHandler;
 import dev.vality.fistful.reporter.handler.withdrawal.WithdrawalRouteChangeHandler;
 import dev.vality.fistful.reporter.handler.withdrawal.WithdrawalStatusChangedHandler;
@@ -24,6 +26,12 @@ public class WithdrawalHandlerTest {
 
     @Autowired
     private WithdrawalBodyChangedHandler withdrawalBodyChangedHandler;
+
+    @Autowired
+    private WithdrawalAdjustmentCreatedHandler withdrawalAdjustmentCreatedHandler;
+
+    @Autowired
+    private WithdrawalAdjustmentSucceededHandler withdrawalAdjustmentSucceededHandler;
 
     @Autowired
     private WithdrawalStatusChangedHandler withdrawalStatusChangedHandler;
@@ -49,6 +57,9 @@ public class WithdrawalHandlerTest {
     @BeforeEach
     public void setUp() {
         withdrawal.setCurrent(true);
+        withdrawal.setAmount(10000L);
+        withdrawal.setCurrencyCode("RUB");
+        withdrawal.setFee(1000L);
         withdrawalDao.save(withdrawal);
     }
 
@@ -115,5 +126,27 @@ public class WithdrawalHandlerTest {
                 jdbcTemplate.queryForObject(
                         sqlStatement, new RecordRowMapper<>(WITHDRAWAL, Withdrawal.class)).getCurrent()
         );
+    }
+
+    @Test
+    public void withdrawalAdjustmentUpdatesFeeOnlyAfterSucceededTest() {
+        withdrawalAdjustmentCreatedHandler.handle(
+                createAdjustmentCreated(), createMachineEvent(withdrawal.getWithdrawalId(), 2L));
+
+        Withdrawal pendingWithdrawal = withdrawalDao.get(withdrawal.getWithdrawalId());
+        assertEquals(10000L, pendingWithdrawal.getAmount().longValue());
+        assertEquals(1000L, pendingWithdrawal.getFee().longValue());
+
+        withdrawalAdjustmentSucceededHandler.handle(
+                createAdjustmentSucceeded(), createMachineEvent(withdrawal.getWithdrawalId(), 3L));
+
+        Withdrawal succeededWithdrawal = withdrawalDao.get(withdrawal.getWithdrawalId());
+        assertEquals(20000L, succeededWithdrawal.getAmount().longValue());
+        assertEquals(2000L, succeededWithdrawal.getFee().longValue());
+
+        withdrawalBodyChangedHandler.handle(
+                createAdjustmentBodyChanged(), createMachineEvent(withdrawal.getWithdrawalId(), 4L));
+
+        assertEquals(2000L, withdrawalDao.get(withdrawal.getWithdrawalId()).getFee().longValue());
     }
 }
